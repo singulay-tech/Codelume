@@ -16,6 +16,15 @@ class VideoPlaybackView: AVPlayerView {
         }
     }
 
+    func startMonitoringNotification() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handlePlaybackDidEnd),
+            name: .AVPlayerItemDidPlayToEndTime,
+            object: player?.currentItem
+        )
+    }
+
     @objc private func handlePlaybackDidEnd(notification: Notification) {
         if let playerItem = notification.object as? AVPlayerItem {
             playerItem.seek(to: CMTime.zero, toleranceBefore: .zero, toleranceAfter: .zero) {
@@ -61,6 +70,7 @@ class VideoPlaybackView: AVPlayerView {
             // 暂时默认使用 Fill 填充方式, 其他方式保留
             self.videoGravity = .resizeAspectFill
             // setVideoFillMode(config.videoFillMode)
+            startMonitoringNotification()
             player.play()
         }
     }
