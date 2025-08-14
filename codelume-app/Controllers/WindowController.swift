@@ -91,8 +91,12 @@ class WindowController: NSObject {
         let screenIdentifier = screen.identifier
         let config = screenConfigurations[screenIdentifier] ?? ScreenConfiguration(screen: screen)
         let viewFrame = screen.frame
-        if config.contentUrl == nil {
+        guard let contentUrl = config.contentUrl else {
             Logger.error("Content url is nil. Screen: \(screenIdentifier)")
+            return nil
+        }
+        if !FileManager.default.fileExists(atPath: contentUrl.path) {
+            Logger.error("File not found at URL: \(contentUrl). Screen: \(screenIdentifier)")
             return nil
         }
         switch config.playbackType {
