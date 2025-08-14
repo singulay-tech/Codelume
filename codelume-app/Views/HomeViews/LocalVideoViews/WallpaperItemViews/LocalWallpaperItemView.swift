@@ -31,7 +31,7 @@ struct LocalWallpaperItemView: View {
             
             if isHovering {
                 HStack(spacing: 8) {
-                    VideoNameLabel(text: URL(fileURLWithPath: item.filePath).lastPathComponent)
+                    VideoNameLabel(text: item.fileUrl.lastPathComponent)
                     Spacer()
                     VideoFloatButton(text: "Preview", action: { isShowingPreview = true})
                     VideoFloatButton(text: "Details", action: showDetails)
@@ -43,7 +43,7 @@ struct LocalWallpaperItemView: View {
         }
         .sheet(isPresented: $isShowingPreview) {
             ZStack(alignment: .topLeading) {
-                VideoPreviewView(videoURL: fileURL(for: item.filePath))
+                VideoPreviewView(videoURL: item.fileUrl)
                 VideoCloseButton(action: { isShowingPreview = false })
             }
         }
@@ -74,7 +74,7 @@ struct LocalWallpaperItemView: View {
     }
     
     private func generateThumbnail() {
-        let asset = AVAsset(url: fileURL(for: item.filePath))
+        let asset = AVAsset(url: item.fileUrl)
         let generator = AVAssetImageGenerator(asset: asset)
         generator.appliesPreferredTrackTransform = true
         
@@ -101,62 +101,62 @@ struct LocalWallpaperItemView: View {
         // }
         
         // LocalVideoManager.shared.addToPlaylist(uuid: item.id)
-        let videoURL = fileURL(for: item.filePath)
+        let videoURL = item.fileUrl
         NotificationCenter.default.post(name: .playVideoUrlChanged, object: nil, userInfo: ["videoURL": videoURL])
     }
     
     private func deleteDynamicWallpaper() {
-        if LocalVideManger.shared.getPlayListItemByFileName(URL(fileURLWithPath: item.filePath).lastPathComponent) != nil {
-            let alert = NSAlert()
-            alert.messageText = NSLocalizedString("Cannot Delete", comment: "")
-            alert.informativeText = NSLocalizedString("This wallpaper is in the playlist. Please remove it from the playlist before deleting.", comment: "")
-            alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
-            alert.alertStyle = .warning
-            alert.runModal()
-            return
-        }
-        
-        let alert = NSAlert()
-        alert.messageText = NSLocalizedString("Delete dynamic wallpaper", comment: "")
-        alert.informativeText = NSLocalizedString(
-            "Non-program-built-in dynamic wallpapers cannot be recovered after deletion and need to be redownloaded or imported.",
-            comment: "")
-        alert.addButton(withTitle: NSLocalizedString("Delete", comment: ""))
-        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
-        alert.alertStyle = .warning
-        
-        let response = alert.runModal()
-        if response == .alertFirstButtonReturn {
-            do {
-                try FileManager.default.removeItem(at: fileURL(for: item.filePath))
-                Logger.info("Dynamic wallpaper deleted successfully: \(item.filePath)")
-                LocalVideManger.shared.deleteLocalWallpaper(item: item)
-                NotificationCenter.default.post(name: .refreshLocalWallpaperList, object: nil)
-            } catch {
-                Logger.error("Failed to delete dynamic wallpaper: \(error)")
-            }
-        }
+//        if DatabaseManger.shared.getPlayListItemByFileName(item.fileUrl.lastPathComponent) != nil {
+//            let alert = NSAlert()
+//            alert.messageText = NSLocalizedString("Cannot Delete", comment: "")
+//            alert.informativeText = NSLocalizedString("This wallpaper is in the playlist. Please remove it from the playlist before deleting.", comment: "")
+//            alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
+//            alert.alertStyle = .warning
+//            alert.runModal()
+//            return
+//        }
+//        
+//        let alert = NSAlert()
+//        alert.messageText = NSLocalizedString("Delete dynamic wallpaper", comment: "")
+//        alert.informativeText = NSLocalizedString(
+//            "Non-program-built-in dynamic wallpapers cannot be recovered after deletion and need to be redownloaded or imported.",
+//            comment: "")
+//        alert.addButton(withTitle: NSLocalizedString("Delete", comment: ""))
+//        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+//        alert.alertStyle = .warning
+//        
+//        let response = alert.runModal()
+//        if response == .alertFirstButtonReturn {
+//            do {
+//                try FileManager.default.removeItem(at: item.fileUrl)
+//                Logger.info("Dynamic wallpaper deleted successfully: \(item.fileUrl)")
+//                LocalVideManger.shared.deleteLocalWallpaper(item: item)
+//                NotificationCenter.default.post(name: .refreshLocalWallpaperList, object: nil)
+//            } catch {
+//                Logger.error("Failed to delete dynamic wallpaper: \(error)")
+//            }
+//        }
     }
     
     private func isCurrentWallpaper() -> Bool {
         if let currentWallpaperURL = UserDefaults.standard.url(forKey: "videoUrl") {
-            return currentWallpaperURL == fileURL(for: item.filePath)
+            return currentWallpaperURL == item.fileUrl
         }
         return false
     }
 }
 
-#Preview {
-    LocalWallpaperItemView(item: WallpaperItem(
-        id: UUID(),
-        title: "Sample Video",
-        filePath: "video/test_1.mp4",
-        category: "Scenery",
-        resolution: "1920x1080",
-        fileSize: 123456,
-        codec: "H.264",
-        duration: 60.0,
-        creationDate: Date(),
-        tags: ["scenery", "HD"]
-    ))
-}
+//#Preview {
+//    LocalWallpaperItemView(item: WallpaperItem(
+//        id: UUID(),
+//        title: "Sample Video",
+//        filePath: "video/test_1.mp4",
+//        category: "Scenery",
+//        resolution: "1920x1080",
+//        fileSize: 123456,
+//        codec: "H.264",
+//        duration: 60.0,
+//        creationDate: Date(),
+//        tags: ["scenery", "HD"]
+//    ))
+//}

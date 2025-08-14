@@ -427,6 +427,7 @@
       }
     },
     "Non-program-built-in dynamic wallpapers cannot be recovered after deletion and need to be redownloaded or imported." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -655,6 +656,7 @@
       }
     },
     "Removal failed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -665,6 +667,7 @@
       }
     },
     "Remove" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -722,6 +725,7 @@
       }
     },
     "Set" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -790,6 +794,7 @@
       }
     },
     "This dynamic wallpaper is currently in use." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

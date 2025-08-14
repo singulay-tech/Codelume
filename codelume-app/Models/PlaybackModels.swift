@@ -38,14 +38,12 @@ struct ScreenConfiguration: Codable {
 struct WallpaperItem: Identifiable {
     let id: UUID
     var title: String
-    var filePath: String
-    var category: String
+    var fileUrl: URL
     var resolution: String
     var fileSize: Int
     var codec: String
     var duration: Double
     var creationDate: Date
-    var tags: [String]
     var isPlaying: Bool = false
 }
 

@@ -28,7 +28,7 @@ struct LocalVideoView: View {
     }
     
     private func loadVideoItems() {
-        videoItems = LocalVideoManager.shared.getAllLocalWallpapers()
+        videoItems = DatabaseManger.shared.getAllLocalVideos()
     }
     
     private func fileURL(for relativePath: String) -> URL {

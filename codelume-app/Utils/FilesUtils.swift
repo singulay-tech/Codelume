@@ -99,14 +99,12 @@ func getWallpaperInfo(from fileURL: URL) async -> WallpaperItem? {
         return WallpaperItem(
             id: UUID(),
             title: title,
-            filePath: filePath,
-            category: contentType,  // 使用UTI类型作为分类
+            fileUrl: fileURL,
             resolution: resolution,
             fileSize: fileSize,
             codec: codec,
             duration: durationSeconds,
             creationDate: creationDate,
-            tags: []
         )
     } catch {
         print("Error loading asset properties: \(error)")
@@ -147,7 +145,7 @@ func importExternalWallpaper() {
                     try FileManager.default.copyItem(at: selectedURL, to: destinationURL)
                     Task { @MainActor in
                         if let item = await getWallpaperInfo(from: destinationURL) {
-                            LocalVideManger.shared.addLocalWallpaper(item)
+                            DatabaseManger.shared.addLocalVideo(item)
                             Logger.info("External wallpaper imported successfully. Path: \(destinationURL.path)")
                             NotificationCenter.default.post(name: .refreshLocalWallpaperList, object: nil)
                         }
@@ -170,7 +168,16 @@ func getCurrentVideoURL() -> URL? {
     return nil
 }
 
-func getFileURL(for relativePath: String) -> URL {
-    let docDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    return docDir.appendingPathComponent(relativePath)
+func fileExists(at url: URL) -> Bool {
+    return FileManager.default.fileExists(atPath: url.path)
+}
+
+func deleteFile(at url: URL) {
+    if fileExists(at: url) {
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            Logger.error("Failed to delete file: \(error)")
+        }
+    }
 }

@@ -8,12 +8,23 @@ class WindowController: NSObject {
     
     override init() {
         super.init()
+        // 初始化数据库管理器
+        _ = DatabaseManger.shared
         loadConfigurations()
         createWindowsForAllScreens()
         startMonitoringNotification()
     }
     
-    func createWindowsForAllScreens() {
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self, name: .playVideoUrlChanged, object: nil)
+        
+        for window in windows.values {
+            window.close()
+        }
+    }
+    
+    private func createWindowsForAllScreens() {
         for window in windows.values {
             window.close()
         }
@@ -24,67 +35,65 @@ class WindowController: NSObject {
         }
     }
     
-    func createDefaultConfig() {
-        let screens = NSScreen.screens
-        for (index, screen) in screens.enumerated() {
-            let screenIdentifier = screen.identifier
-            let isMainScreen = index == 0
-            screenConfigurations[screenIdentifier] = ScreenConfiguration(screen: screen, isMainScreen: isMainScreen)
-        }
-        saveConfigurations()
+    // MARK: - Configuration Management
+    private func createDefaultConfig(for screen: NSScreen) -> ScreenConfiguration {
+        let isMainScreen = NSScreen.screens.first?.identifier == screen.identifier
+        return ScreenConfiguration(screen: screen, playbackType: .video, contentUrl: nil, isMainScreen: true)
     }
-    
-    func syncScreenConfigurations() {
-        let currentScreens = NSScreen.screens
-        var existingIdentifiers = Set(screenConfigurations.keys)
-        
-        for screen in currentScreens {
-            let screenIdentifier = screen.identifier
-            if !existingIdentifiers.contains(screenIdentifier) {
-                Logger.info("Found new screen, adding to config: \(screenIdentifier)")
-                let isMainScreen = currentScreens.first?.identifier == screenIdentifier
-                screenConfigurations[screenIdentifier] = ScreenConfiguration(screen: screen, isMainScreen: isMainScreen)
-                saveConfigurations()
+
+    private func saveConfigurations() {
+        for (_, config) in screenConfigurations {
+            DatabaseManger.shared.saveScreenConfig(config)
+        }
+        Logger.info("Configurations saved to database successfully")
+    }
+
+    private func loadConfigurations() {
+        screenConfigurations = [:]
+        let configs = DatabaseManger.shared.getAllScreenConfigs()
+
+        if !configs.isEmpty {
+            for config in configs {
+                screenConfigurations[config.screenIdentifier] = config
             }
-            existingIdentifiers.remove(screenIdentifier)
-        }
-        
-        // 不存在的屏幕配置暂时保留，有可能会重新连接上
-        // for removedIdentifier in existingIdentifiers {
-        //     Logger.info("Screen removed, removing from config: \(removedIdentifier)")
-        //     screenConfigurations.removeValue(forKey: removedIdentifier)
-        //     saveConfigurations()
-        // }
-    }
-    
-    func saveConfigurations() {
-        let defaults = UserDefaults.standard
-        do {
-            let encoder = JSONEncoder()
-            let data = try encoder.encode(screenConfigurations)
-            defaults.set(data, forKey: "screenConfigurations")
-            Logger.info("Screen configurations saved successfully.")
-        } catch {
-            Logger.error("Failed to save screen configurations: \(error).")
-        }
-    }
-    
-    func loadConfigurations() {
-        let defaults = UserDefaults.standard
-        if let data = defaults.data(forKey: "screenConfigurations") {
-            do {
-                let decoder = JSONDecoder()
-                screenConfigurations = try decoder.decode([String: ScreenConfiguration].self, from: data)
-            } catch {
-                Logger.error("Screen config load error: \(error).")
-            }
-            Logger.info("Screen config load success.")
-            syncScreenConfigurations()
-            print(screenConfigurations)
+            Logger.info("Configurations loaded from database successfully")
         } else {
-            Logger.info("Screen config not found, create default config.")
-            createDefaultConfig()
+            // 如果数据库中没有配置，为每个屏幕创建默认配置
+            createDefaultConfigForAllScreens()
         }
+        syncScreenConfigurations()
+    }
+
+    private func syncScreenConfigurations() {
+        // 获取当前所有屏幕的标识符
+        let currentScreenIds = NSScreen.screens.map { $0.identifier }
+
+        // 添加新屏幕的配置
+        for screen in NSScreen.screens {
+            let screenId = screen.identifier
+            if !screenConfigurations.keys.contains(screenId) {
+                let newConfig = createDefaultConfig(for: screen)
+                screenConfigurations[screenId] = newConfig
+                DatabaseManger.shared.saveScreenConfig(newConfig)
+            }
+        }
+
+        // 移除不存在屏幕的配置
+        let removedScreenIds = screenConfigurations.keys.filter { !currentScreenIds.contains($0) }
+        for screenId in removedScreenIds {
+            screenConfigurations.removeValue(forKey: screenId)
+            DatabaseManger.shared.deleteScreenConfig(for: screenId)
+        }
+    }
+
+    // 为所有屏幕创建默认配置
+    private func createDefaultConfigForAllScreens() {
+        for screen in NSScreen.screens {
+            let config = createDefaultConfig(for: screen)
+            screenConfigurations[config.screenIdentifier] = config
+            DatabaseManger.shared.saveScreenConfig(config)
+        }
+        Logger.info("Created default configurations for all screens")
     }
     
     func createPlaybackView(for screen: NSScreen) -> NSView? {
@@ -113,6 +122,12 @@ class WindowController: NSObject {
     }
     
     func updateScreenConfiguration(_ screen: NSScreen, playbackType: PlaybackType, contentUrl: URL? = nil) {
+        let currentScreens = NSScreen.screens
+        if !currentScreens.contains(where: { $0.identifier == screen.identifier }) {
+            Logger.info("Screen does not exist, creating new window for it: \(screen.identifier)")
+            createWindowForScreen(screen)
+        }
+        
         let screenIdentifier = screen.identifier
         if var config = screenConfigurations[screenIdentifier] {
             config.playbackType = playbackType
@@ -196,28 +211,38 @@ class WindowController: NSObject {
             object: nil)
     }
     
-    @objc func handleScreenChange() {
-        Logger.info("Screen change notification received.")
-        let currentScreenCount = NSScreen.screens.count
-        if currentScreenCount != windows.count {
-            Logger.info("Screen count changed from \(windows.count) to \(currentScreenCount), rebuilding windows.")
-            createWindowsForAllScreens()
+    @objc private func handleScreenChange(_ notification: Notification) {
+        Logger.info("Screen change detected")
+        syncScreenConfigurations()
+        removeWindowsForRemovedScreens()
+        createWindowsForNewScreens()
+    }
+
+    private func createWindowsForNewScreens() {
+        let currentScreens = NSScreen.screens
+        let currentScreenIds = Set(currentScreens.map { $0.identifier })
+        let existingWindowIds = Set(windows.keys)
+        let newScreenIds = currentScreenIds.subtracting(existingWindowIds)
+
+        if !newScreenIds.isEmpty {
+            Logger.info("Found \(newScreenIds.count) new screens, creating windows")
+            for screen in currentScreens {
+                if newScreenIds.contains(screen.identifier) {
+                    createWindowForScreen(screen)
+                }
+            }
         } else {
-            Logger.info("Screen count unchanged (\(currentScreenCount)), updating window layouts.")
-            let currentScreens = NSScreen.screens
+            // 更新现有窗口布局
+            Logger.info("Updating layouts for all existing windows")
             let screenMap = [String: NSScreen](uniqueKeysWithValues: currentScreens.map { ($0.identifier, $0) })
             for (screenIdentifier, window) in windows {
                 if let screen = screenMap[screenIdentifier] {
                     let screenFrame = screen.frame
-                    Logger.info("Updating window frame for screen \(screenIdentifier) from \(window.frame) to \(screenFrame)")
                     window.contentAspectRatio = .zero
                     window.setFrame(screenFrame, display: true, animate: true)
                     if let contentView = window.contentView {
                         contentView.setFrameSize(screenFrame.size)
-                        Logger.info("Updated content view size to \(screenFrame.size)")
                     }
-                } else {
-                    Logger.warning("Screen not found for identifier: \(screenIdentifier)")
                 }
             }
         }
@@ -233,11 +258,20 @@ class WindowController: NSObject {
         }
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-        NotificationCenter.default.removeObserver(self, name: .playVideoUrlChanged, object: nil)
-        for window in windows.values {
-            window.close()
+    func removeWindowsForRemovedScreens() {
+        let currentScreens = NSScreen.screens
+        let currentScreenIdentifiers = Set(currentScreens.map { $0.identifier })
+        let removedIdentifiers = Set(windows.keys).subtracting(currentScreenIdentifiers)
+        
+        for removedIdentifier in removedIdentifiers {
+            Logger.info("Screen removed, cleaning up resources for: \(removedIdentifier)")
+            if let window = windows[removedIdentifier] {
+                window.close()
+                windows.removeValue(forKey: removedIdentifier)
+            }
+            playbackViews.removeValue(forKey: removedIdentifier)
         }
     }
+    
+    
 }
