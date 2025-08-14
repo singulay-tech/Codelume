@@ -3,11 +3,11 @@ import AVKit
 
 struct VideoPreviewView: View {
     let videoURL: URL
-
+    
     @AppStorage("volume") private var volume: Double = 1.0
     @AppStorage("mute") private var mute: Bool = false
     @State private var player = AVPlayer()
-
+    
     var body: some View {
         VideoPlayer(player: player)
             .frame(width: 1000, height: 563)
