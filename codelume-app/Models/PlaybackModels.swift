@@ -13,9 +13,9 @@ struct ScreenConfiguration: Codable {
     var playbackType: PlaybackType
     var contentUrl: URL?
     var volume: Float = 0.0
-    var isPlaying: Bool = false
+    var isPlaying: Bool = true
     
-    init(screen: NSScreen, playbackType: PlaybackType = .video, contentUrl: URL? = nil, isMainScreen: Bool = false) {
+    init(screen: NSScreen, playbackType: PlaybackType = .video, contentUrl: URL? = nil, isMainScreen: Bool = true) {
         self.screenIdentifier = screen.identifier
         self.isMainScreen = isMainScreen
         self.playbackType = playbackType

@@ -2,7 +2,7 @@ import Foundation
 import AppKit
 
 class WindowController: NSObject {
-    var windows: [NSScreen: NSWindow] = [:]
+    var windows: [String: NSWindow] = [:]
     var screenConfigurations: [String: ScreenConfiguration] = [:]
     var playbackViews: [String: NSView] = [:]
     
@@ -120,11 +120,11 @@ class WindowController: NSObject {
             screenConfigurations[screenIdentifier] = config
         } else {
             screenConfigurations[screenIdentifier] = ScreenConfiguration(screen: screen, playbackType: playbackType, contentUrl: contentUrl)
-         }
-
+        }
+        
         saveConfigurations()
         
-        if let window = windows[screen] {
+        if let window = windows[screen.identifier] {
             if let oldView = playbackViews[screenIdentifier] {
                 oldView.removeFromSuperview()
             }
@@ -132,6 +132,7 @@ class WindowController: NSObject {
             let newView = createPlaybackView(for: screen)
             playbackViews[screenIdentifier] = newView
             window.contentView = newView
+            window.setIsVisible(true)
         }
     }
     
@@ -150,9 +151,17 @@ class WindowController: NSObject {
             isVisible = false
             return
         }
-
+        
         playbackViews[screenIdentifier] = playbackView
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        playbackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(playbackView)
+        NSLayoutConstraint.activate([
+            playbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            playbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            playbackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            playbackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
         
         let window = NSWindow(
             contentRect: screenFrame,
@@ -165,12 +174,12 @@ class WindowController: NSObject {
         window.setFrameOrigin(screenFrame.origin)
         window.contentView = contentView
         window.level = NSWindow.Level(Int(CGWindowLevelForKey(.desktopIconWindow)) - 1)
-        window.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle]
-        window.isReleasedWhenClosed = false
-        window.ignoresMouseEvents = false
-        window.makeKeyAndOrderFront(nil)
+        window.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .fullScreenAuxiliary]
+        window.isReleasedWhenClosed = true
+        window.ignoresMouseEvents = true
+        window.orderFront(nil)
         window.setIsVisible(isVisible)
-        windows[screen] = window
+        windows[screen.identifier] = window
     }
     
     func startMonitoringNotification() {
@@ -180,14 +189,53 @@ class WindowController: NSObject {
             name: NSApplication.didChangeScreenParametersNotification,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleVideoUrlChange),
+            name: .playVideoUrlChanged,
+            object: nil)
     }
     
     @objc func handleScreenChange() {
-        createWindowsForAllScreens()
+        Logger.info("Screen change notification received.")
+        let currentScreenCount = NSScreen.screens.count
+        if currentScreenCount != windows.count {
+            Logger.info("Screen count changed from \(windows.count) to \(currentScreenCount), rebuilding windows.")
+            createWindowsForAllScreens()
+        } else {
+            Logger.info("Screen count unchanged (\(currentScreenCount)), updating window layouts.")
+            let currentScreens = NSScreen.screens
+            let screenMap = [String: NSScreen](uniqueKeysWithValues: currentScreens.map { ($0.identifier, $0) })
+            for (screenIdentifier, window) in windows {
+                if let screen = screenMap[screenIdentifier] {
+                    let screenFrame = screen.frame
+                    Logger.info("Updating window frame for screen \(screenIdentifier) from \(window.frame) to \(screenFrame)")
+                    window.contentAspectRatio = .zero
+                    window.setFrame(screenFrame, display: true, animate: true)
+                    if let contentView = window.contentView {
+                        contentView.setFrameSize(screenFrame.size)
+                        Logger.info("Updated content view size to \(screenFrame.size)")
+                    }
+                } else {
+                    Logger.warning("Screen not found for identifier: \(screenIdentifier)")
+                }
+            }
+        }
+    }
+    
+    @objc func handleVideoUrlChange(_ notification: Notification) {
+        if let userInfo = notification.userInfo,
+           let videoURL = userInfo["videoURL"] as? URL {
+            Logger.info("Received video URL change notification: \(videoURL)")
+            for screen in NSScreen.screens {
+                updateScreenConfiguration(screen, playbackType: .video, contentUrl: videoURL)
+            }
+        }
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self, name: .playVideoUrlChanged, object: nil)
         for window in windows.values {
             window.close()
         }

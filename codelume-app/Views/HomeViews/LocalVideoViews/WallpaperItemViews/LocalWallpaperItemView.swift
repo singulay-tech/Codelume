@@ -101,8 +101,8 @@ struct LocalWallpaperItemView: View {
         // }
         
         // LocalVideoManager.shared.addToPlaylist(uuid: item.id)
-        let videoURL = URL(fileURLWithPath: item.filePath)
-        NotificationCenter.default.post(name: .updatePlayVideoUrl, object: nil, userInfo: ["videoURL": videoURL])
+        let videoURL = fileURL(for: item.filePath)
+        NotificationCenter.default.post(name: .playVideoUrlChanged, object: nil, userInfo: ["videoURL": videoURL])
     }
     
     private func deleteDynamicWallpaper() {
