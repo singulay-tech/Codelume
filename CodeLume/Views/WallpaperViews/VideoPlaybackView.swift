@@ -35,6 +35,8 @@ class VideoPlaybackView: AVPlayerView {
     }
 
     deinit {
+        self.player?.pause()
+        self.player = nil
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -50,7 +52,6 @@ class VideoPlaybackView: AVPlayerView {
     
     init(frame: NSRect, config: ScreenConfiguration) {
         super.init(frame: frame)
-        self.controlsStyle = .none
         setupPlayer(with: config)
     }
     
@@ -62,16 +63,17 @@ class VideoPlaybackView: AVPlayerView {
         if let url = config.contentUrl {
             let player = AVPlayer(url: url)
             self.player = player
-            if config.isMainScreen {
-                player.volume = config.volume
-            } else {
-                player.volume = 0.0
-            }
+            player.volume = config.volume
+            player.isMuted = !config.isMainScreen
             // 暂时默认使用 Fill 填充方式, 其他方式保留
             self.videoGravity = .resizeAspectFill
             // setVideoFillMode(config.videoFillMode)
             startMonitoringNotification()
-            player.play()
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                NotificationCenter.default.post(name: .setWallpaperIsVisible, object: config.screenIdentifier, userInfo: ["isVisible": true])
+                player.play()
+            }
         }
     }
 

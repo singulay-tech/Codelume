@@ -2,6 +2,7 @@ import Foundation
 import AppKit
 
 class WindowController: NSObject {
+    var currentScreens: [NSScreen] = []
     var windows: [String: NSWindow] = [:]
     var screenConfigurations: [String: ScreenConfiguration] = [:]
     var playbackViews: [String: NSView] = [:]
@@ -9,14 +10,16 @@ class WindowController: NSObject {
     override init() {
         super.init()
         addDefaultVideo()
+        startMonitoringNotification()
         loadConfigurations()
         createWindowsForAllScreens()
-        startMonitoringNotification()
+        
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.removeObserver(self, name: .playVideoUrlChanged, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .setWallpaperIsVisible, object: nil)
         
         for window in windows.values {
             window.close()
@@ -29,14 +32,13 @@ class WindowController: NSObject {
         }
         windows.removeAll()
         
-        for screen in NSScreen.screens {
+        for screen in currentScreens {
             createWindowForScreen(screen)
         }
     }
     
     private func createDefaultConfig(for screen: NSScreen) -> ScreenConfiguration {
-        let isMainScreen = NSScreen.screens.first?.identifier == screen.identifier
-        return ScreenConfiguration(screenIdentifier: screen.localizedName)
+        return ScreenConfiguration(screenIdentifier: screen.identifier)
     }
 
     private func saveConfigurations() {
@@ -48,80 +50,48 @@ class WindowController: NSObject {
 
     private func loadConfigurations() {
         screenConfigurations = [:] 
-        // 1. 从数据库加载所有配置
         let configs = DatabaseManger.shared.getAllScreenConfigs()
-        
-        // 2. 将数据库配置添加到全局配置中
+        currentScreens = NSScreen.screens
+
         for config in configs {
             screenConfigurations[config.screenIdentifier] = config
         }
-        
-        // 3. 获取当前所有屏幕
-        let currentScreens = NSScreen.screens
-        
-        // 4. 检查每个屏幕是否有配置
+
         for screen in currentScreens {
             let screenId = screen.identifier
             if screenConfigurations[screenId] == nil {
-                // 5. 没有配置则创建新配置
                 let newConfig = createDefaultConfig(for: screen)
                 screenConfigurations[screenId] = newConfig
                 DatabaseManger.shared.saveScreenConfig(newConfig)
             }
         }
-        
+
         Logger.info("Configurations loaded successfully")
-        syncScreenConfigurations()
-    }
-
-    private func syncScreenConfigurations() {
-        let currentScreenIds = NSScreen.screens.map { $0.identifier }
-
-        for screen in NSScreen.screens {
-            let screenId = screen.identifier
-            if !screenConfigurations.keys.contains(screenId) {
-                let newConfig = createDefaultConfig(for: screen)
-                screenConfigurations[screenId] = newConfig
-                DatabaseManger.shared.saveScreenConfig(newConfig)
-            }
-        }
-
-        // 移除不存在屏幕的配置
-        // let removedScreenIds = screenConfigurations.keys.filter { !currentScreenIds.contains($0) }
-        // for screenId in removedScreenIds {
-        //     screenConfigurations.removeValue(forKey: screenId)
-        //     DatabaseManger.shared.deleteScreenConfig(for: screenId)
-        // }
-    }
-
-    // 为所有屏幕创建默认配置
-    private func createDefaultConfigForAllScreens() {
-        for screen in NSScreen.screens {
-            let config = createDefaultConfig(for: screen)
-            screenConfigurations[config.screenIdentifier] = config
-            DatabaseManger.shared.saveScreenConfig(config)
-        }
-        Logger.info("Created default configurations for all screens")
     }
     
     func createPlaybackView(for screen: NSScreen) -> NSView? {
         let screenIdentifier = screen.identifier
-        let config = screenConfigurations[screenIdentifier] ?? ScreenConfiguration(screenIdentifier: screenIdentifier)
+        guard let config = screenConfigurations[screenIdentifier] else {
+            Logger.error("Screen configuration not found. Screen: \(screenIdentifier)")
+            return nil
+        }
+
         let viewFrame = screen.frame
+
         guard let contentUrl = config.contentUrl else {
             Logger.error("Content url is nil. Screen: \(screenIdentifier)")
             return nil
         }
+
         if !FileManager.default.fileExists(atPath: contentUrl.path) {
             Logger.error("File not found at URL: \(contentUrl). Screen: \(screenIdentifier)")
             return nil
         }
         
-        setFirstFrameAsWallpaper(videoURL: contentUrl)
-        
         switch config.playbackType {
         case .video:
             Logger.info("Create video playback view.")
+            if !setFirstFrameAsWallpaper(videoURL: contentUrl) { return nil }
             return VideoPlaybackView(frame: viewFrame, config: config)
         case .sprite:
             Logger.info("Create sprite playback view.")
@@ -133,11 +103,12 @@ class WindowController: NSObject {
     }
     
     func updateScreenConfiguration(_ screen: NSScreen, playbackType: PlaybackType, contentUrl: URL? = nil) {
+        NotificationCenter.default.post(name: .setWallpaperIsVisible, object: screen.identifier, userInfo: ["isVisible": false])
+
         if let contentUrl = contentUrl {
             setFirstFrameAsWallpaper(videoURL: contentUrl)
         }
         
-        let currentScreens = NSScreen.screens
         if !currentScreens.contains(where: { $0.identifier == screen.identifier }) {
             Logger.info("Screen does not exist, creating new window for it: \(screen.identifier)")
             createWindowForScreen(screen)
@@ -154,15 +125,10 @@ class WindowController: NSObject {
         
         saveConfigurations()
         
-        if let window = windows[screen.identifier] {
-            if let oldView = playbackViews[screenIdentifier] {
-                oldView.removeFromSuperview()
-            }
-            
+        if let window = windows[screen.identifier] {            
             let newView = createPlaybackView(for: screen)
             playbackViews[screenIdentifier] = newView
             window.contentView = newView
-            window.setIsVisible(true)
         }
     }
     
@@ -170,28 +136,13 @@ class WindowController: NSObject {
         Logger.info("Create window for screen: \(screen.identifier)")
         let screenFrame = screen.frame
         let screenIdentifier = screen.identifier
-        var isVisible = true
-        
-        let contentView = NSView(frame: screenFrame)
-        contentView.wantsLayer = true
-        contentView.layer?.backgroundColor = NSColor.black.cgColor
         
         guard let playbackView = createPlaybackView(for: screen) else {
             Logger.error("Create playback view failed.")
-            isVisible = false
             return
         }
         
         playbackViews[screenIdentifier] = playbackView
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        playbackView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(playbackView)
-        NSLayoutConstraint.activate([
-            playbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            playbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            playbackView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            playbackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
         
         let window = NSWindow(
             contentRect: screenFrame,
@@ -202,13 +153,13 @@ class WindowController: NSObject {
         )
         
         window.setFrameOrigin(screenFrame.origin)
-        window.contentView = contentView
+        window.contentView = playbackView
         window.level = NSWindow.Level(Int(CGWindowLevelForKey(.desktopIconWindow)) - 1)
         window.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .fullScreenAuxiliary]
         window.isReleasedWhenClosed = true
         window.ignoresMouseEvents = true
         window.orderFront(nil)
-        window.setIsVisible(isVisible)
+        window.setIsVisible(false)
         windows[screen.identifier] = window
     }
     
@@ -224,13 +175,28 @@ class WindowController: NSObject {
             selector: #selector(handleVideoUrlChange),
             name: .playVideoUrlChanged,
             object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleWallpaperIsVisibleChange),
+            name: .setWallpaperIsVisible,
+            object: nil)
     }
     
     @objc private func handleScreenChange(_ notification: Notification) {
         Logger.info("Screen change detected")
-        syncScreenConfigurations()
         removeWindowsForRemovedScreens()
         createWindowsForNewScreens()
+    }
+
+    @objc private func handleWallpaperIsVisibleChange(_ notification: Notification) {
+        if let identifier = notification.object as? String {
+            let screenIdentifier = identifier
+            if let window = windows[screenIdentifier] {
+                if let isVisible = notification.userInfo?["isVisible"] as? Bool {
+                    window.setIsVisible(isVisible)
+                }
+            }
+        }
     }
 
     private func createWindowsForNewScreens() {
@@ -266,7 +232,7 @@ class WindowController: NSObject {
         if let userInfo = notification.userInfo,
            let videoURL = userInfo["videoURL"] as? URL {
             Logger.info("Received video URL change notification: \(videoURL)")
-            for screen in NSScreen.screens {
+            for screen in currentScreens {
                 updateScreenConfiguration(screen, playbackType: .video, contentUrl: videoURL)
             }
         }

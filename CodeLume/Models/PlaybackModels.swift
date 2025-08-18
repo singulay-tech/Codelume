@@ -22,11 +22,11 @@ struct ScreenConfiguration: Codable {
     var isMainScreen: Bool
     var playbackType: PlaybackType
     var contentUrl: URL? = getDefaultVideoURL()
-    var volume: Float = 0.0
+    var volume: Float = 1.0
     var isPlaying: Bool = true
     var videoFillMode: VideoFillMode = .fill
 
-    init(screenIdentifier: String, playbackType: PlaybackType = .video, contentUrl: URL? = getDefaultVideoURL(), isMainScreen: Bool = true, videoFillMode: VideoFillMode = .fill) {
+    init(screenIdentifier: String, playbackType: PlaybackType = .video, contentUrl: URL? = getDefaultVideoURL(), isMainScreen: Bool = false, videoFillMode: VideoFillMode = .fill) {
         self.screenIdentifier = screenIdentifier
         self.isMainScreen = isMainScreen
         self.playbackType = playbackType
