@@ -2,10 +2,12 @@ import Foundation
 import AppKit
 
 class WindowController: NSObject {
-    var currentScreens: [NSScreen] = []
+    var screens: [NSScreen] = []
     var windows: [String: NSWindow] = [:]
     var screenConfigurations: [String: ScreenConfiguration] = [:]
     var playbackViews: [String: NSView] = [:]
+    private var lastScreenChangeTime: TimeInterval = 0
+    private let screenChangeDebounceInterval: TimeInterval = 1
     
     override init() {
         super.init()
@@ -27,12 +29,7 @@ class WindowController: NSObject {
     }
     
     private func createWindowsForAllScreens() {
-        for window in windows.values {
-            window.close()
-        }
-        windows.removeAll()
-        
-        for screen in currentScreens {
+        for screen in screens {
             createWindowForScreen(screen)
         }
     }
@@ -51,13 +48,13 @@ class WindowController: NSObject {
     private func loadConfigurations() {
         screenConfigurations = [:] 
         let configs = DatabaseManger.shared.getAllScreenConfigs()
-        currentScreens = NSScreen.screens
+        screens = NSScreen.screens
 
         for config in configs {
             screenConfigurations[config.screenIdentifier] = config
         }
 
-        for screen in currentScreens {
+        for screen in screens {
             let screenId = screen.identifier
             if screenConfigurations[screenId] == nil {
                 let newConfig = createDefaultConfig(for: screen)
@@ -109,7 +106,7 @@ class WindowController: NSObject {
             setFirstFrameAsWallpaper(videoURL: contentUrl)
         }
         
-        if !currentScreens.contains(where: { $0.identifier == screen.identifier }) {
+        if !screens.contains(where: { $0.identifier == screen.identifier }) {
             Logger.info("Screen does not exist, creating new window for it: \(screen.identifier)")
             createWindowForScreen(screen)
         }
@@ -153,13 +150,31 @@ class WindowController: NSObject {
         )
         
         window.setFrameOrigin(screenFrame.origin)
-        window.contentView = playbackView
+        
+        // 使用自动布局管理contentView
+        let contentView = NSView(frame: screenFrame)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        window.contentView = contentView
+        
+        // 将播放视图添加到contentView并设置自动布局约束
+        playbackView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(playbackView)
+        
+        // 添加约束使播放视图始终填充整个contentView
+        NSLayoutConstraint.activate([
+            playbackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            playbackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            playbackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            playbackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+        
         window.level = NSWindow.Level(Int(CGWindowLevelForKey(.desktopIconWindow)) - 1)
         window.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .fullScreenAuxiliary]
         window.isReleasedWhenClosed = true
         window.ignoresMouseEvents = true
         window.orderFront(nil)
         window.setIsVisible(false)
+        // window.delegate = self
         windows[screen.identifier] = window
     }
     
@@ -182,12 +197,76 @@ class WindowController: NSObject {
             object: nil)
     }
     
+    
     @objc private func handleScreenChange(_ notification: Notification) {
-        Logger.info("Screen change detected")
-        removeWindowsForRemovedScreens()
-        createWindowsForNewScreens()
-    }
+        let now = Date.timeIntervalSinceReferenceDate
+        if now - lastScreenChangeTime < screenChangeDebounceInterval {
+            Logger.info("Screen change ignored due to debounce")
+            return
+        }
+        lastScreenChangeTime = now
+        let currentScreens = NSScreen.screens
+        if currentScreens.count == screens.count {
+            screens = currentScreens
+            for screen in screens {
+                if let window = windows[screen.identifier] {
+                    let screenFrame = screen.frame
+                    Logger.info("Screen size: \(screenFrame.size)")
+                    window.contentAspectRatio = .zero
+                    window.setFrameOrigin(screenFrame.origin)
+                    window.setFrame(screenFrame, display: true, animate: true)
+                }
+            }
+        } else if currentScreens.count > screens.count {
+            // 获取新增的屏幕列表
+            let newScreens = currentScreens.filter { !screens.contains($0) }
+            screens = currentScreens
+            for screen in newScreens {
+                // 检查是否有对应的窗口存在，不存在则创建
+                if windows[screen.identifier] == nil {
+                    createWindowForScreen(screen)
+                } else {
+                    if let config = screenConfigurations[screen.identifier] {
+                        updateScreenConfiguration(screen, playbackType: config.playbackType, contentUrl: config.contentUrl)
+                    }
+                }
+            }
+        } else if currentScreens.count < screens.count {
+            // 获取移除的屏幕列表
+            let removedScreens = screens.filter { !currentScreens.contains($0) }
+            screens = currentScreens
+            for screen in removedScreens {
+                // 检查是否有对应的窗口存在，存在则移除
+                if let window = windows[screen.identifier] {
+                    // 移除对应的视图
+                    if let playbackView = playbackViews[screen.identifier] {
+                        playbackView.removeFromSuperview()
+                        if let config = screenConfigurations[screen.identifier] {
+                            switch config.playbackType {
+                            case .video:
+                                if let videoPlaybackView = playbackView as? VideoPlaybackView {
+                                    videoPlaybackView.releaseResources()
+                                }
+                                break
+                            case .sprite:
+                                break
+                            case .scene:
+                                break
+                            default: break
+                                
+                            }
+                        }
+                    }
+                    playbackViews.removeValue(forKey: screen.identifier)
+                    window.setIsVisible(false)
+                }
+            }
+        } else {
 
+        }
+    }
+    
+    
     @objc private func handleWallpaperIsVisibleChange(_ notification: Notification) {
         if let identifier = notification.object as? String {
             let screenIdentifier = identifier
@@ -198,60 +277,28 @@ class WindowController: NSObject {
             }
         }
     }
-
-    private func createWindowsForNewScreens() {
-        let currentScreens = NSScreen.screens
-        let currentScreenIds = Set(currentScreens.map { $0.identifier })
-        let existingWindowIds = Set(windows.keys)
-        let newScreenIds = currentScreenIds.subtracting(existingWindowIds)
-
-        if !newScreenIds.isEmpty {
-            Logger.info("Found \(newScreenIds.count) new screens, creating windows")
-            for screen in currentScreens {
-                if newScreenIds.contains(screen.identifier) {
-                    createWindowForScreen(screen)
-                }
-            }
-        } else {
-            Logger.info("Updating layouts for all existing windows")
-            let screenMap = [String: NSScreen](uniqueKeysWithValues: currentScreens.map { ($0.identifier, $0) })
-            for (screenIdentifier, window) in windows {
-                if let screen = screenMap[screenIdentifier] {
-                    let screenFrame = screen.frame
-                    window.contentAspectRatio = .zero
-                    window.setFrame(screenFrame, display: true, animate: true)
-                    if let contentView = window.contentView {
-                        contentView.setFrameSize(screenFrame.size)
-                    }
-                }
-            }
-        }
-    }
     
     @objc func handleVideoUrlChange(_ notification: Notification) {
-        if let userInfo = notification.userInfo,
-           let videoURL = userInfo["videoURL"] as? URL {
+        if let userInfo = notification.userInfo, let videoURL = userInfo["videoURL"] as? URL {
             Logger.info("Received video URL change notification: \(videoURL)")
-            for screen in currentScreens {
-                updateScreenConfiguration(screen, playbackType: .video, contentUrl: videoURL)
+            
+            // 检查是否指定了屏幕ID
+            if let screenIdentifier = userInfo["screenIdentifier"] as? String {
+                Logger.info("Targeting specific screen: \(screenIdentifier)")
+                
+                // 查找对应的屏幕
+                if let targetScreen = screens.first(where: { $0.identifier == screenIdentifier }) {
+                    // 只更新指定屏幕的配置
+                    updateScreenConfiguration(targetScreen, playbackType: .video, contentUrl: videoURL)
+                } else {
+                    Logger.warning("Screen not found for identifier: \(screenIdentifier)")
+                }
+            } else {
+                // 如果没有指定屏幕ID，则更新所有屏幕
+                for screen in screens {
+                    updateScreenConfiguration(screen, playbackType: .video, contentUrl: videoURL)
+                }
             }
         }
     }
-    
-    func removeWindowsForRemovedScreens() {
-        let currentScreens = NSScreen.screens
-        let currentScreenIdentifiers = Set(currentScreens.map { $0.identifier })
-        let removedIdentifiers = Set(windows.keys).subtracting(currentScreenIdentifiers)
-        
-        for removedIdentifier in removedIdentifiers {
-            Logger.info("Screen removed, cleaning up resources for: \(removedIdentifier)")
-            if let window = windows[removedIdentifier] {
-                window.close()
-                windows.removeValue(forKey: removedIdentifier)
-            }
-            playbackViews.removeValue(forKey: removedIdentifier)
-        }
-    }
-    
-    
 }

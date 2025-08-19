@@ -22,11 +22,6 @@ struct GeneralSettingsView: View {
     }
     
     @State private var lastHideDockIconToggleTime: Date = .distantPast
-    @AppStorage("hideDockIcon") private var hideDockIcon: Bool = false {
-        didSet {
-            setDockIconVisibility(hideDockIcon)
-        }
-    }
     @State private var showRestartAlert = false
     
     var body: some View {
@@ -62,17 +57,6 @@ struct GeneralSettingsView: View {
                 }
                 .frame(width: 130)
             }
-            Divider()
-            
-            IconToggle(iconName: "dock.rectangle", title: "Hide Dock icon", isOn: $hideDockIcon) {
-                newValue in
-                let now = Date()
-                if now.timeIntervalSince(lastHideDockIconToggleTime) > 0.5 {
-                    hideDockIcon = newValue
-                    lastHideDockIconToggleTime = now
-                }
-            }
-            
             Divider()
             
             IconToggle(iconName: "power.circle", title: "Start at login", isOn: $startAtLogin) {

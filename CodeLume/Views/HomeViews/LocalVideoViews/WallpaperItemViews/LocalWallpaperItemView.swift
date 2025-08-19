@@ -1,5 +1,6 @@
 import SwiftUI
 import AVKit
+import AppKit
 
 struct LocalWallpaperItemView: View {
     let item: WallpaperItem
@@ -8,7 +9,11 @@ struct LocalWallpaperItemView: View {
     @State private var isShowingPreview = false
     @State private var isShowingDetails = false
     @State private var isButtonDisabled = false
+    @State private var isShowingScreenSelector = false
+    @State private var selectedScreenId: String?
+    @State private var screens = NSScreen.screens
     private let buttonDelay: Double = 0.5
+    
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -30,7 +35,7 @@ struct LocalWallpaperItemView: View {
                     Spacer()
                     VideoFloatButton(text: "Preview", action: debouncedAction { isShowingPreview = true })
                     VideoFloatButton(text: "Details", action: debouncedAction(showDetails))
-                    VideoFloatButton(text: "Play", action: debouncedAction(playVideo))
+                    VideoFloatButton(text: "Play", action: debouncedAction { isShowingScreenSelector = true })
                     VideoFloatButton(text: "Delete", color: .red, action: debouncedAction(deleteVideo))
                 }
                 .padding(8)
@@ -48,6 +53,9 @@ struct LocalWallpaperItemView: View {
                     .padding(20)
                 VideoCloseButton(action: { isShowingDetails = false })
             }
+        }
+        .sheet(isPresented: $isShowingScreenSelector) {
+            ScreenSelectorView(screens: NSScreen.screens, onSelect: handleScreenSelection)
         }
         .onAppear {
             generateThumbnail()
@@ -89,6 +97,34 @@ struct LocalWallpaperItemView: View {
         NotificationCenter.default.post(name: .playVideoUrlChanged, object: nil, userInfo: ["videoURL": videoURL])
     }
     
+    private func handleScreenSelection(screen: NSScreen?) {
+        guard let screen = screen else {
+            isShowingScreenSelector = false
+            return
+        }
+        
+        let videoURL = item.fileUrl
+        
+        // 检查是否为"所有屏幕"选项
+        if screen.identifier == "AllScreens" {
+            // 发送不带屏幕ID的通知，让WindowController更新所有屏幕
+            NotificationCenter.default.post(
+                name: .playVideoUrlChanged,
+                object: nil,
+                userInfo: ["videoURL": videoURL]
+            )
+        } else {
+            // 发送带屏幕ID的通知
+            NotificationCenter.default.post(
+                name: .playVideoUrlChanged,
+                object: nil,
+                userInfo: ["videoURL": videoURL, "screenIdentifier": screen.identifier]
+            )
+        }
+        
+        isShowingScreenSelector = false
+    }
+    
     private func debouncedAction(_ action: @escaping () -> Void) -> () -> Void {
         return {
             if !isButtonDisabled {
@@ -126,6 +162,130 @@ struct LocalWallpaperItemView: View {
             DatabaseManger.shared.deleteLocalVideo(item: item)
             NotificationCenter.default.post(name: .refreshLocalVideoList, object: nil)
             Logger.info("Local video deleted successfully: \(item.fileUrl)")
+        }
+    }
+}
+
+// 屏幕选择器视图
+struct ScreenSelectorView: View {
+    let screens: [NSScreen]
+    let onSelect: (NSScreen?) -> Void
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("Select Screen")
+                    .font(.headline)
+                Spacer()
+                Button("Cancel") {
+                    onSelect(nil)
+                }
+            }
+            .padding()
+            
+            Divider()
+            
+            ScrollView {
+                VStack(spacing: 8) {
+                    // 添加"所有屏幕"选项
+                    AllScreensRow(onSelect: onSelect)
+                    
+                    ForEach(screens, id: \.identifier) {
+                        screen in
+                        ScreenRow(screen: screen, onSelect: onSelect)
+                    }
+                }
+                .padding()
+            }
+        }
+        .frame(width: 300, height: CGFloat(min(400, screens.count * 80 + 180))) // 增加高度以容纳"所有屏幕"选项
+    }
+}
+
+// 所有屏幕选项行视图
+struct AllScreensRow: View {
+    let onSelect: (NSScreen?) -> Void
+    @State private var isHovering = false
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("所有屏幕")
+                    .font(.body)
+                    .bold()
+                Text("在所有可用屏幕上显示")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            Image(systemName: "display.2")
+                .foregroundColor(.blue)
+        }
+        .padding()
+        .background(isHovering ? Color.gray.opacity(0.1) : Color.clear)
+        .cornerRadius(8)
+        .onHover { hovering in
+            isHovering = hovering
+        }
+        .onTapGesture {
+            // 创建一个虚拟的NSScreen实例来表示"所有屏幕"
+            let allScreensPlaceholder = AllScreensPlaceholder()
+            onSelect(allScreensPlaceholder)
+        }
+    }
+}
+
+// 虚拟的NSScreen子类，用于表示"所有屏幕"选项
+class AllScreensPlaceholder: NSScreen {
+    override var localizedName: String {
+        return "AllScreens"
+    }
+    
+    override var frame: NSRect {
+        return .zero
+    }
+    
+    override class var main: NSScreen? {
+        return nil
+    }
+    
+    override var deviceDescription: [NSDeviceDescriptionKey : Any] {
+        return [:]
+    }
+}
+
+// 屏幕行项目视图
+struct ScreenRow: View {
+    let screen: NSScreen
+    let onSelect: (NSScreen?) -> Void
+    @State private var isHovering = false
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text("Screen \(screen.identifier)")
+                    .font(.body)
+                Text("\(Int(screen.frame.width))x\(Int(screen.frame.height))")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            if screen == NSScreen.main {
+                Text("Main")
+                    .font(.caption)
+                    .padding(4)
+                    .background(Color.blue.opacity(0.1))
+                    .cornerRadius(4)
+            }
+        }
+        .padding()
+        .background(isHovering ? Color.gray.opacity(0.1) : Color.clear)
+        .cornerRadius(8)
+        .onHover { hovering in
+            isHovering = hovering
+        }
+        .onTapGesture {
+            onSelect(screen)
         }
     }
 }

@@ -25,6 +25,13 @@ class VideoPlaybackView: AVPlayerView {
         )
     }
 
+    func releaseResources() {
+        player?.pause()
+        player = nil
+        NotificationCenter.default.removeObserver(self)
+    }
+
+
     @objc private func handlePlaybackDidEnd(notification: Notification) {
         if let playerItem = notification.object as? AVPlayerItem {
             playerItem.seek(to: CMTime.zero, toleranceBefore: .zero, toleranceAfter: .zero) {
@@ -35,9 +42,7 @@ class VideoPlaybackView: AVPlayerView {
     }
 
     deinit {
-        self.player?.pause()
-        self.player = nil
-        NotificationCenter.default.removeObserver(self)
+        releaseResources()
     }
 
     // 音量控制

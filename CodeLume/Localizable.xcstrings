@@ -14,6 +14,16 @@
     "%@:" : {
 
     },
+    "%lldx%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lldx%2$lld"
+          }
+        }
+      }
+    },
     "© 2025 CodeLume. All rights reserved." : {
       "localizations" : {
         "zh-Hans" : {
@@ -268,6 +278,7 @@
       }
     },
     "Hide Dock icon" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -358,6 +369,9 @@
           }
         }
       }
+    },
+    "Main" : {
+
     },
     "Mute" : {
       "extractionState" : "manual",
@@ -590,6 +604,12 @@
     "SceneKit" : {
 
     },
+    "Screen %@" : {
+
+    },
+    "Select Screen" : {
+
+    },
     "Sequence" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -700,7 +720,13 @@
     "可用屏幕:" : {
 
     },
+    "在所有可用屏幕上显示" : {
+
+    },
     "屏幕管理" : {
+
+    },
+    "所有屏幕" : {
 
     },
     "播放状态:" : {
