@@ -14,16 +14,16 @@ struct PlayingView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text("屏幕管理")
+            Text("Screen Management")
                 .font(.title)
                 .fontWeight(.bold)
 
             // 屏幕列表
             VStack(alignment: .leading, spacing: 10) {
-                Text("可用屏幕:")
+                Text("Available Screens:")
                     .font(.headline)
 
-                Picker("选择屏幕", selection: $viewModel.selectedScreen) {
+                Picker("Select Screen", selection: $viewModel.selectedScreen) {
                     ForEach(viewModel.screens, id: \.self) {
                         Text("\($0.localizedName) (\($0.frame.width)x\($0.frame.height))")
                     }
@@ -37,15 +37,15 @@ struct PlayingView: View {
 
             // 播放设置
             VStack(alignment: .leading, spacing: 10) {
-                Text("播放设置:")
+                Text("Playback Settings:")
                     .font(.headline)
 
                 // 播放类型
                 HStack {
-                    Text("播放类型:")
+                    Text("Playback Type:")
                         .frame(width: 100, alignment: .leading)
-                    Picker("播放类型", selection: $viewModel.selectedPlaybackType) {
-                        Text("视频").tag(PlaybackType.video)
+                    Picker("Playback Type", selection: $viewModel.selectedPlaybackType) {
+                        Text("Video").tag(PlaybackType.video)
                         Text("SpriteKit").tag(PlaybackType.sprite)
                         Text("SceneKit").tag(PlaybackType.scene)
                     }
@@ -55,11 +55,11 @@ struct PlayingView: View {
                 // 视频文件路径
                 if viewModel.selectedPlaybackType == .video {
                     HStack {
-                        Text("文件路径:")
+                        Text("File Path:")
                             .frame(width: 100, alignment: .leading)
-                        TextField("输入文件路径", text: $viewModel.contentPath)
+                        TextField("Enter file path", text: $viewModel.contentPath)
                             .frame(width: 300)
-                        Button("浏览") {
+                        Button("Browse") {
                             viewModel.selectFile()
                         }
                     }
@@ -67,7 +67,7 @@ struct PlayingView: View {
 
                 // 音量控制
                 HStack {
-                    Text("音量:")
+                    Text("Volume:")
                         .frame(width: 100, alignment: .leading)
                     Slider(
                         value: $viewModel.volume,
@@ -80,14 +80,14 @@ struct PlayingView: View {
 
                 // 播放控制
                 HStack {
-                    Text("播放状态:")
+                    Text("Playback Status:")
                         .frame(width: 100, alignment: .leading)
-                    Toggle("正在播放", isOn: $viewModel.isPlaying)
+                    Toggle("Playing", isOn: $viewModel.isPlaying)
                 }
             }
 
             // 更新按钮
-            Button("更新配置") {
+            Button("Update Configuration") {
                 viewModel.updateScreenConfiguration()
             }
             .frame(maxWidth: .infinity)

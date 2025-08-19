@@ -18,7 +18,7 @@ class SpriteKitPlaybackView: SKView {
         self.presentScene(scene)
         
         // 添加默认的SpriteKit内容
-        let labelNode = SKLabelNode(text: "SpriteKit 演示")
+        let labelNode = SKLabelNode(text: "SpriteKit Demo")
         labelNode.position = CGPoint(x: self.frame.size.width/2, y: self.frame.size.height/2)
         labelNode.fontSize = 30
         labelNode.fontColor = .white

@@ -210,10 +210,10 @@ struct AllScreensRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text("所有屏幕")
+                Text("All Screens")
                     .font(.body)
                     .bold()
-                Text("在所有可用屏幕上显示")
+                Text("Display on all available screens")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }

@@ -9,10 +9,11 @@
             "value" : "%1$@ (%2$lfx%3$lf)"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "%@:" : {
-
+      "shouldTranslate" : false
     },
     "%lldx%lld" : {
       "localizations" : {
@@ -22,7 +23,8 @@
             "value" : "%1$lldx%2$lld"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "© 2025 CodeLume. All rights reserved." : {
       "localizations" : {
@@ -50,6 +52,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "关于"
+          }
+        }
+      }
+    },
+    "All Screens" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有屏幕"
+          }
+        }
+      }
+    },
+    "Available Screens:" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可用屏幕："
+          }
+        }
+      }
+    },
+    "Browse" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "浏览"
           }
         }
       }
@@ -180,6 +212,16 @@
         }
       }
     },
+    "Display on all available screens" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在所有可用屏幕上显示"
+          }
+        }
+      }
+    },
     "Duration" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -202,6 +244,16 @@
         }
       }
     },
+    "Enter file path" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输入文件路径"
+          }
+        }
+      }
+    },
     "File Path" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -213,6 +265,16 @@
         }
       }
     },
+    "File Path:" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件路径："
+          }
+        }
+      }
+    },
     "File Size" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -220,6 +282,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "文件大小"
+          }
+        }
+      }
+    },
+    "FileName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件名称"
           }
         }
       }
@@ -256,6 +329,16 @@
         }
       }
     },
+    "Get Started" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始使用"
+          }
+        }
+      }
+    },
     "Half an hour" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -273,17 +356,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你好世界"
-          }
-        }
-      }
-    },
-    "Hide Dock icon" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "隐藏Dock图标"
           }
         }
       }
@@ -371,7 +443,14 @@
       }
     },
     "Main" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主"
+          }
+        }
+      }
     },
     "Mute" : {
       "extractionState" : "manual",
@@ -519,6 +598,21 @@
         }
       }
     },
+    "Playback Settings:" : {
+
+    },
+    "Playback Status:" : {
+
+    },
+    "Playback Type" : {
+
+    },
+    "Playback Type:" : {
+
+    },
+    "Playing" : {
+
+    },
     "Please restart the app to apply the new language settings." : {
       "localizations" : {
         "zh-Hans" : {
@@ -570,9 +664,6 @@
         }
       }
     },
-    "Reboot" : {
-
-    },
     "Resolution" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -604,14 +695,48 @@
         }
       }
     },
+    "Rstart" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重启"
+          }
+        }
+      }
+    },
     "SceneKit" : {
 
     },
     "Screen %@" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕 %@"
+          }
+        }
+      }
+    },
+    "Screen Management" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕管理"
+          }
+        }
+      }
     },
     "Select Screen" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择屏幕"
+          }
+        }
+      }
     },
     "Sequence" : {
       "extractionState" : "manual",
@@ -620,6 +745,27 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "顺序"
+          }
+        }
+      }
+    },
+    "Show on next startup" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下次启动时显示"
+          }
+        }
+      }
+    },
+    "Show welcome screen" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "展示欢迎界面"
           }
         }
       }
@@ -669,6 +815,16 @@
         }
       }
     },
+    "This software is free to use. In addition to the built-in wallpapers, this installation package does not include other wallpapers. In the future, there will be dedicated servers to support each user in creating their own wallpapers and sharing them. Developers are working hard to improve the software. If you encounter any issues or have suggestions during use, please contact us through the About interface." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该软件可免费使用。除内置壁纸外，此安装包不包含其他壁纸内容。后续将推出专属服务器，支持每位用户创建并分享自己的壁纸。开发团队正在持续优化软件，如果您在使用过程中遇到问题或有改进建议，请通过\"关于\"界面联系我们。"
+          }
+        }
+      }
+    },
     "This video is currently being used by a screen and cannot be deleted." : {
       "localizations" : {
         "zh-Hans" : {
@@ -690,12 +846,32 @@
         }
       }
     },
+    "Update Configuration" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新配置"
+          }
+        }
+      }
+    },
     "Version %@" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "版本%@"
+          }
+        }
+      }
+    },
+    "Video" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "视频"
           }
         }
       }
@@ -720,53 +896,25 @@
         }
       }
     },
-    "可用屏幕:" : {
-
+    "Volume:" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音量："
+          }
+        }
+      }
     },
-    "在所有可用屏幕上显示" : {
-
-    },
-    "屏幕管理" : {
-
-    },
-    "所有屏幕" : {
-
-    },
-    "播放状态:" : {
-
-    },
-    "播放类型" : {
-
-    },
-    "播放类型:" : {
-
-    },
-    "播放设置:" : {
-
-    },
-    "文件路径:" : {
-
-    },
-    "更新配置" : {
-
-    },
-    "正在播放" : {
-
-    },
-    "浏览" : {
-
-    },
-    "视频" : {
-
-    },
-    "输入文件路径" : {
-
-    },
-    "选择屏幕" : {
-
-    },
-    "音量:" : {
-
+    "Welcome to CodeLume! To control the installation package size, we have built-in default dynamic wallpapers that have been automatically loaded. For more operations, please find the C-shaped icon in the status bar and click on it." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "欢迎使用码镜！为控制安装包体积，我们已内置默认动态壁纸并自动加载。更多操作请点击状态栏中的 C 形图标进行查看。"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
