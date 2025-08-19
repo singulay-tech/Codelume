@@ -119,14 +119,6 @@ struct GeneralSettingsView: View {
         }
     }
     
-    private func restartApplication() {
-        let task = Process()
-        task.launchPath = "/bin/sh"
-        task.arguments = ["-c", "sleep 1 && open \"\(Bundle.main.bundlePath)\""]
-        task.launch()
-        NSApplication.shared.terminate(nil)
-    }
-    
     private func setStartAtLogin(_ enabled: Bool) {
         do {
             if enabled {

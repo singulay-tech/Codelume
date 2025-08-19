@@ -47,6 +47,9 @@ struct MenuBarView: View {
                 importExternalVideo()
             }
             Divider()
+            Button("Reboot") {
+                restartApplication()
+            }
             Button("Quit") {
                 NSApplication.shared.terminate(nil)
             }

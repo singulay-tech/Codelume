@@ -9,6 +9,14 @@ import AppKit
 import Foundation
 import IOKit.ps
 
+func restartApplication() {
+    let task = Process()
+    task.launchPath = "/bin/sh"
+    task.arguments = ["-c", "sleep 1 && open \"\(Bundle.main.bundlePath)\""]
+    task.launch()
+    NSApplication.shared.terminate(nil)
+}
+
 func setDockIconVisibility(_ hide: Bool) {
     let policy: NSApplication.ActivationPolicy = hide ? .accessory : .regular
     let success = NSApp.setActivationPolicy(policy)

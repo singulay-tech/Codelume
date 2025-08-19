@@ -570,6 +570,9 @@
         }
       }
     },
+    "Reboot" : {
+
+    },
     "Resolution" : {
       "extractionState" : "manual",
       "localizations" : {
