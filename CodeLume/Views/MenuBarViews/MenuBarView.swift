@@ -47,7 +47,7 @@ struct MenuBarView: View {
                 importExternalVideo()
             }
             Divider()
-            Button("Reboot") {
+            Button("Rstart") {
                 restartApplication()
             }
             Button("Quit") {
