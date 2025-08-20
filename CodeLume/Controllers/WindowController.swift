@@ -124,10 +124,46 @@ class WindowController: NSObject {
         
         if let window = windows[screen.identifier] {     
             Logger.debug("Update screen window: \(screen.identifier)")
-            let newView = createPlaybackView(for: screen)
-            playbackViews[screenIdentifier] = newView
-            window.contentView = newView
-            window.setFrame(screen.frame, display: true, animate: true)
+            
+            // 先释放旧视图的资源
+            if let oldView = playbackViews[screenIdentifier] {
+                // 检查旧视图是否为VideoPlaybackView类型并调用releaseResources方法
+                if let videoPlaybackView = oldView as? VideoPlaybackView {
+                    videoPlaybackView.releaseResources()
+                }
+                // 从窗口内容视图中移除旧视图
+                if let contentView = window.contentView {
+                    contentView.subviews.forEach { $0.removeFromSuperview() }
+                }
+            }
+            
+            // 创建新视图
+            if let newView = createPlaybackView(for: screen) {
+                playbackViews[screenIdentifier] = newView
+                
+                // 如果窗口没有contentView，创建一个新的
+                if window.contentView == nil {
+                    let contentView = NSView(frame: screen.frame)
+                    contentView.translatesAutoresizingMaskIntoConstraints = false
+                    window.contentView = contentView
+                }
+                
+                // 将新视图添加到contentView并设置自动布局约束（与createWindowForScreen保持一致）
+                if let contentView = window.contentView {
+                    newView.translatesAutoresizingMaskIntoConstraints = false
+                    contentView.addSubview(newView)
+                    
+                    // 添加约束使播放视图始终填充整个contentView
+                    NSLayoutConstraint.activate([
+                        newView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                        newView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                        newView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                        newView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+                    ])
+                }
+                
+                window.setFrame(screen.frame, display: true, animate: true)
+            }
         }
     }
     
