@@ -44,7 +44,7 @@ struct WelcomeView: View {
             .padding(.top, 20)
         }
         .padding(40)
-        .frame(minWidth: 450, minHeight: 450)
+        .frame(minWidth: 550, minHeight: 450)
     }
 }
 
