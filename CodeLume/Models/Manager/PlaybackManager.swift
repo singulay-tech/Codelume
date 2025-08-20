@@ -11,14 +11,14 @@ class PlaybackManager {
                 Logger.info("Global playback state changed to: \(isPlaying)")
                 NotificationCenter.default.post(name: .playbackStateChanged, 
                                               object: nil, 
-                                              userInfo: ["isPlaying": isPlaying])
+                                              userInfo: ["isPlaying": isPlaying, "seekToZero": seekToZero])
             }
         }
     }
     
     // 每个屏幕的播放状态
     private var screenPlaybackStates: [String: Bool] = [:]
-    
+    private var seekToZero = false
     private var timer: Timer?
     private var screenLock = false
     
@@ -103,12 +103,14 @@ class PlaybackManager {
             if pauseIfOtherAppOnDesktop && isOtherAppOnScreen(screen) {
                 Logger.debug("Other app detected on screen: \(screenName)")
                 shouldScreenPlay = false
+                seekToZero = false
             }
             
             // 检查是否有全屏应用
             if pauseIfOtherAppFullScreen && isAnyAppFullScreenOnScreen(screen) {
                 Logger.debug("Full screen app detected on screen: \(screenName)")
                 shouldScreenPlay = false
+                seekToZero = true
             }
             
             // 只有当屏幕状态发生变化时，才发送特定屏幕的播放状态通知
@@ -119,7 +121,7 @@ class PlaybackManager {
                 // 发送屏幕特定的播放状态通知
                 NotificationCenter.default.post(name: .screenPlayStateChanged,
                                               object: screenId,
-                                              userInfo: ["screenName": screenName, "isPlaying": shouldScreenPlay])
+                                              userInfo: ["screenName": screenName, "isPlaying": shouldScreenPlay, "seekToZero": seekToZero])
             }
         }
         
@@ -139,6 +141,7 @@ class PlaybackManager {
         // 如果屏幕锁定，全局暂停
         if screenLock {
             isPlaying = false
+            seekToZero = true
             return
         }
         
@@ -149,12 +152,14 @@ class PlaybackManager {
         if pauseIfBatteryPowered && isBatteryPowered() {
             Logger.debug("Pausing playback because device is on battery power")
             isPlaying = false
+            seekToZero = true
             return
         }
         
         if pauseIfPowerSaving && isPowerSavingMode() {
             Logger.debug("Pausing playback because device is in power saving mode")
             isPlaying = false
+            seekToZero = true
             return
         }
         

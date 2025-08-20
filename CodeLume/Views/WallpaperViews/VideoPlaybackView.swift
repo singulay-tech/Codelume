@@ -3,7 +3,11 @@ import AVKit
 
 class VideoPlaybackView: AVPlayerView {
     private var isPlaying = true
+    private var currentScreenPlayingState = true
     private var playScreen : NSScreen = NSScreen.main!
+    private var pause: Bool = UserDefaults.standard.bool(forKey: "pause")
+    private var mute: Bool = UserDefaults.standard.bool(forKey: "mute")
+    private var volume: Float = UserDefaults.standard.float(forKey: "volume")
 
     func startMonitoringNotification() {
         NotificationCenter.default.addObserver(
@@ -26,6 +30,25 @@ class VideoPlaybackView: AVPlayerView {
             name: .playbackStateChanged,
             object: nil
         )
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handlePause),
+            name: .pause,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleMute),
+            name: .mute,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleVolume),
+            name: .volume,
+            object: nil
+        )
     }
 
     func releaseResources() {
@@ -34,6 +57,9 @@ class VideoPlaybackView: AVPlayerView {
         NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.removeObserver(self, name: .screenPlayStateChanged, object: nil)
         NotificationCenter.default.removeObserver(self, name: .playbackStateChanged, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .pause, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .mute, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .volume, object: nil)
     }
 
 
@@ -47,7 +73,7 @@ class VideoPlaybackView: AVPlayerView {
     }
 
     @objc private func handleScreenPlayStateChanged(notification: Notification) {
-        if !isPlaying {
+        if !isPlaying || pause {
             return
         }
 
@@ -57,11 +83,19 @@ class VideoPlaybackView: AVPlayerView {
                     if shouldPlay {
                         Logger.info("Screen play state changed to playing.")
 //                        player?.seek(to: CMTime.zero, toleranceBefore: .zero, toleranceAfter: .zero)
-                        player?.play()
+                        currentScreenPlayingState = true
+                        if !pause && isPlaying {
+                            player?.play()
+                        }
                     } else {
                         Logger.info("Screen play state changed to paused.")
+                        currentScreenPlayingState = false
                         player?.pause()
-                        player?.seek(to: CMTime.zero, toleranceBefore: .zero, toleranceAfter: .zero)
+                        if let seekToZero = notification.userInfo?["seekToZero"] as? Bool {
+                            if seekToZero {
+                                player?.seek(to: CMTime.zero, toleranceBefore: .zero, toleranceAfter: .zero)
+                            }
+                        }
                     }
                 }
             }
@@ -73,14 +107,42 @@ class VideoPlaybackView: AVPlayerView {
             if isPlaying {
                 Logger.info("Playback state changed to playing.")
                 self.isPlaying = true
-                
-                player?.play()
+                if !pause && currentScreenPlayingState {
+                    player?.play()
+                }
             } else {
                 Logger.info("Playback state changed to paused.")
                 self.isPlaying = false
                 player?.pause()
                 player?.seek(to: CMTime.zero, toleranceBefore: .zero, toleranceAfter: .zero)
             }
+        }
+    }
+
+    @objc private func handlePause(notification: Notification) {
+        if let pause = notification.object as? Bool {
+            self.pause = pause
+            if pause {
+                player?.pause()
+            } else {
+                if isPlaying && currentScreenPlayingState {
+                    player?.play()
+                }
+            }
+        }
+    }
+
+    @objc private func handleMute(notification: Notification) {
+        if let mute = notification.object as? Bool {
+            self.mute = mute
+            player?.isMuted = mute
+        }
+    }
+
+    @objc private func handleVolume(notification: Notification) {
+        if let volume = notification.object as? Float {
+            self.volume = volume
+            player?.volume = volume
         }
     }
 
@@ -111,7 +173,9 @@ class VideoPlaybackView: AVPlayerView {
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 NotificationCenter.default.post(name: .setWallpaperIsVisible, object: config.screenIdentifier, userInfo: ["isVisible": true])
-                player.play()
+                if !self.pause {
+                    player.play()
+                }
             }
         }
     }

@@ -7,12 +7,12 @@ struct MenuBarView: View {
     @Environment(\.openSettings) private var openSettings
     @AppStorage("pause") private var pause: Bool = false {
         didSet {
-//            NotificationCenter.default.post(name: .pause, object: pause)
+           NotificationCenter.default.post(name: .pause, object: pause)
         }
     }
     @AppStorage("mute") private var mute: Bool = false {
         didSet {
-//            NotificationCenter.default.post(name: .mute, object: mute)
+           NotificationCenter.default.post(name: .mute, object: mute)
         }
     }
     
@@ -22,21 +22,21 @@ struct MenuBarView: View {
             Button("Home") {
                 openOrBringToFrontWindow(id: "home")
             }
-//            Divider()
-//            Toggle(isOn: $pause) {
-//                Text("Pause")
-//            }
-//            .toggleStyle(.checkbox)
-//            .onChange(of: pause) { oldValue, newValue in
-//                pause = newValue
-//            }
-//            Toggle(isOn: $mute) {
-//                Text("Mute")
-//            }
-//            .toggleStyle(.checkbox)
-//            .onChange(of: mute) { oldValue, newValue in
-//                mute = newValue
-//            }
+           Divider()
+           Toggle(isOn: $pause) {
+               Text("Pause")
+           }
+           .toggleStyle(.checkbox)
+           .onChange(of: pause) { oldValue, newValue in
+               pause = newValue
+           }
+           Toggle(isOn: $mute) {
+               Text("Mute")
+           }
+           .toggleStyle(.checkbox)
+           .onChange(of: mute) { oldValue, newValue in
+               mute = newValue
+           }
             Divider()
             Button("Preferences") {
                 NSApp.activate(ignoringOtherApps: true)
