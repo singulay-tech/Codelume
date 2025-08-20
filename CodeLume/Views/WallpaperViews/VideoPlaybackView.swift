@@ -52,6 +52,7 @@ class VideoPlaybackView: AVPlayerView {
     }
 
     func releaseResources() {
+        Logger.info("Release video playback view resources. Screen: \(playScreen.identifier)")
         player?.pause()
         player = nil
         NotificationCenter.default.removeObserver(self)

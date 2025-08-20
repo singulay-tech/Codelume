@@ -88,7 +88,7 @@ class WindowController: NSObject {
         switch config.playbackType {
         case .video:
             Logger.info("Create video playback view.")
-            if !setFirstFrameAsWallpaper(videoURL: contentUrl) { return nil }
+            if !setFirstFrameAsWallpaper(videoURL: contentUrl, screenLocalName: screen.identifier) { return nil }
             return VideoPlaybackView(frame: viewFrame, config: config, screen: screen)
         case .sprite:
             Logger.info("Create sprite playback view.")
@@ -103,7 +103,7 @@ class WindowController: NSObject {
         NotificationCenter.default.post(name: .setWallpaperIsVisible, object: screen.identifier, userInfo: ["isVisible": false])
 
         if let contentUrl = contentUrl {
-            setFirstFrameAsWallpaper(videoURL: contentUrl)
+            setFirstFrameAsWallpaper(videoURL: contentUrl, screenLocalName: screen.identifier)
         }
         
         if !screens.contains(where: { $0.identifier == screen.identifier }) {
