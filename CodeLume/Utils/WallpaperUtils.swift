@@ -101,10 +101,15 @@ func setWallpaper(image: NSImage, name: String, screenLocalName: String) -> Bool
     }
     
     let imageDir = docDir.appendingPathComponent("currentwallpaper")
-    
-    // 检查目录是否存在
-    guard fileManager.fileExists(atPath: imageDir.path) else {
-        Logger.error("Directory \(imageDir.path) does not exist.")
+
+    // 确保目录存在，如果不存在则创建
+    do {
+        if !fileManager.fileExists(atPath: imageDir.path) {
+            try fileManager.createDirectory(at: imageDir, withIntermediateDirectories: true, attributes: nil)
+            Logger.info("Created directory: \(imageDir.path)")
+        }
+    } catch {
+        Logger.error("Failed to create directory \(imageDir.path): \(error)")
         return false
     }
     

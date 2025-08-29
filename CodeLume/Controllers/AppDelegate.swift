@@ -9,6 +9,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // 应用启动时被调用
     func applicationWillFinishLaunching(_ notification: Notification) {
+        // 确保开机自启默认关闭
+        if UserDefaults.standard.object(forKey: "startAtLogin") == nil {
+            UserDefaults.standard.set(false, forKey: "startAtLogin")
+            UserDefaults.standard.synchronize()
+            Logger.info("Set default startAtLogin to false")
+        }
+        
         // 启动播放管理器
         PlaybackManager.shared.start()
         Logger.info("CodeLume application started")
