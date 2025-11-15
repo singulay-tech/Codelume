@@ -30,13 +30,13 @@ struct MenuBarView: View {
            .onChange(of: pause) { oldValue, newValue in
                pause = newValue
            }
-           Toggle(isOn: $mute) {
-               Text("Mute")
-           }
-           .toggleStyle(.checkbox)
-           .onChange(of: mute) { oldValue, newValue in
-               mute = newValue
-           }
+        //    Toggle(isOn: $mute) {
+        //        Text("Mute")
+        //    }
+        //    .toggleStyle(.checkbox)
+        //    .onChange(of: mute) { oldValue, newValue in
+        //        mute = newValue
+        //    }
             Divider()
             Button("Preferences") {
                 NSApp.activate(ignoringOtherApps: true)

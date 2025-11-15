@@ -788,6 +788,26 @@
         }
       }
     },
+    "Screensaver Saved" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏保已保存"
+          }
+        }
+      }
+    },
+    "Screensaver saved successfully! Double-click to install." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏保保存成功！双击安装。"
+          }
+        }
+      }
+    },
     "Select Screen" : {
       "localizations" : {
         "zh-Hans" : {
@@ -943,6 +963,7 @@
       }
     },
     "Volume" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -968,26 +989,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "欢迎使用码镜！为控制安装包体积，我们已内置默认动态壁纸并自动加载。更多操作请点击状态栏中的 C 形图标进行查看。"
-          }
-        }
-      }
-    },
-    "Screensaver Saved" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "屏保已保存"
-          }
-        }
-      }
-    },
-    "Screensaver saved successfully! Double-click to install." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "屏保保存成功！双击安装。"
           }
         }
       }

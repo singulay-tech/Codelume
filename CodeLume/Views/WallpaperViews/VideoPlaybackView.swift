@@ -139,14 +139,14 @@ class VideoPlaybackView: AVPlayerView {
             // 判断当前屏幕是否为主屏幕
             // 如果是主屏幕，使用用户配置的静音状态
             // 如果是其他屏幕，强制静音
-            player?.isMuted = playScreen == NSScreen.main ? mute : true
+            player?.isMuted = false
         }
     }
 
     @objc private func handleVolume(notification: Notification) {
         if let volume = notification.object as? Float {
             self.volume = volume
-            player?.volume = volume
+            player?.volume = 0.0
         }
     }
 
@@ -168,11 +168,11 @@ class VideoPlaybackView: AVPlayerView {
         if let url = config.contentUrl {
             let player = AVPlayer(url: url)
             self.player = player
-            player.volume = volume
+            player.volume = 0.0
             // 判断当前屏幕是否为主屏幕
             // 如果是主屏幕，使用用户配置的静音状态
             // 如果是其他屏幕，强制静音
-            player.isMuted = playScreen == NSScreen.main ? self.mute : true
+            player.isMuted = false
             // 暂时默认使用 Fill 填充方式, 其他方式保留
             self.videoGravity = .resizeAspectFill
             // setVideoFillMode(config.videoFillMode)

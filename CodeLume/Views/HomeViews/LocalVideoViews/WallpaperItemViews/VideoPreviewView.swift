@@ -15,7 +15,7 @@ struct VideoPreviewView: View {
                 player.replaceCurrentItem(with: AVPlayerItem(url: videoURL))
                 player.actionAtItemEnd = .none
                 player.volume = Float(volume)
-                player.isMuted = mute
+                player.isMuted = false
                 player.play()
                 NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: player.currentItem, queue: .main) { _ in
                     player.seek(to: .zero)
@@ -30,7 +30,7 @@ struct VideoPreviewView: View {
                 player.volume = Float(newValue)
             }
             .onChange(of: mute) { _, newValue in
-                player.isMuted = newValue
+                player.isMuted = false
             }
     }
 }

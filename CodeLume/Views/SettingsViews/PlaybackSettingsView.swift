@@ -6,11 +6,11 @@ struct PlaybackSettingsView: View {
             NotificationCenter.default.post(name: .pause, object: pause)
         }
     }
-    @AppStorage("mute") private var mute: Bool = false {
-        didSet {
-            NotificationCenter.default.post(name: .mute, object: mute)
-        }
-    }
+    // @AppStorage("mute") private var mute: Bool = false {
+    //     didSet {
+    //         NotificationCenter.default.post(name: .mute, object: mute)
+    //     }
+    // }
     @AppStorage("pauseIfOtherAppOnDesktop") private var pauseIfOtherAppOnDesktop: Bool = false {
         didSet {
             NotificationCenter.default.post(name: .pauseIfOtherAppOnDesktop, object: pauseIfOtherAppOnDesktop)
@@ -34,11 +34,11 @@ struct PlaybackSettingsView: View {
             NotificationCenter.default.post(name: .pauseIfPowerSaving, object: pauseIfPowerSaving)
         }
     }
-    @AppStorage("volume") private var volume: Double = 1.0 {
-        didSet {
-            NotificationCenter.default.post(name: .volume, object: volume)
-        }
-    }
+    // @AppStorage("volume") private var volume: Double = 1.0 {
+    //     didSet {
+    //         NotificationCenter.default.post(name: .volume, object: volume)
+    //     }
+    // }
     
 //    @AppStorage("switchInterval") private var switchInterval: String = Interval.fiveMinutes.rawValue {
 //        didSet {
@@ -87,32 +87,32 @@ struct PlaybackSettingsView: View {
             }
             .padding(.leading)
             
-            IconToggle(iconName: "speaker.slash", title: "Mute", isOn: $mute){
-                newValue in
-                Logger.info("set mute to \(newValue)")
-                mute = newValue
-            }
-            .padding(.leading)
+            // IconToggle(iconName: "speaker.slash", title: "Mute", isOn: $mute){
+            //     newValue in
+            //     Logger.info("set mute to \(newValue)")
+            //     mute = newValue
+            // }
+            // .padding(.leading)
             
-            HStack() {
-                Image(systemName: "speaker.3")
-                    .frame(width: 20, height: 20)
-                    .foregroundColor(.primary)
-                    .alignmentGuide(.firstTextBaseline) { d in
-                        d[.bottom] + 4
-                    }
-                    .padding(.leading)
-                Text("Volume")
-                Spacer()
-            }
-            Slider(value: $volume) { editing in
-                if !editing {
-                    Logger.info("Current volume: \(volume)")
-                    volume = volume
-                }
-            }
-            .padding(.leading, 40)
-            .padding(.trailing, 40)
+            // HStack() {
+            //     Image(systemName: "speaker.3")
+            //         .frame(width: 20, height: 20)
+            //         .foregroundColor(.primary)
+            //         .alignmentGuide(.firstTextBaseline) { d in
+            //             d[.bottom] + 4
+            //         }
+            //         .padding(.leading)
+            //     Text("Volume")
+            //     Spacer()
+            // }
+            // Slider(value: $volume) { editing in
+            //     if !editing {
+            //         Logger.info("Current volume: \(volume)")
+            //         volume = volume
+            //     }
+            // }
+            // .padding(.leading, 40)
+            // .padding(.trailing, 40)
             
             Text("Conditions for pausing playback")
             
