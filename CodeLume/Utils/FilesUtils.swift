@@ -210,7 +210,7 @@ func downloadScreensaver() {
     
     // 创建保存面板
     let savePanel = NSSavePanel()
-    savePanel.title = "Save Screensaver"
+    savePanel.title = NSLocalizedString("Save Screen Saver", comment: "")
     savePanel.nameFieldStringValue = "CodeLume.saver"
     savePanel.allowedContentTypes = [UTType(filenameExtension: "saver") ?? .item]
     
@@ -235,7 +235,7 @@ func downloadScreensaver() {
                 DispatchQueue.main.async {
                     let alert = NSAlert()
                     alert.messageText = NSLocalizedString("Screensaver Saved", comment: "")
-                    alert.informativeText = NSLocalizedString("Screensaver saved successfully! Double-click to install.", comment: "")
+                    alert.informativeText = NSLocalizedString("Screensaver saved successfully!", comment: "")
                     alert.alertStyle = .informational
                     alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
                     alert.runModal()
