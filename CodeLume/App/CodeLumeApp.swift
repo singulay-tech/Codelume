@@ -25,15 +25,5 @@ struct CodeLumeApp: App {
         .windowStyle(.titleBar)
         .defaultSize(width: 1000, height: 600)
         .windowResizability(.contentSize)
-        
-        WindowGroup("About", id: "about") {
-            AboutView()
-        }
-        .windowResizability(.contentSize)
-        .windowStyle(.titleBar)
-        
-        Settings {
-            SettingsView()
-        }
     }
 }

@@ -11,7 +11,6 @@ struct SettingsView: View {
                Label("Playback Settings", systemImage: "play.circle")
            }.tag(2)
         }
-        .frame(width: 500, height: 400)
     }
 }
 

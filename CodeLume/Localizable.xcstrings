@@ -290,17 +290,6 @@
         }
       }
     },
-    "Download screensaver" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "下载屏保程序"
-          }
-        }
-      }
-    },
     "Duration" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -905,17 +894,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "屏幕保护程序最初诞生于CRT显示器时代，其核心目的是通过动态画面防止静态图像长时间停留导致的\"烧屏\"现象，即避免电子束持续轰击相同荧光粉区域造成永久性物理损伤。随着技术演进至LCD、OLED时代，屏幕保护的作用已从单纯的硬件保护转变为集安全防护、能源管理、信息展示与个性化体验于一体的多功能平台。"
-          }
-        }
-      }
-    },
-    "Screen savers originated in the CRT monitor era, primarily designed to prevent 'burn-in' caused by static images remaining on the screen for extended periods. This phenomenon occurs when electron beams continuously bombard the same phosphor areas, causing permanent physical damage. As technology evolved to LCD and OLED displays, screen savers transformed from mere hardware protection to versatile platforms that integrate security, energy management, information display, and personalized experiences. CodeLume offers a dedicated screen saver module that allows users to set their current dynamic wallpapers as screen savers after downloading and installing it. This creates a seamless visual transition between active desktop environments and idle states, extending dynamic aesthetics throughout the entire device usage cycle while ensuring privacy security and maintaining a consistent immersive visual experience." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "屏幕保护程序最初诞生于CRT显示器时代，其核心目的是通过动态画面防止静态图像长时间停留导致的\"烧屏\"现象，即避免电子束持续轰击相同荧光粉区域造成永久性物理损伤。随着技术演进至LCD、OLED时代，屏幕保护的作用已从单纯的硬件保护转变为集安全防护、能源管理、信息展示与个性化体验于一体的多功能平台。为此码镜提供了专属的屏幕保护程序模块，用户下载安装后即可将正在使用的动态壁纸设置为屏幕保护程序，实现桌面环境与休息状态的无缝视觉衔接，让动态美学贯穿设备使用的全周期，在保护隐私安全的同时营造始终如一的沉浸式视觉体验。"
           }
         }
       }

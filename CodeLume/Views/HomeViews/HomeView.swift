@@ -5,15 +5,22 @@ struct HomeView: View {
         NavigationSplitView {
             VStack {
                 List {
-//                    NavigationLink("Playing", destination: PlayingView()
-//                        .navigationTitle("Playing"))
-                    
-                    NavigationLink("LocalVideos", destination: LocalVideoView()
-                        .navigationTitle("LocalVideos"))
-                    NavigationLink("Screen Saver", destination: ScreenSaverView()
-                        .navigationTitle("Screen Saver"))
-                    NavigationLink("About", destination: AboutView()
-                        .navigationTitle("About"))
+                    NavigationLink(destination: LocalVideoView()
+                        .navigationTitle("LocalVideos")) {
+                        Label("LocalVideos", systemImage: "film")
+                    }
+                    NavigationLink(destination: ScreenSaverView()
+                        .navigationTitle("Screen Saver")) {
+                        Label("Screen Saver", systemImage: "desktopcomputer")
+                    }
+                    NavigationLink(destination: SettingsView()
+                        .navigationTitle("Preferences")) {
+                        Label("Preferences", systemImage: "gear")
+                    }
+                    NavigationLink(destination: AboutView()
+                        .navigationTitle("About")) {
+                        Label("About", systemImage: "info.circle")
+                    }
                 }
                 .listStyle(.sidebar)
                 .frame(minWidth: 220)
@@ -24,8 +31,12 @@ struct HomeView: View {
                     Text("Version \(version)")
                         .font(.caption)
                         .foregroundColor(.secondary)
-                        .padding(.bottom, 8)
                 }
+                
+                Text("© 2025 CodeLume. All rights reserved.")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 8)
             }
         } detail: {
             LocalVideoView()
