@@ -221,6 +221,27 @@
         }
       }
     },
+    "Congratulations on discovering this free treasure of an app! CodeLume is a dynamic wallpaper application designed exclusively for macOS, boasting a sleek and elegant design with comprehensive functionality. As a menu bar application, please remember to launch and use it from the menu bar—it won't be visible in your Dock." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恭喜你发现这款免费的宝藏软件！码镜是一款专为 macOS 系统打造的动态壁纸应用，设计简约优雅，功能全面实用。它是一款状态栏应用，请记得在状态栏中打开使用，程序坞中不会显示。"
+          }
+        }
+      }
+    },
+    "Congratulations on discovering this free treasure of an app! CodeLume is a dynamic wallpaper application exclusively designed for macOS, featuring an elegant and minimalist design with comprehensive and practical functionality. As a menu bar application, please remember to open and use it from the menu bar—it won't appear in the Dock. Additionally, CodeLume does not come with extra dynamic wallpaper resources. You can find your favorite videos (supports MP4 and MOV formats) and set them as your exclusive dynamic wallpaper." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恭喜你发现这款免费的宝藏软件！码镜是一款专为 macOS 系统打造的动态壁纸应用，设计简约优雅，功能全面实用。它是一款状态栏应用，请记得在状态栏中打开使用，程序坞中不会显示。另外，码镜本身不提供额外的动态壁纸素材，你可以自行寻找喜欢的视频（支持 MP4 和 MOV 格式）来设置为专属动态壁纸。"
+          }
+        }
+      }
+    },
     "Contact Us" : {
       "localizations" : {
         "zh-Hans" : {
@@ -952,6 +973,16 @@
         }
       }
     },
+    "Show welcome screen at startup" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启动时显示欢迎界面"
+          }
+        }
+      }
+    },
     "SpriteKit" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1005,6 +1036,7 @@
       }
     },
     "This software is free to use. In addition to the built-in wallpapers, this installation package does not include other wallpapers. In the future, there will be dedicated servers to support each user in creating their own wallpapers and sharing them. Developers are working hard to improve the software. If you encounter any issues or have suggestions during use, please contact us through the About interface." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1076,6 +1108,7 @@
       }
     },
     "Welcome to CodeLume! To control the installation package size, we have built-in default dynamic wallpapers that have been automatically loaded. For more operations, please find the C-shaped icon in the status bar and click on it." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

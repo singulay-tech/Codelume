@@ -59,17 +59,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let welcomeView = WelcomeView()
         let hostingController = NSHostingController(rootView: welcomeView)
         
-        // 创建窗口 - 使用borderless样式掩码并启用圆角
+        // 创建窗口 - 使用无边框样式，移除所有控制按钮
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 100, height: 100),
-            styleMask: [.closable, .titled],
+            contentRect: NSRect(x: 0, y: 0, width: 500, height: 400), // 设置合理的初始大小
+            styleMask: .borderless, // 使用无边框样式，移除关闭按钮和标题栏
             backing: .buffered,
             defer: false
         )
         
         // 配置窗口
-        window.title = "Welcome to CodeLume"
         window.contentViewController = hostingController
+        window.isMovableByWindowBackground = true // 允许通过窗口背景拖动窗口
         
         
         window.center()

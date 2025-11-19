@@ -15,6 +15,7 @@ struct GeneralSettingsView: View {
     
     @AppStorage("selectedLanguage") private var selectedLanguage: String = Language.system.rawValue
     @AppStorage("selectedTheme") private var selectedTheme: String = Theme.system.rawValue
+    @AppStorage("showWelcomeScreen") private var showWelcomeScreen: Bool = true
     @AppStorage("startAtLogin") private var startAtLogin: Bool = false {
         didSet {
             setStartAtLogin(startAtLogin)
@@ -58,6 +59,17 @@ struct GeneralSettingsView: View {
                 .frame(width: 130)
             }
             Divider()
+            
+            Divider()
+            
+            HStack {
+                Label("Show welcome screen at startup", systemImage: "star.fill")
+                Spacer()
+                Toggle("", isOn: $showWelcomeScreen)
+                    .toggleStyle(.switch)
+                    .frame(width: 50)
+                    .padding(.trailing, 20)
+            }
             
             HStack {
                 Label("Start at login", systemImage: "power.circle")
