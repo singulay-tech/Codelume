@@ -30,19 +30,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         // 检查是否已经有应用实例在运行
+        #if !DEBUG
         if isAppAlreadyRunning() {
             // 显示警告并退出当前实例
             let alert = NSAlert()
-            alert.messageText = "CodeLume is Running"
-            alert.informativeText = "The application is already running. Please access CodeLume through the top status bar."
+            alert.messageText = NSLocalizedString("CodeLume is Running", comment: "")
+            alert.informativeText = NSLocalizedString("The application is already running. Please access CodeLume through the top status bar.", comment: "")
             alert.alertStyle = .warning
-            alert.addButton(withTitle: "OK")
+            alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
             alert.runModal()
             
             // 退出应用
             NSApp.terminate(nil)
             return
         }
+        #endif
         let shouldShowWelcomeBySetting = UserDefaults.standard.object(forKey: "showWelcomeScreen") as? Bool ?? true
         
         
@@ -69,8 +71,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // 配置窗口
         window.contentViewController = hostingController
-        window.isMovableByWindowBackground = true // 允许通过窗口背景拖动窗口
-        
         
         window.center()
         window.makeKeyAndOrderFront(nil)

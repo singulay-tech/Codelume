@@ -2,7 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
+      "shouldTranslate" : false
     },
     "%@ (%lfx%lf)" : {
       "localizations" : {
@@ -12,10 +12,11 @@
             "value" : "%1$@ (%2$lfx%3$lf)"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "%@:" : {
-
+      "shouldTranslate" : false
     },
     "%lldx%lld" : {
       "localizations" : {
@@ -25,7 +26,8 @@
             "value" : "%1$lldx%2$lld"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "© 2025 CodeLume. All rights reserved." : {
       "localizations" : {
@@ -191,6 +193,16 @@
         }
       }
     },
+    "CodeLume is Running" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "码镜正在运行中"
+          }
+        }
+      }
+    },
     "CodeLume offers a dedicated screen saver module that allows users to set their current dynamic wallpapers as screen savers after downloading and installing it. This creates a seamless visual transition between active desktop environments and idle states, extending dynamic aesthetics throughout the entire device usage cycle while ensuring privacy security and maintaining a consistent immersive visual experience." : {
       "localizations" : {
         "zh-Hans" : {
@@ -227,17 +239,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "恭喜你发现这款免费的宝藏软件！码镜是一款专为 macOS 系统打造的动态壁纸应用，设计简约优雅，功能全面实用。它是一款状态栏应用，请记得在状态栏中打开使用，程序坞中不会显示。"
-          }
-        }
-      }
-    },
-    "Congratulations on discovering this free treasure of an app! CodeLume is a dynamic wallpaper application exclusively designed for macOS, featuring an elegant and minimalist design with comprehensive and practical functionality. As a menu bar application, please remember to open and use it from the menu bar—it won't appear in the Dock. Additionally, CodeLume does not come with extra dynamic wallpaper resources. You can find your favorite videos (supports MP4 and MOV formats) and set them as your exclusive dynamic wallpaper." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "恭喜你发现这款免费的宝藏软件！码镜是一款专为 macOS 系统打造的动态壁纸应用，设计简约优雅，功能全面实用。它是一款状态栏应用，请记得在状态栏中打开使用，程序坞中不会显示。另外，码镜本身不提供额外的动态壁纸素材，你可以自行寻找喜欢的视频（支持 MP4 和 MOV 格式）来设置为专属动态壁纸。"
           }
         }
       }
@@ -1025,23 +1026,22 @@
         }
       }
     },
+    "The application is already running. Please access CodeLume through the top status bar." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "该应用已在运行。请通过顶部状态栏访问码镜"
+          }
+        }
+      }
+    },
     "Theme settings:" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "主题设置"
-          }
-        }
-      }
-    },
-    "This software is free to use. In addition to the built-in wallpapers, this installation package does not include other wallpapers. In the future, there will be dedicated servers to support each user in creating their own wallpapers and sharing them. Developers are working hard to improve the software. If you encounter any issues or have suggestions during use, please contact us through the About interface." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "该软件可免费使用。除内置壁纸外，此安装包不包含其他壁纸内容。后续将推出专属服务器，支持每位用户创建并分享自己的壁纸。开发团队正在持续优化软件，如果您在使用过程中遇到问题或有改进建议，请通过\"关于\"界面联系我们。"
           }
         }
       }
@@ -1103,17 +1103,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "音量："
-          }
-        }
-      }
-    },
-    "Welcome to CodeLume! To control the installation package size, we have built-in default dynamic wallpapers that have been automatically loaded. For more operations, please find the C-shaped icon in the status bar and click on it." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "欢迎使用码镜！为控制安装包体积，我们已内置默认动态壁纸并自动加载。更多操作请点击状态栏中的 C 形图标进行查看。"
           }
         }
       }
