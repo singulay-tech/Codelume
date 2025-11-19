@@ -53,10 +53,6 @@ struct MenuBarView: View {
             Button("Quit") {
                 NSApplication.shared.terminate(nil)
             }
-            Divider()
-            Button("About") {
-                openOrBringToFrontWindow(id: "about")
-            }
         }
         
     }

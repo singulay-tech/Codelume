@@ -12,6 +12,8 @@ struct HomeView: View {
                         .navigationTitle("LocalVideos"))
                     NavigationLink("Screen Saver", destination: ScreenSaverView()
                         .navigationTitle("Screen Saver"))
+                    NavigationLink("About", destination: AboutView()
+                        .navigationTitle("About"))
                 }
                 .listStyle(.sidebar)
                 .frame(minWidth: 220)
