@@ -108,4 +108,34 @@ class UserDefaultsManager {
     }
     // MARK: - private
     let startAtLoginKeys = "startAtLogin"
+
+// MARK: - 语言配置
+    // MARK: - public
+    func saveLanguage(_ language: Language) {
+        userDefaults.set(language.rawValue, forKey: showLanguageKey)
+        Logger.info("save language: \(language.rawValue)")
+        switch language {
+        case .system:
+            userDefaults.removeObject(forKey: languageKey)
+        case .chinese:
+            userDefaults.set(["zh-Hans-CN"], forKey: languageKey)
+        case .english:
+            userDefaults.set(["en"], forKey: languageKey)
+        }
+    }
+    
+    func getLanguage() -> Language {
+        if let language = userDefaults.object(forKey: showLanguageKey) as? String {
+            return Language(rawValue: language) ?? .system
+        }
+        return .system
+    }
+    
+    func clearLanguageConfig() {
+        userDefaults.removeObject(forKey: languageKey)
+        userDefaults.removeObject(forKey: showLanguageKey)
+    }
+    // MARK: - private
+    let languageKey = "AppleLanguages"
+    let showLanguageKey = "showLanguage"
 }

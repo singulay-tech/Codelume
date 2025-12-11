@@ -2,18 +2,13 @@ import SwiftUI
 import ServiceManagement
 
 struct GeneralSettingsView: View {
-    enum Language: String, CaseIterable {
-        case system = "Follow system"
-        case chinese = "Chinese"
-        case english = "English"
-    }
     enum Theme: String, CaseIterable {
         case system = "Follow system"
         case light = "Light"
         case dark = "Dark"
     }
     
-    @AppStorage("selectedLanguage") private var selectedLanguage: String = Language.system.rawValue
+    @State private var selectedLanguage: String = UserDefaultsManager.shared.getLanguage().rawValue
     @AppStorage("selectedTheme") private var selectedTheme: String = Theme.system.rawValue
     @AppStorage("showWelcomeScreen") private var showWelcomeScreen: Bool = true
     @State private var startAtLogin: Bool = UserDefaultsManager.shared.getStartAtLogin()
@@ -91,22 +86,10 @@ struct GeneralSettingsView: View {
     }
     
     private func setAppLanguage(_ language: Language) {
-        let currentLanguage = UserDefaults.standard.array(forKey: "AppleLanguages")?.first as? String ?? ""
-        var newLanguage: String
-        switch language {
-        case .system:
-            newLanguage = ""
-            UserDefaults.standard.removeObject(forKey: "AppleLanguages")
-        case .chinese:
-            newLanguage = "zh-Hans-CN"
-            UserDefaults.standard.set(["zh-Hans-CN"], forKey: "AppleLanguages")
-        case .english:
-            newLanguage = "en"
-            UserDefaults.standard.set(["en"], forKey: "AppleLanguages")
-        }
-        UserDefaults.standard.synchronize()
-        Logger.info("new language: \(newLanguage), current language: \(currentLanguage)")
-        if currentLanguage != newLanguage {
+        let currentLanguage = UserDefaultsManager.shared.getLanguage().rawValue
+        Logger.info("new language: \(language.rawValue), current language: \(currentLanguage)")
+        UserDefaultsManager.shared.saveLanguage(language)
+        if currentLanguage != language.rawValue {
             showRestartAlert = true
         }
     }
