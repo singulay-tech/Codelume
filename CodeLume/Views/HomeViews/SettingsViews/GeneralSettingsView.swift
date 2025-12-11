@@ -16,12 +16,7 @@ struct GeneralSettingsView: View {
     @AppStorage("selectedLanguage") private var selectedLanguage: String = Language.system.rawValue
     @AppStorage("selectedTheme") private var selectedTheme: String = Theme.system.rawValue
     @AppStorage("showWelcomeScreen") private var showWelcomeScreen: Bool = true
-    @AppStorage("startAtLogin") private var startAtLogin: Bool = false {
-        didSet {
-            setStartAtLogin(startAtLogin)
-        }
-    }
-    
+    @State private var startAtLogin: Bool = UserDefaultsManager.shared.getStartAtLogin()
     @State private var lastHideDockIconToggleTime: Date = .distantPast
     @State private var showRestartAlert = false
     
@@ -75,6 +70,9 @@ struct GeneralSettingsView: View {
                     .toggleStyle(.switch)
                     .frame(width: 50)
                     .padding(.trailing, 20)
+                    .onChange(of: startAtLogin) { oldValue, newValue in
+                        setStartAtLogin(newValue)
+                    }
             }
             Spacer()
         }
@@ -114,6 +112,7 @@ struct GeneralSettingsView: View {
     }
     
     private func setAppTheme(_ theme: Theme) {
+        Logger.info("Set theme to \(theme.rawValue)")
         switch theme {
         case .system:
             UserDefaults.standard.removeObject(forKey: "AppleInterfaceStyle")

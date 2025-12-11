@@ -31,7 +31,6 @@ class UserDefaultsManager {
     }
     
     func getLogMaxFileSize() -> Int {
-        UserDefaults.standard.synchronize()
         if userDefaults.object(forKey: LogKeys.maxFileSize) != nil {
             return userDefaults.integer(forKey: LogKeys.maxFileSize)
         }
@@ -43,7 +42,6 @@ class UserDefaultsManager {
     }
     
     func getLogMaxFileCount() -> Int {
-        UserDefaults.standard.synchronize()
         if userDefaults.object(forKey: LogKeys.maxFileCount) != nil {
             return userDefaults.integer(forKey: LogKeys.maxFileCount)
         }
@@ -80,12 +78,34 @@ class UserDefaultsManager {
     }
     
     func getTheme() -> themeType {
-        UserDefaults.standard.synchronize()
         if let theme = userDefaults.object(forKey: themeKeys) as? Int {
             return themeType(rawValue: theme) ?? .system
         }
         return .system
     }
+
+    func clearThemeConfig() {
+        userDefaults.removeObject(forKey: themeKeys)
+    }
     // MARK: - private
     let themeKeys = "codelumeTheme"
+
+// MARK: - 开机自启配置
+    // MARK: - public
+    func saveStartAtLogin(_ startAtLogin: Bool) {
+        userDefaults.set(startAtLogin, forKey: startAtLoginKeys)
+    }
+    
+    func getStartAtLogin() -> Bool {
+        if userDefaults.object(forKey: startAtLoginKeys) != nil {
+            return userDefaults.bool(forKey: startAtLoginKeys)
+        }
+        return false
+    }
+    
+    func clearStartAtLoginConfig() {
+        userDefaults.removeObject(forKey: startAtLoginKeys)
+    }
+    // MARK: - private
+    let startAtLoginKeys = "startAtLogin"
 }
