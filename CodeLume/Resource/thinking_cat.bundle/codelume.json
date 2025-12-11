@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "locales": {
+    "default": "en",
+    "supported": ["en", "zh", "ja"]
+  },
+  "author": "",
+  "email": "",
+  "createdAt": "2024-01-15T10:30:00Z",
+  "updatedAt": "2024-01-15T11:45:00Z",
+  "wallpaperType": "Video",
+  "category": "Cartoon",
+  "tags": ["black", "cat", "simple"],
+  "previewImage": "preview/thumbnail.jpg",
+  "video": "video/video.json"
+}
