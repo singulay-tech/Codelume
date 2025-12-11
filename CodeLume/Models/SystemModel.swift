@@ -13,3 +13,10 @@ enum Language: String, CaseIterable {
         case chinese = "Chinese"
         case english = "English"
 }
+
+// MARK: - 主题
+enum Theme: String, CaseIterable {
+        case system = "Follow system"
+        case light = "Light"
+        case dark = "Dark"
+    }

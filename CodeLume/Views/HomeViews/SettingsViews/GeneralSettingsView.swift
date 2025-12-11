@@ -2,14 +2,8 @@ import SwiftUI
 import ServiceManagement
 
 struct GeneralSettingsView: View {
-    enum Theme: String, CaseIterable {
-        case system = "Follow system"
-        case light = "Light"
-        case dark = "Dark"
-    }
-    
     @State private var selectedLanguage: String = UserDefaultsManager.shared.getLanguage().rawValue
-    @AppStorage("selectedTheme") private var selectedTheme: String = Theme.system.rawValue
+    @State private var selectedTheme: String = UserDefaultsManager.shared.getTheme().rawValue
     @AppStorage("showWelcomeScreen") private var showWelcomeScreen: Bool = true
     @State private var startAtLogin: Bool = UserDefaultsManager.shared.getStartAtLogin()
     @State private var lastHideDockIconToggleTime: Date = .distantPast

@@ -67,19 +67,13 @@ class UserDefaultsManager {
     
 // MARK: - 主题配置
     // MARK: - public
-    enum themeType: Int {
-        case system = 0
-        case light = 1
-        case dark = 2
-    }
-    
-    func saveTheme(_ theme: themeType) {
+    func saveTheme(_ theme: Theme) {
         userDefaults.set(theme.rawValue, forKey: themeKeys)
     }
     
-    func getTheme() -> themeType {
-        if let theme = userDefaults.object(forKey: themeKeys) as? Int {
-            return themeType(rawValue: theme) ?? .system
+    func getTheme() -> Theme {
+        if let theme = userDefaults.object(forKey: themeKeys) as? String {
+            return Theme(rawValue: theme) ?? .system
         }
         return .system
     }
