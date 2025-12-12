@@ -5,33 +5,19 @@ enum PlaybackType: String, Codable {
     case video
     case sprite
     case scene
+    
+    var description: String {
+        return self.rawValue
+    }
 }
 
-enum VideoFillMode: String, Codable, CaseIterable {
+enum WallpaperFillMode: String, Codable, CaseIterable {
     case fit = "Fit"
     case fill = "Fill"
     case stretch = "Stretch"
 
     var description: String {
         return self.rawValue
-    }
-}
-
-struct ScreenConfiguration: Codable {
-    let screenIdentifier: String
-    var isMainScreen: Bool
-    var playbackType: PlaybackType
-    var contentUrl: URL? = getDefaultVideoURL()
-    var volume: Float = 1.0
-    var isPlaying: Bool = true
-    var videoFillMode: VideoFillMode = .fill
-
-    init(screenIdentifier: String, playbackType: PlaybackType = .video, contentUrl: URL? = getDefaultVideoURL(), isMainScreen: Bool = false, videoFillMode: VideoFillMode = .fill) {
-        self.screenIdentifier = screenIdentifier
-        self.isMainScreen = isMainScreen
-        self.playbackType = playbackType
-        self.contentUrl = contentUrl
-        self.videoFillMode = videoFillMode
     }
 }
 
@@ -47,7 +33,7 @@ struct WallpaperItem: Identifiable {
     var isPlaying: Bool = false
 }
 
-enum Interval: String, CaseIterable {
+enum PlayingSwitchInterval: String, CaseIterable {
     case fiveMinutes = "Five minutes"
     case tenMinutes = "Ten minutes"
     case halfHour = "Half an hour"

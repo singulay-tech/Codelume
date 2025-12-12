@@ -159,8 +159,8 @@ struct LocalWallpaperItemView: View {
         
         let response = alert.runModal()
         if response == .alertFirstButtonReturn {
-            DatabaseManger.shared.deleteLocalVideo(item: item)
-            NotificationCenter.default.post(name: .refreshLocalVideoList, object: nil)
+//            DatabaseManger.shared.de(item: item)
+            NotificationCenter.default.post(name: .refreshLocalWallpaperList, object: nil)
             Logger.info("Local video deleted successfully: \(item.fileUrl)")
         }
     }

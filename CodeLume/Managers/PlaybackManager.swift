@@ -1,6 +1,7 @@
 import Foundation
 import AppKit
 
+// MARK: - 播放管理类
 class PlaybackManager {
     static let shared = PlaybackManager()
     

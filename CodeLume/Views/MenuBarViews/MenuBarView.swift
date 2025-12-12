@@ -32,7 +32,7 @@ struct MenuBarView: View {
            }
             Divider()
             Button("Import external video") {
-                importExternalVideo()
+                importExternalBundle()
             }
             Divider()
             Button("Rstart") {

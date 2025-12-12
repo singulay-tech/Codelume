@@ -12,7 +12,7 @@ extension Notification.Name {
     static let setWallpaperIsVisible = Notification.Name("com.codelume.notification.setWallpaperIsVisible")
     static let refreshVideoList = Notification.Name("com.codelume.notification.refreshVideoList")
     static let refreshPlayList = Notification.Name("com.codelume.notification.refreshPlayList")
-    static let refreshLocalVideoList = Notification.Name("com.codelume.notification.refreshLocalVideoList")
+    static let refreshLocalWallpaperList = Notification.Name("com.codelume.notification.refreshLocalWallpaperList")
     static let playConfigChanged = Notification.Name("com.codelume.notification.playConfigChanged")
     static let playItemChanged = Notification.Name("com.codelume.notification.playItemChanged")
     static let playVideoUrlChanged = Notification.Name("com.codelume.notification.playVideoUrlChanged")

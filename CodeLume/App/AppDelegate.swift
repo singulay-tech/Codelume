@@ -9,6 +9,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
         let _ = LogManager.shared
         let _ = UserDefaultsManager.shared
+        let _ = DatabaseManger.shared
+        let _ = ScreenManager.shared
 
         PlaybackManager.shared.start()
         Logger.info("CodeLume application started")

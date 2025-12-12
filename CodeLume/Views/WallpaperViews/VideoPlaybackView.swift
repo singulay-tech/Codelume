@@ -8,9 +8,9 @@ class VideoPlaybackView: NSView {
     private var isPlaying = true
     private var currentScreenPlayingState = true
     private var playScreen : NSScreen = NSScreen.main!
-    private var pause: Bool = UserDefaults.standard.bool(forKey: "pause")
-    private var mute: Bool = UserDefaults.standard.bool(forKey: "mute")
-    private var volume: Float = UserDefaults.standard.float(forKey: "volume")
+    private var pause: Bool = UserDefaultsManager.shared.getPauseStatus()
+    private var mute: Bool = UserDefaultsManager.shared.getMuteStatus()
+    private var volume: Float = UserDefaultsManager.shared.getVolume()
 
     func startMonitoringNotification() {
         NotificationCenter.default.addObserver(
@@ -86,7 +86,6 @@ class VideoPlaybackView: NSView {
                 if let shouldPlay = notification.userInfo?["isPlaying"] as? Bool {
                     if shouldPlay {
                         Logger.info("Screen play state changed to playing.")
-//                        player?.seek(to: CMTime.zero, toleranceBefore: .zero, toleranceAfter: .zero)
                         currentScreenPlayingState = true
                         if !pause && isPlaying {
                             player?.play()
@@ -139,17 +138,14 @@ class VideoPlaybackView: NSView {
     @objc private func handleMute(notification: Notification) {
         if let mute = notification.object as? Bool {
             self.mute = mute
-            // 判断当前屏幕是否为主屏幕
-            // 如果是主屏幕，使用用户配置的静音状态
-            // 如果是其他屏幕，强制静音
-            player?.isMuted = false
+            player?.isMuted = mute
         }
     }
 
     @objc private func handleVolume(notification: Notification) {
         if let volume = notification.object as? Float {
             self.volume = volume
-            player?.volume = 0.0
+            player?.volume = volume
         }
     }
 
@@ -191,15 +187,12 @@ class VideoPlaybackView: NSView {
             self.playerLayer = playerLayer
             
             player.volume = 0.0
-            // 判断当前屏幕是否为主屏幕
-            // 如果是主屏幕，使用用户配置的静音状态
-            // 如果是其他屏幕，强制静音
-            player.isMuted = false
+            player.isMuted = mute
             
             startMonitoringNotification()
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                NotificationCenter.default.post(name: .setWallpaperIsVisible, object: config.screenIdentifier, userInfo: ["isVisible": true])
+                NotificationCenter.default.post(name: .setWallpaperIsVisible, object: config.id, userInfo: ["isVisible": true])
                 if !self.pause {
                     player.play()
                 }
@@ -207,7 +200,7 @@ class VideoPlaybackView: NSView {
         }
     }
 
-    private func setVideoFillMode(_ mode: VideoFillMode) {
+    private func setVideoFillMode(_ mode: WallpaperFillMode) {
         switch mode {
         case .fit:
             self.videoGravity = .resizeAspect

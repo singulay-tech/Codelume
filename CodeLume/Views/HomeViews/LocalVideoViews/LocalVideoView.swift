@@ -21,14 +21,14 @@ struct LocalVideoView: View {
         .onAppear {
             loadVideoItems()
         }
-        .onReceive(NotificationCenter.default.publisher(for: .refreshLocalVideoList)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: .refreshLocalWallpaperList)) { _ in
             Logger.info("start load video items from database.")
             loadVideoItems()
         }
     }
     
     private func loadVideoItems() {
-        videoItems = DatabaseManger.shared.getAllLocalVideos()
+//        videoItems = DatabaseManger.shared.getAllLocalVideos()
     }
     
     private func fileURL(for relativePath: String) -> URL {

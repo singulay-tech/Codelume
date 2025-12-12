@@ -17,6 +17,9 @@
     "%@:" : {
 
     },
+    "%lld" : {
+
+    },
     "%lldx%lld" : {
       "localizations" : {
         "en" : {
@@ -28,6 +31,7 @@
       }
     },
     "© 2025 CodeLume. All rights reserved." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -127,6 +131,9 @@
         }
       }
     },
+    "Bundle imported successfully. Please go to Local Wallpapers View to view it." : {
+
+    },
     "Cancel" : {
       "localizations" : {
         "zh-Hans" : {
@@ -168,6 +175,9 @@
           }
         }
       }
+    },
+    "Clear" : {
+
     },
     "Codec" : {
       "extractionState" : "manual",
@@ -241,6 +251,16 @@
         }
       }
     },
+    "Connected" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已连接"
+          }
+        }
+      }
+    },
     "Contact Us" : {
       "localizations" : {
         "zh-Hans" : {
@@ -250,6 +270,12 @@
           }
         }
       }
+    },
+    "Content Configuration" : {
+
+    },
+    "Content Path:" : {
+
     },
     "Created At" : {
       "extractionState" : "manual",
@@ -282,6 +308,9 @@
           }
         }
       }
+    },
+    "Delete Configuration" : {
+
     },
     "Delete this video?" : {
       "localizations" : {
@@ -398,6 +427,9 @@
         }
       }
     },
+    "Fill Mode:" : {
+
+    },
     "Five minutes" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -416,6 +448,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "跟随系统"
+          }
+        }
+      }
+    },
+    "From the list on the left, select a screen to view and edit its configuration information" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从左侧列表中选择一个屏幕，查看和编辑其配置信息"
           }
         }
       }
@@ -452,6 +494,7 @@
       }
     },
     "Hello, world!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -501,6 +544,9 @@
           }
         }
       }
+    },
+    "Is Main Screen:" : {
+
     },
     "Language settings:" : {
       "localizations" : {
@@ -564,6 +610,9 @@
         }
       }
     },
+    "Main Screen" : {
+
+    },
     "Mute" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -574,6 +623,9 @@
           }
         }
       }
+    },
+    "No" : {
+
     },
     "Non-program-built-in local video cannot be recovered after deletion and need to be redownloaded or imported." : {
       "localizations" : {
@@ -701,6 +753,9 @@
         }
       }
     },
+    "Physical Resolution:" : {
+
+    },
     "Play" : {
       "localizations" : {
         "zh-Hans" : {
@@ -710,6 +765,9 @@
           }
         }
       }
+    },
+    "Playback Controls" : {
+
     },
     "Playback Settings" : {
       "localizations" : {
@@ -781,6 +839,16 @@
         }
       }
     },
+    "Please select a screen to configure" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请选择一个屏幕进行配置"
+          }
+        }
+      }
+    },
     "Preferences" : {
       "localizations" : {
         "zh-Hans" : {
@@ -822,6 +890,9 @@
         }
       }
     },
+    "Reset Configuration" : {
+
+    },
     "Resolution" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -832,6 +903,9 @@
           }
         }
       }
+    },
+    "Resolution:" : {
+
     },
     "Restart Now" : {
       "localizations" : {
@@ -893,6 +967,12 @@
         }
       }
     },
+    "Screen ID:" : {
+
+    },
+    "Screen Information" : {
+
+    },
     "Screen Management" : {
       "localizations" : {
         "zh-Hans" : {
@@ -933,6 +1013,36 @@
         }
       }
     },
+    "Screen Statistics" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕统计信息"
+          }
+        }
+      }
+    },
+    "Screen Status:" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕状态："
+          }
+        }
+      }
+    },
+    "ScreenManager" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理屏幕"
+          }
+        }
+      }
+    },
     "Screensaver Saved" : {
       "localizations" : {
         "zh-Hans" : {
@@ -953,7 +1063,38 @@
         }
       }
     },
+    "Secondary Screen" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "副屏幕"
+          }
+        }
+      }
+    },
+    "Select" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择"
+          }
+        }
+      }
+    },
+    "Select a Bundle." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择一个资源包"
+          }
+        }
+      }
+    },
     "Select a Video." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1087,6 +1228,19 @@
         }
       }
     },
+    "Total Screens" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "总屏幕数"
+          }
+        }
+      }
+    },
+    "Unset Content" : {
+
+    },
     "Update Configuration" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1119,6 +1273,7 @@
     },
     "Video imported successfully. Please go to Local Videos to view it." : {
       "comment" : "Import successful message",
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1134,6 +1289,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "音量："
+          }
+        }
+      }
+    },
+    "Yes" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确认"
           }
         }
       }

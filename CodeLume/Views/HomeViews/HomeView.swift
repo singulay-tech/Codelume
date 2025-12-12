@@ -5,6 +5,10 @@ struct HomeView: View {
         NavigationSplitView {
             VStack {
                 List {
+                    NavigationLink(destination: ScreenManagerView()
+                        .navigationTitle("")) {
+                        Label("ScreenManager", systemImage: "display.2")
+                    }
                     NavigationLink(destination: LocalVideoView()
                         .navigationTitle("")) {
                         Label("LocalVideos", systemImage: "film")
@@ -32,11 +36,6 @@ struct HomeView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                
-                Text("© 2025 CodeLume. All rights reserved.")
-                    .font(.footnote)
-                    .foregroundColor(.secondary)
-                    .padding(.bottom, 8)
             }
         } detail: {
             LocalVideoView()

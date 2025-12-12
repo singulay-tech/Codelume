@@ -11,7 +11,7 @@ class WindowController: NSObject {
     
     override init() {
         super.init()
-        addDefaultVideo()
+        addDefaultBundle()
         startMonitoringNotification()
         loadConfigurations()
         createWindowsForAllScreens()
@@ -35,12 +35,12 @@ class WindowController: NSObject {
     }
     
     private func createDefaultConfig(for screen: NSScreen) -> ScreenConfiguration {
-        return ScreenConfiguration(screenIdentifier: screen.identifier)
+        return ScreenConfiguration(id: screen.identifier)
     }
 
     private func saveConfigurations() {
         for (_, config) in screenConfigurations {
-            DatabaseManger.shared.saveScreenConfig(config)
+            DatabaseManger.shared.setScreenConfig(config)
         }
         Logger.info("Configurations saved to database successfully")
     }
@@ -51,7 +51,7 @@ class WindowController: NSObject {
         screens = NSScreen.screens
 
         for config in configs {
-            screenConfigurations[config.screenIdentifier] = config
+            screenConfigurations[config.id] = config
         }
 
         for screen in screens {
@@ -59,7 +59,7 @@ class WindowController: NSObject {
             if screenConfigurations[screenId] == nil {
                 let newConfig = createDefaultConfig(for: screen)
                 screenConfigurations[screenId] = newConfig
-                DatabaseManger.shared.saveScreenConfig(newConfig)
+                DatabaseManger.shared.setScreenConfig(newConfig)
             }
         }
 
@@ -67,21 +67,21 @@ class WindowController: NSObject {
     }
     
     func createPlaybackView(for screen: NSScreen) -> NSView? {
-        let screenIdentifier = screen.identifier
-        guard let config = screenConfigurations[screenIdentifier] else {
-            Logger.error("Screen configuration not found. Screen: \(screenIdentifier)")
+        let id = screen.identifier
+        guard let config = screenConfigurations[id] else {
+            Logger.error("Screen configuration not found. Screen: \(id)")
             return nil
         }
 
         let viewFrame = screen.frame
 
         guard let contentUrl = config.contentUrl else {
-            Logger.error("Content url is nil. Screen: \(screenIdentifier)")
+            Logger.error("Content url is nil. Screen: \(id)")
             return nil
         }
 
         if !FileManager.default.fileExists(atPath: contentUrl.path) {
-            Logger.error("File not found at URL: \(contentUrl). Screen: \(screenIdentifier)")
+            Logger.error("File not found at URL: \(contentUrl). Screen: \(id)")
             return nil
         }
         
@@ -111,13 +111,13 @@ class WindowController: NSObject {
             createWindowForScreen(screen)
         }
         
-        let screenIdentifier = screen.identifier
-        if var config = screenConfigurations[screenIdentifier] {
+        let id = screen.identifier
+        if var config = screenConfigurations[id] {
             config.playbackType = playbackType
             config.contentUrl = contentUrl
-            screenConfigurations[screenIdentifier] = config
+            screenConfigurations[id] = config
         } else {
-            screenConfigurations[screenIdentifier] = ScreenConfiguration(screenIdentifier: screenIdentifier, playbackType: playbackType, contentUrl: contentUrl)
+            screenConfigurations[id] = ScreenConfiguration(id: id, playbackType: playbackType, contentUrl: contentUrl)
         }
         
         saveConfigurations()
@@ -126,7 +126,7 @@ class WindowController: NSObject {
             Logger.debug("Update screen window: \(screen.identifier)")
             
             // 先释放旧视图的资源
-            if let oldView = playbackViews[screenIdentifier] {
+            if let oldView = playbackViews[id] {
                 // 检查旧视图是否为VideoPlaybackView类型并调用releaseResources方法
                 if let videoPlaybackView = oldView as? VideoPlaybackView {
                     videoPlaybackView.releaseResources()
@@ -139,7 +139,7 @@ class WindowController: NSObject {
             
             // 创建新视图
             if let newView = createPlaybackView(for: screen) {
-                playbackViews[screenIdentifier] = newView
+                playbackViews[id] = newView
                 
                 // 如果窗口没有contentView，创建一个新的
                 if window.contentView == nil {
@@ -170,14 +170,14 @@ class WindowController: NSObject {
     func createWindowForScreen(_ screen: NSScreen) {
         Logger.info("Create window for screen: \(screen.identifier)")
         let screenFrame = screen.frame
-        let screenIdentifier = screen.identifier
+        let id = screen.identifier
         
         guard let playbackView = createPlaybackView(for: screen) else {
             Logger.error("Create playback view failed.")
             return
         }
         
-        playbackViews[screenIdentifier] = playbackView
+        playbackViews[id] = playbackView
         
         let window = NSWindow(
             contentRect: screenFrame,
@@ -306,8 +306,8 @@ class WindowController: NSObject {
     
     @objc private func handleWallpaperIsVisibleChange(_ notification: Notification) {
         if let identifier = notification.object as? String {
-            let screenIdentifier = identifier
-            if let window = windows[screenIdentifier] {
+            let id = identifier
+            if let window = windows[id] {
                 if let isVisible = notification.userInfo?["isVisible"] as? Bool {
                     window.setIsVisible(isVisible)
                 }
@@ -320,15 +320,15 @@ class WindowController: NSObject {
             Logger.info("Received video URL change notification: \(videoURL)")
             
             // 检查是否指定了屏幕ID
-            if let screenIdentifier = userInfo["screenIdentifier"] as? String {
-                Logger.info("Targeting specific screen: \(screenIdentifier)")
+            if let id = userInfo["id"] as? String {
+                Logger.info("Targeting specific screen: \(id)")
                 
                 // 查找对应的屏幕
-                if let targetScreen = screens.first(where: { $0.identifier == screenIdentifier }) {
+                if let targetScreen = screens.first(where: { $0.identifier == id }) {
                     // 只更新指定屏幕的配置
                     updateScreenConfiguration(targetScreen, playbackType: .video, contentUrl: videoURL)
                 } else {
-                    Logger.warning("Screen not found for identifier: \(screenIdentifier)")
+                    Logger.warning("Screen not found for identifier: \(id)")
                 }
             } else {
                 // 如果没有指定屏幕ID，则更新所有屏幕
