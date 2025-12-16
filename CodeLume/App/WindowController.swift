@@ -13,15 +13,13 @@ class WindowController: NSObject {
         super.init()
         addDefaultWallpaper()
         startMonitoringNotification()
+        screens = NSScreen.screens
         loadConfigurations()
         createWindowsForAllScreens()
-        
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
-        NotificationCenter.default.removeObserver(self, name: .playVideoUrlChanged, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .setWallpaperIsVisible, object: nil)
         
         for window in windows.values {
             window.close()
@@ -33,34 +31,13 @@ class WindowController: NSObject {
             createWindowForScreen(screen)
         }
     }
-    
-    private func createDefaultConfig(for screen: NSScreen) -> ScreenConfiguration {
-        return ScreenConfiguration(id: screen.identifier)
-    }
-
-    private func saveConfigurations() {
-        for (_, config) in screenConfigurations {
-            DatabaseManger.shared.setScreenConfig(config)
-        }
-        Logger.info("Configurations saved to database successfully")
-    }
 
     private func loadConfigurations() {
         screenConfigurations = [:] 
         let configs = DatabaseManger.shared.getAllScreenConfigs()
-        screens = NSScreen.screens
 
         for config in configs {
             screenConfigurations[config.id] = config
-        }
-
-        for screen in screens {
-            let screenId = screen.identifier
-            if screenConfigurations[screenId] == nil {
-                let newConfig = createDefaultConfig(for: screen)
-                screenConfigurations[screenId] = newConfig
-                DatabaseManger.shared.setScreenConfig(newConfig)
-            }
         }
 
         Logger.info("Configurations loaded successfully")
@@ -88,7 +65,7 @@ class WindowController: NSObject {
         switch config.playbackType {
         case .video:
             Logger.info("Create video playback view.")
-            if !setFirstFrameAsWallpaper(videoURL: contentUrl, screenLocalName: screen.identifier) { return nil }
+            if !setStaticWallpaper(bundleURL: contentUrl, screenLocalName: screen.identifier) { return nil }
             return VideoPlaybackView(frame: viewFrame, config: config, screen: screen)
         case .sprite:
             Logger.info("Create sprite playback view.")
@@ -103,7 +80,7 @@ class WindowController: NSObject {
         NotificationCenter.default.post(name: .setWallpaperIsVisible, object: screen.identifier, userInfo: ["isVisible": false])
 
         if let contentUrl = contentUrl {
-            setFirstFrameAsWallpaper(videoURL: contentUrl, screenLocalName: screen.identifier)
+            setStaticWallpaper(bundleURL: contentUrl, screenLocalName: screen.identifier)
         }
         
         if !screens.contains(where: { $0.identifier == screen.identifier }) {
@@ -120,7 +97,6 @@ class WindowController: NSObject {
             screenConfigurations[id] = ScreenConfiguration(id: id, playbackType: playbackType, wallpaperUrl: contentUrl)
         }
         
-        saveConfigurations()
         
         if let window = windows[screen.identifier] {     
             Logger.debug("Update screen window: \(screen.identifier)")
@@ -212,7 +188,6 @@ class WindowController: NSObject {
         window.ignoresMouseEvents = true
         window.orderFront(nil)
         window.setIsVisible(false)
-        // window.delegate = self
         windows[screen.identifier] = window
     }
     
@@ -225,8 +200,8 @@ class WindowController: NSObject {
         )
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(handleVideoUrlChange),
-            name: .playVideoUrlChanged,
+            selector: #selector(handleWallpaperBundleChanged),
+            name: .wallpaperBundleChanged,
             object: nil)
         NotificationCenter.default.addObserver(
             self,
@@ -243,8 +218,14 @@ class WindowController: NSObject {
             return
         }
         lastScreenChangeTime = now
+        loadConfigurations()
         let currentScreens = NSScreen.screens
         if currentScreens.count == screens.count {
+            if currentScreens.count == 1 {
+                restartApplication()
+            }
+
+            Logger.info("Same screens count: \(currentScreens.count)")
             screens = currentScreens
             for screen in screens {
                 if let window = windows[screen.identifier] {
@@ -256,19 +237,22 @@ class WindowController: NSObject {
                 }
             }
         } else if currentScreens.count > screens.count {
+            Logger.info("New screens count: \(currentScreens.count - screens.count)")
             let newScreens = currentScreens.filter { !screens.contains($0) }
-            Logger.debug("New screens: \(newScreens)")
             screens = currentScreens
             for screen in newScreens {
                 if windows[screen.identifier] == nil {
+                    Logger.info("Create window for new screen: \(screen.identifier)")
                     createWindowForScreen(screen)
                 } else {
+                    Logger.info("Update window for existing screen: \(screen.identifier)")
                     if let config = screenConfigurations[screen.identifier] {
                         updateScreenConfiguration(screen, playbackType: config.playbackType, contentUrl: config.wallpaperUrl)
                     }
                 }
             }
         } else if currentScreens.count < screens.count {
+            Logger.info("Removed screens count: \(screens.count - currentScreens.count)")
             // 获取移除的屏幕列表
             let removedScreens = screens.filter { !currentScreens.contains($0) }
             screens = currentScreens
@@ -315,9 +299,11 @@ class WindowController: NSObject {
         }
     }
     
-    @objc func handleVideoUrlChange(_ notification: Notification) {
-        if let userInfo = notification.userInfo, let videoURL = userInfo["videoURL"] as? URL {
-            Logger.info("Received video URL change notification: \(videoURL)")
+    @objc func handleWallpaperBundleChanged(_ notification: Notification) {
+        Logger.info("Received wallpaper bundle changed notification.")
+        loadConfigurations()
+        if let userInfo = notification.userInfo {
+            Logger.info("Received bundle URL change notification.")
             
             // 检查是否指定了屏幕ID
             if let id = userInfo["id"] as? String {
@@ -326,14 +312,19 @@ class WindowController: NSObject {
                 // 查找对应的屏幕
                 if let targetScreen = screens.first(where: { $0.identifier == id }) {
                     // 只更新指定屏幕的配置
-                    updateScreenConfiguration(targetScreen, playbackType: .video, contentUrl: videoURL)
+                    if let config = screenConfigurations[targetScreen.identifier] {
+                        updateScreenConfiguration(targetScreen, playbackType: config.playbackType, contentUrl: config.wallpaperUrl)
+                    }
                 } else {
                     Logger.warning("Screen not found for identifier: \(id)")
                 }
             } else {
                 // 如果没有指定屏幕ID，则更新所有屏幕
+                Logger.info("Updating configurations for all screens.")
                 for screen in screens {
-                    updateScreenConfiguration(screen, playbackType: .video, contentUrl: videoURL)
+                    if let config = screenConfigurations[screen.identifier] {
+                        updateScreenConfiguration(screen, playbackType: config.playbackType, contentUrl: config.wallpaperUrl)
+                    }
                 }
             }
         }

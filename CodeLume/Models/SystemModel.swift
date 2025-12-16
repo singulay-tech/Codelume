@@ -45,7 +45,7 @@ struct ScreenConfiguration: Codable, Hashable, Identifiable, Equatable {
     init(
         id: String, 
         playbackType: PlaybackType = .video, 
-        wallpaperUrl: URL? = getWallpaperSaveURL(),
+        wallpaperUrl: URL? = nil,
         isPlaying: Bool = true,
         isMuted: Bool = false,
         volume: Double = 0.3,

@@ -14,9 +14,6 @@
         }
       }
     },
-    "%@:" : {
-
-    },
     "%lld" : {
 
     },
@@ -320,6 +317,7 @@
       }
     },
     "Details" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -572,6 +570,9 @@
           }
         }
       }
+    },
+    "Loading..." : {
+
     },
     "LocalVideos" : {
       "localizations" : {

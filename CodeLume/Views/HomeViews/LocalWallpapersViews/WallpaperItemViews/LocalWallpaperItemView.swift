@@ -3,7 +3,7 @@ import AVKit
 import AppKit
 
 struct LocalWallpaperItemView: View {
-    let item: WallpaperItem
+    let wallpaperURL: URL
     @State private var isHovering = false
     @State private var thumbnailImage: Image?
     @State private var isShowingPreview = false
@@ -31,10 +31,10 @@ struct LocalWallpaperItemView: View {
             
             if isHovering {
                 HStack(spacing: 8) {
-                    VideoNameLabel(text: item.fileUrl.lastPathComponent)
+                    WallpaperNameLabel(text: wallpaperURL.lastPathComponent)
                     Spacer()
                     VideoFloatButton(text: "Preview", action: debouncedAction { isShowingPreview = true })
-                    VideoFloatButton(text: "Details", action: debouncedAction(showDetails))
+                    //                    VideoFloatButton(text: "Details", action: debouncedAction(showDetails))
                     VideoFloatButton(text: "Play", action: debouncedAction { isShowingScreenSelector = true })
                     VideoFloatButton(text: "Delete", color: .red, action: debouncedAction(deleteVideo))
                 }
@@ -43,15 +43,15 @@ struct LocalWallpaperItemView: View {
         }
         .sheet(isPresented: $isShowingPreview) {
             ZStack(alignment: .topLeading) {
-                VideoPreviewView(videoURL: item.fileUrl)
-                VideoCloseButton(action: { isShowingPreview = false })
+                WallpaperPreviewView(url: wallpaperURL)
+                CloseButton(action: { isShowingPreview = false })
             }
         }
         .sheet(isPresented: $isShowingDetails) {
             ZStack(alignment: .topLeading) {
-                DetailsView(item: item)
-                    .padding(20)
-                VideoCloseButton(action: { isShowingDetails = false })
+                //               DetailsView(item: item)
+                //                   .padding(20)
+                //               CloseButton(action: { isShowingDetails = false })
             }
         }
         .sheet(isPresented: $isShowingScreenSelector) {
@@ -77,24 +77,49 @@ struct LocalWallpaperItemView: View {
     }
     
     private func generateThumbnail() {
-        let asset = AVAsset(url: item.fileUrl)
-        let generator = AVAssetImageGenerator(asset: asset)
-        generator.appliesPreferredTrackTransform = true
-        
-        let time = CMTime(seconds: 1, preferredTimescale: 60)
-        generator.generateCGImageAsynchronously(for: time) { cgImage, _, _ in
-            if let cgImage = cgImage {
-                DispatchQueue.main.async {
-                    let nsImage = NSImage(cgImage: cgImage, size: .zero)
-                    self.thumbnailImage = Image(nsImage: nsImage)
-                }
-            }
+        // 确保wallpaperURL不为空且是bundle
+        if wallpaperURL.pathExtension != "bundle" {
+            Logger.error("无效的壁纸bundle URL: \(wallpaperURL.path)")
+            return
         }
-    }
-    
-    private func playVideo() {
-        let videoURL = item.fileUrl
-        NotificationCenter.default.post(name: .playVideoUrlChanged, object: nil, userInfo: ["videoURL": videoURL])
+        
+        do {
+            // 尝试创建bundle对象
+            let bundle = Bundle(url: wallpaperURL)
+            
+            // 读取codelume.json文件
+            guard let codelumeJSONURL = bundle?.url(forResource: "codelume", withExtension: "json"),
+                  let jsonData = try? Data(contentsOf: codelumeJSONURL) else {
+                Logger.error("无法读取codelume.json文件")
+                return
+            }
+            
+            // 解析JSON数据
+            let json = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any]
+            
+            // 获取预览图路径 - 根据实际JSON格式，previewImage是直接的字符串路径
+            guard let thumbnailPath = json?["previewImage"] as? String else {
+                Logger.error("无法从JSON中获取预览图路径")
+                return
+            }
+            
+            // 构建预览图的完整URL
+            if let thumbnailURL = bundle?.url(forResource: thumbnailPath, withExtension: nil) {
+                // 加载预览图
+                if let nsImage = NSImage(contentsOf: thumbnailURL) {
+                    DispatchQueue.main.async {
+                        self.thumbnailImage = Image(nsImage: nsImage)
+                    }
+                } else {
+                    Logger.error("无法加载预览图: \(thumbnailPath)")
+                }
+            } else {
+                Logger.error("无法构建预览图URL: \(thumbnailPath)")
+            }
+            
+        } catch {
+            Logger.error("处理预览图时发生错误: \(error)")
+        }
     }
     
     private func handleScreenSelection(screen: NSScreen?) {
@@ -103,23 +128,18 @@ struct LocalWallpaperItemView: View {
             return
         }
         
-        let videoURL = item.fileUrl
+        let videoURL = wallpaperURL
         
         // 检查是否为"所有屏幕"选项
         if screen.identifier == "AllScreens" {
             // 发送不带屏幕ID的通知，让WindowController更新所有屏幕
-            NotificationCenter.default.post(
-                name: .playVideoUrlChanged,
-                object: nil,
-                userInfo: ["videoURL": videoURL]
-            )
+            ScreenManager.shared.updateAllScreensWallpaper(wallpaperURL: videoURL)
+            NotificationCenter.default.post(name: .wallpaperBundleChanged, object: nil, userInfo: [:])
+            
         } else {
+            ScreenManager.shared.updateScreenWallpaper(screenId: screen.identifier, wallpaperURL: videoURL)
             // 发送带屏幕ID的通知
-            NotificationCenter.default.post(
-                name: .playVideoUrlChanged,
-                object: nil,
-                userInfo: ["videoURL": videoURL, "screenIdentifier": screen.identifier]
-            )
+            NotificationCenter.default.post(name: .wallpaperBundleChanged, object: nil, userInfo: ["id": screen.identifier])
         }
         
         isShowingScreenSelector = false
@@ -138,7 +158,14 @@ struct LocalWallpaperItemView: View {
     }
     
     private func deleteVideo() {
-        guard !DatabaseManger.shared.isSetWallpaperUrl(url: item.fileUrl) else {
+        // 获取当前所有的屏幕配置，检查当前url是否正在使用
+        let screenConfigs = ScreenManager.shared.screenConfigurations
+        
+        // 检查当前url是否正在使用
+        let isUsed = screenConfigs.contains { $0.wallpaperUrl == wallpaperURL }
+        
+        // 如果当前url正在使用，提示用户
+        if isUsed {
             let alert = NSAlert()
             alert.messageText = NSLocalizedString("Cannot Delete", comment: "")
             alert.informativeText = NSLocalizedString("This video is currently being used by a screen and cannot be deleted.", comment: "")
@@ -159,14 +186,14 @@ struct LocalWallpaperItemView: View {
         
         let response = alert.runModal()
         if response == .alertFirstButtonReturn {
-//            DatabaseManger.shared.de(item: item)
+            let wallpaperName = wallpaperURL.deletingPathExtension().lastPathComponent
+            DatabaseManger.shared.deleteWallpaper(by: wallpaperName)
             NotificationCenter.default.post(name: .refreshLocalWallpaperList, object: nil)
-            Logger.info("Local video deleted successfully: \(item.fileUrl)")
+            Logger.info("Local wallpaper deleted successfully: \(wallpaperURL)")
         }
     }
 }
 
-// 屏幕选择器视图
 struct ScreenSelectorView: View {
     let screens: [NSScreen]
     let onSelect: (NSScreen?) -> Void
@@ -187,7 +214,6 @@ struct ScreenSelectorView: View {
             
             ScrollView {
                 VStack(spacing: 8) {
-                    // 添加"所有屏幕"选项
                     AllScreensRow(onSelect: onSelect)
                     
                     ForEach(screens, id: \.identifier) {
@@ -198,11 +224,10 @@ struct ScreenSelectorView: View {
                 .padding()
             }
         }
-        .frame(width: 300, height: CGFloat(min(400, screens.count * 80 + 180))) // 增加高度以容纳"所有屏幕"选项
+        .frame(width: 300, height: CGFloat(min(400, screens.count * 80 + 180)))
     }
 }
 
-// 所有屏幕选项行视图
 struct AllScreensRow: View {
     let onSelect: (NSScreen?) -> Void
     @State private var isHovering = false
@@ -228,14 +253,12 @@ struct AllScreensRow: View {
             isHovering = hovering
         }
         .onTapGesture {
-            // 创建一个虚拟的NSScreen实例来表示"所有屏幕"
             let allScreensPlaceholder = AllScreensPlaceholder()
             onSelect(allScreensPlaceholder)
         }
     }
 }
 
-// 虚拟的NSScreen子类，用于表示"所有屏幕"选项
 class AllScreensPlaceholder: NSScreen {
     override var localizedName: String {
         return "AllScreens"
@@ -254,7 +277,6 @@ class AllScreensPlaceholder: NSScreen {
     }
 }
 
-// 屏幕行项目视图
 struct ScreenRow: View {
     let screen: NSScreen
     let onSelect: (NSScreen?) -> Void
@@ -291,14 +313,6 @@ struct ScreenRow: View {
 }
 
 #Preview {
-    LocalWallpaperItemView(item: WallpaperItem(
-        id: UUID(),
-        title: "Sample Video",
-        fileUrl: Bundle.main.url(forResource: "codelume_0", withExtension: "mp4")!,
-        resolution: "1920x1080",
-        fileSize: 123456,
-        codec: "H.264",
-        duration: 60.0,
-        creationDate: Date()
-    ))
+    let bundleURL = Bundle.main.url(forResource: "thinking_cat", withExtension: "bundle")!
+    LocalWallpaperItemView(wallpaperURL: bundleURL)
 }

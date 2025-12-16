@@ -195,18 +195,23 @@ struct ScreenConfigurationDetailView: View {
     
     private func selectContent() {
         let openPanel = NSOpenPanel()
-        openPanel.allowedContentTypes = [.mpeg4Movie, .quickTimeMovie]
+        openPanel.allowedContentTypes = [.bundle]
         openPanel.allowsMultipleSelection = false
         
+        // 设置默认打开应用沙盒的文档目录
+        if let docDir = FileManager.default.urls(for: .documentDirectory, in:  .userDomainMask).first {
+            openPanel.directoryURL = docDir
+        }
+        
         if openPanel.runModal() == .OK {
-            if let url = openPanel.url {
-                screenManager.updateContentUrl(screenId: configurationId, contentUrl: url)
-            }
+            // if let url = openPanel.url {
+            //     screenManager.updateContentUrl(screenId: configurationId, contentUrl: url)
+            // }
         }
     }
     
     private func clearContent() {
-        screenManager.updateContentUrl(screenId: configurationId, contentUrl: nil)
+        // screenManager.updateContentUrl(screenId: configurationId, contentUrl: nil)
     }
     
     private var isScreenOnline: Bool {

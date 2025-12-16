@@ -9,7 +9,7 @@ struct HomeView: View {
                         .navigationTitle("")) {
                         Label("ScreenManager", systemImage: "display.2")
                     }
-                    NavigationLink(destination: LocalVideoView()
+                    NavigationLink(destination: LocalWallpapersView()
                         .navigationTitle("")) {
                         Label("LocalVideos", systemImage: "film")
                     }
@@ -38,7 +38,7 @@ struct HomeView: View {
                 }
             }
         } detail: {
-            LocalVideoView()
+            LocalWallpapersView()
                 .navigationTitle("")
         }
         .presentedWindowStyle(.automatic)

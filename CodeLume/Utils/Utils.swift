@@ -20,7 +20,7 @@ func getWallpaperSaveURL() -> URL? {
     guard let docDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
         return nil
     }
-    
+
     let wallpaperSaveURL = docDir.appendingPathComponent("Wallpapers")
     if !fileManager.fileExists(atPath: wallpaperSaveURL.path) {
         do {
@@ -78,7 +78,7 @@ func importExternalWallpaper() {
 
 func deleteWallpaperFile(at fileName: String) {
     if let wallpaperSaveURL = getWallpaperSaveURL() {
-        let fileURL = wallpaperSaveURL.appendingPathComponent(fileName)
+        let fileURL = wallpaperSaveURL.appendingPathComponent(fileName).appendingPathExtension("bundle")
         if fileExists(at: fileURL) {
             do {
                 try FileManager.default.removeItem(at: fileURL)
@@ -86,6 +86,8 @@ func deleteWallpaperFile(at fileName: String) {
             } catch {
                 Logger.error("Failed to delete wallpaper file: \(error)")
             }   
+        } else {
+            Logger.error("Wallpaper file does not exist at: \(fileURL.path)")
         }
     }
 }
@@ -102,8 +104,8 @@ func addDefaultWallpaper() {
         let destinationURL = wallpaperSaveURL.appendingPathComponent(wallpaperURL.lastPathComponent)
         do {
             if FileManager.default.fileExists(atPath: destinationURL.path) {
-                try FileManager.default.removeItem(at: destinationURL)
-                Logger.info("Deleted existing wallpaper file at: \(destinationURL.path)")
+                Logger.info("Default wallpaper already exists. Path: \(destinationURL.path)")
+                return
             }
             try FileManager.default.copyItem(at: wallpaperURL, to: destinationURL)
             Task { @MainActor in
@@ -171,5 +173,50 @@ func downloadScreensaver() {
                 Logger.error("Failed to save screensaver: \(error)")
             }
         }
+    }
+}
+
+func setStaticWallpaper(bundleURL: URL, screenLocalName: String) -> Bool {
+    // 构建缩略图文件路径：bundleURL/preview/thumbnail.jpg
+    let previewDirectory = bundleURL.appendingPathComponent("preview")
+    let thumbnailURL = previewDirectory.appendingPathComponent("thumbnail.jpg")
+    
+    do {
+        // 检查缩略图文件是否存在
+        let fileManager = FileManager.default
+        guard fileManager.fileExists(atPath: thumbnailURL.path) else {
+            Logger.error("Thumbnail file not found at \(thumbnailURL.path)")
+            return false
+        }
+        
+        // 设置壁纸选项
+        let options: [NSWorkspace.DesktopImageOptionKey: Any] = [
+            .imageScaling: NSImageScaling.scaleProportionallyUpOrDown.rawValue,
+            .allowClipping: true,
+        ]
+        
+        // 查找并设置指定屏幕的壁纸
+        let workspace = NSWorkspace.shared
+        var isScreenFound = false
+        
+        for screen in NSScreen.screens {
+            // 使用NSScreen的localizedName来匹配
+            if screen.localizedName == screenLocalName {
+                try workspace.setDesktopImageURL(thumbnailURL, for: screen, options: options)
+                isScreenFound = true
+                Logger.info("Set static wallpaper success for screen \(screenLocalName) with image \(thumbnailURL).")
+                break
+            }
+        }
+        
+        if !isScreenFound {
+            Logger.error("Screen with name \(screenLocalName) not found.")
+            return false
+        }
+        
+        return true
+    } catch {
+        Logger.error("Error setting static wallpaper for screen \(screenLocalName): \(error).")
+        return false
     }
 }

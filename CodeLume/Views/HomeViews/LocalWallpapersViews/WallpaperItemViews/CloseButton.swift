@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct VideoCloseButton: View {
+struct CloseButton: View {
     let action: () -> Void
     var body: some View {
         Button(action: action) {
@@ -15,6 +15,6 @@ struct VideoCloseButton: View {
 }
 
 #Preview {
-    VideoCloseButton(action: {})
+    CloseButton(action: {})
         .frame(width: 50, height: 50)
 }

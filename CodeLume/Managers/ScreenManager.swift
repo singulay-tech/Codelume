@@ -7,6 +7,8 @@ class ScreenManager: ObservableObject {
     @Published var screenConfigurations: [ScreenConfiguration] = []
     @Published var currentScreens: [NSScreen] = []
     private let databaseManager = DatabaseManger.shared
+    private var lastScreenChangeTime: TimeInterval = 0
+    private let screenChangeDebounceInterval: TimeInterval = 1
     
     private init() {
         updateCurrentScreens()
@@ -14,7 +16,7 @@ class ScreenManager: ObservableObject {
         handleScreenChanges()
         updateMainScreenFlag()
         sortScreenConfigurations()
-
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(screensDidChange),
@@ -38,7 +40,7 @@ class ScreenManager: ObservableObject {
     private func handleScreenChanges() {
         let currentScreenIdentifiers = Set(currentScreens.map { $0.identifier })
         let configuredScreenIdentifiers = Set(screenConfigurations.map { $0.id })
-
+        
         // 处理已断开连接的屏幕
         let removedScreenIdentifiers = configuredScreenIdentifiers.subtracting(currentScreenIdentifiers)
         for screenId in removedScreenIdentifiers {
@@ -57,8 +59,8 @@ class ScreenManager: ObservableObject {
         // 新增屏幕配置
         let addedScreenIdentifiers = currentScreenIdentifiers.subtracting(configuredScreenIdentifiers)
         for screenId in addedScreenIdentifiers {
+            if screenId == "" { continue }
             guard let screen = currentScreens.first(where: { $0.identifier == screenId }) else { continue }
-
             let newConfig = createDefaultScreenConfiguration(screen: screen)
             
             screenConfigurations.append(newConfig)
@@ -211,7 +213,7 @@ class ScreenManager: ObservableObject {
         let physicalHeight = Int(screenFrame.height * backingScaleFactor)
         return "\(physicalWidth) x \(physicalHeight)"
     }
-
+    
     func getCurrentScreenCount() -> Int {
         return currentScreens.count
     }
@@ -242,16 +244,22 @@ class ScreenManager: ObservableObject {
     }
     
     // 更新屏幕内容URL
-    func updateContentUrl(screenId: String, contentUrl: URL?) {
+    func updateScreenWallpaper(screenId: String, wallpaperURL: URL?) {
         guard let index = screenConfigurations.firstIndex(where: { $0.id == screenId }) else { return }
         
         var updatedConfig = screenConfigurations[index]
-        updatedConfig.wallpaperUrl = contentUrl
+        updatedConfig.wallpaperUrl = wallpaperURL
         
         screenConfigurations[index] = updatedConfig
         databaseManager.setScreenConfig(updatedConfig)
         
-        Logger.info("更新屏幕内容URL: \(screenId) -> \(contentUrl?.path ?? "nil")")
+        Logger.info("更新屏幕壁纸URL: \(screenId) -> \(wallpaperURL?.path ?? "nil")")
+    }
+
+    func updateAllScreensWallpaper(wallpaperURL: URL) {
+        for screen in screenConfigurations {
+            updateScreenWallpaper(screenId: screen.id, wallpaperURL: wallpaperURL)
+        }
     }
     
     // 更新屏幕播放类型
@@ -283,11 +291,11 @@ class ScreenManager: ObservableObject {
     // MARK: - 屏幕配置重置
     // 重置所有屏幕配置
     func resetAllScreenConfigurations() {
- 
+        
         for config in screenConfigurations {
             databaseManager.deleteScreenConfig(for: config.id)
         }
-  
+        
         screenConfigurations.removeAll()
         
         for screen in NSScreen.screens {
@@ -316,11 +324,15 @@ class ScreenManager: ObservableObject {
         databaseManager.setScreenConfig(newConfig)
         Logger.info("Reset Screen Config: \(screenId)")
     }
-
+    
     // 删除特定屏幕配置
     func deleteScreenConfiguration(screenId: String) {
         screenConfigurations.removeAll { $0.id == screenId }
         databaseManager.deleteScreenConfig(for: screenId)
         Logger.info("Delete Screen Config: \(screenId)")
+    }
+    
+    func getScreenConfiguration(screenId: String) -> ScreenConfiguration? {
+        return screenConfigurations.first(where: { $0.id == screenId })
     }
 }

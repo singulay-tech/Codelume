@@ -11,13 +11,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let _ = UserDefaultsManager.shared
         let _ = DatabaseManger.shared
         let _ = ScreenManager.shared
-
-        PlaybackManager.shared.start()
         Logger.info("CodeLume application started")
     }
     
     func applicationWillTerminate(_ notification: Notification) {
-        PlaybackManager.shared.stop()
         Logger.info("CodeLume application terminated")
     }
     

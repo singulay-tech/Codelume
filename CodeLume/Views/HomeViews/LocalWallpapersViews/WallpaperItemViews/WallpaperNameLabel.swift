@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct VideoNameLabel: View {
+struct WallpaperNameLabel: View {
     let text: String
     var body: some View {
         Text(text)
@@ -16,6 +16,6 @@ struct VideoNameLabel: View {
 }
 
 #Preview {
-    VideoNameLabel(text: "codelume_0.mp4")
+    WallpaperNameLabel(text: "codelume_0.bundle")
         .frame(width: 300, height: 50)
 }

@@ -15,7 +15,14 @@ extension Notification.Name {
     static let refreshLocalWallpaperList = Notification.Name("com.codelume.notification.refreshLocalWallpaperList")
     static let playConfigChanged = Notification.Name("com.codelume.notification.playConfigChanged")
     static let playItemChanged = Notification.Name("com.codelume.notification.playItemChanged")
-    static let playVideoUrlChanged = Notification.Name("com.codelume.notification.playVideoUrlChanged")
-    static let playbackStateChanged = Notification.Name("com.codelume.notification.playStateChanged")
+    // 壁纸包改变通知
+    static let wallpaperBundleChanged = Notification.Name("com.codelume.notification.wallpaperBundleChanged")
     static let screenPlayStateChanged = Notification.Name("com.codelume.notification.screenPlayStateChanged")
+    // 屏幕配置改变通知
+    static let screenConfigChanged = Notification.Name("com.codelume.notification.screenConfigChanged")
+    // 全局播放状态改变通知
+    static let playbackStateChanged = Notification.Name("com.codelume.notification.playStateChanged")
+    // seek to zero
+    static let seekToZero = Notification.Name("com.codelume.notification.seekToZero")
+
 }
