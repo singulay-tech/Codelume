@@ -31,7 +31,7 @@ struct MenuBarView: View {
                pause = newValue
            }
             Divider()
-            Button("Import external video") {
+            Button("Import external wallpaper") {
                 importExternalWallpaper()
             }
             Divider()

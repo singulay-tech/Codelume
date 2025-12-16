@@ -27,17 +27,6 @@
         }
       }
     },
-    "© 2025 CodeLume. All rights reserved." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "© 2025 码镜 保留所有权利。"
-          }
-        }
-      }
-    },
     "1. Click the download button to download the screen saver file to your desktop;" : {
       "localizations" : {
         "zh-Hans" : {
@@ -304,7 +293,14 @@
       }
     },
     "Delete Configuration" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除配置"
+          }
+        }
+      }
     },
     "Delete this video?" : {
       "localizations" : {
@@ -312,17 +308,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "删除视频？"
-          }
-        }
-      }
-    },
-    "Details" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "详情"
           }
         }
       }
@@ -488,17 +473,6 @@
         }
       }
     },
-    "Hello, world!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你好世界"
-          }
-        }
-      }
-    },
     "Home" : {
       "localizations" : {
         "zh-Hans" : {
@@ -509,12 +483,22 @@
         }
       }
     },
-    "Import external video" : {
+    "Import external wallpaper" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "导入外部视频"
+            "value" : "导入外部壁纸"
+          }
+        }
+      }
+    },
+    "Import Failed" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入失败"
           }
         }
       }
@@ -572,7 +556,14 @@
       }
     },
     "Loading..." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加载中…"
+          }
+        }
+      }
     },
     "LocalVideos" : {
       "localizations" : {
@@ -606,10 +597,24 @@
       }
     },
     "Main Screen" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主屏幕"
+          }
+        }
+      }
     },
     "Main Screen:" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "主屏幕："
+          }
+        }
+      }
     },
     "Mute" : {
       "extractionState" : "manual",
@@ -623,7 +628,14 @@
       }
     },
     "No" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "否"
+          }
+        }
+      }
     },
     "Non-program-built-in local video cannot be recovered after deletion and need to be redownloaded or imported." : {
       "localizations" : {
@@ -752,7 +764,14 @@
       }
     },
     "Physical Resolution:" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "物理分辨率："
+          }
+        }
+      }
     },
     "Play" : {
       "localizations" : {
@@ -765,7 +784,14 @@
       }
     },
     "Playback Controls" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "播放控制"
+          }
+        }
+      }
     },
     "Playback Settings" : {
       "localizations" : {
@@ -889,7 +915,14 @@
       }
     },
     "Reset Configuration" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重置配置"
+          }
+        }
+      }
     },
     "Resolution" : {
       "extractionState" : "manual",
@@ -903,7 +936,14 @@
       }
     },
     "Resolution:" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分辨率："
+          }
+        }
+      }
     },
     "Restart Now" : {
       "localizations" : {
@@ -966,10 +1006,24 @@
       }
     },
     "Screen ID:" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕 ID："
+          }
+        }
+      }
     },
     "Screen Information" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕信息"
+          }
+        }
+      }
     },
     "Screen Management" : {
       "localizations" : {
@@ -1081,30 +1135,15 @@
         }
       }
     },
-    "Select a Bundle." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "选择一个资源包"
-          }
-        }
-      }
-    },
-    "Select a Video." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "选择一个视频"
-          }
-        }
-      }
-    },
     "Select a Wallpaper Bundle." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请选择一个壁纸包文件"
+          }
+        }
+      }
     },
     "Select Screen" : {
       "localizations" : {
@@ -1199,6 +1238,16 @@
         }
       }
     },
+    "The selected file is not a valid wallpaper bundle." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所选文件不是有效的壁纸包文件"
+          }
+        }
+      }
+    },
     "Theme settings:" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1273,18 +1322,6 @@
         }
       }
     },
-    "Video imported successfully. Please go to Local Videos to view it." : {
-      "comment" : "Import successful message",
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "视频导入成功，请前往本地视频界面查看"
-          }
-        }
-      }
-    },
     "Volume:" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1296,14 +1333,21 @@
       }
     },
     "Wallpaper imported successfully. Please go to Local Wallpapers View to view it." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "壁纸导入成功，请前往本地壁纸库查看"
+          }
+        }
+      }
     },
     "Yes" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "确认"
+            "value" : "是"
           }
         }
       }

@@ -44,6 +44,20 @@ func importExternalWallpaper() {
     openPanel.begin { response in
         if response == .OK, let selectedURL = openPanel.url {
             do {
+                // 检查壁纸包格式是否正确
+                if !checkWallpaperBundle(selectedURL) {
+                    Logger.error("Invalid wallpaper bundle format.")
+                    
+                    // 显示导入失败的弹窗
+                    let alert = NSAlert()
+                    alert.messageText = NSLocalizedString("Import Failed", comment: "")
+                    alert.informativeText = NSLocalizedString("The selected file is not a valid wallpaper bundle.", comment: "")
+                    alert.alertStyle = .critical
+                    alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
+                    alert.runModal()
+                    return
+                }
+                
                 if let wallpaperSaveURL = getWallpaperSaveURL() {
                     let destinationURL = wallpaperSaveURL.appendingPathComponent(selectedURL.lastPathComponent)
                     if FileManager.default.fileExists(atPath: destinationURL.path) {
@@ -54,10 +68,9 @@ func importExternalWallpaper() {
                     Task { @MainActor in
                         if let item = await getWallpaperFileName(from: destinationURL) {
                             DatabaseManger.shared.addWallpaper(item)
-                            Logger.info("External wallpaper imported successfully. Path: \(destinationURL.path)")
                             NotificationCenter.default.post(name: .refreshLocalWallpaperList, object: nil)
-                            
-                            // 显示导入成功的弹窗
+                            Logger.info("External wallpaper imported successfully. Path: \(destinationURL.path)")
+
                             let alert = NSAlert()
                             alert.messageText = NSLocalizedString("Import Successful", comment: "")
                             alert.informativeText = NSLocalizedString("Wallpaper imported successfully. Please go to Local Wallpapers View to view it.", comment: "")
