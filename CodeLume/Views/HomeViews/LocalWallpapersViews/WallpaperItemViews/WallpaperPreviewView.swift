@@ -1,5 +1,6 @@
 import SwiftUI
 import AVKit
+import CodelumeBundle
 
 struct WallpaperPreviewView: View {
     let url: URL
@@ -12,6 +13,7 @@ struct WallpaperPreviewView: View {
         Group {
             if let videoURL = videoURL {
                 VideoPreviewView(videoURL: videoURL)
+                    
             } else if let errorMessage = errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
@@ -25,31 +27,17 @@ struct WallpaperPreviewView: View {
     }
     
     private func extractWallpaperURL() {
-        let codelumeJsonUrl = url.appendingPathComponent("codelume.json")
-        do {
-            let codelumeJsonData = try Data(contentsOf: codelumeJsonUrl)
-            let codelumeJson = try JSONSerialization.jsonObject(with: codelumeJsonData, options: []) as? [String: Any]
-            
-            if let wallpaperType = codelumeJson?["wallpaperType"] as? String, wallpaperType == "Video" {
-                if let videoConfigPath = codelumeJson?["video"] as? String {
-                    let videoConfigUrl = url.appendingPathComponent(videoConfigPath)
-                    
-                    let videoConfigData = try Data(contentsOf: videoConfigUrl)
-                    let videoConfig = try JSONSerialization.jsonObject(with: videoConfigData, options: []) as? [String: Any]
-                    
-                    if let videoPath = videoConfig?["url"] as? String {
-                        self.videoURL = url.appendingPathComponent(videoPath)
-                    } else {
-                        errorMessage = "Invalid video url in video.json"
-                    }
-                } else {
-                    errorMessage = "Invalid video config path in codelume.json"
-                }
-            } else {
-                errorMessage = "Wallpaper type is not Video"
-            }
-        } catch {
-            errorMessage = "Error loading wallpaper: \(error.localizedDescription)"
+        let wallpaper = VideoWallpaper()
+        if !wallpaper.open(wallpaperUrl: url) {
+            errorMessage = "Error opening wallpaper: \(url)"
+            return
+        }
+
+        if let videoUrl = wallpaper.videoUrl {
+            self.videoURL = videoUrl
+        } else {
+            errorMessage = "Invalid video url in wallpaper bundle"
+            return
         }
     }
 }
@@ -60,7 +48,7 @@ struct VideoPreviewView: View {
     
     var body: some View {
         VideoPlayer(player: player)
-            .frame(width: 1000, height: 563)
+            .frame(width: 1000, height: 600)
             .onAppear {
                 player.replaceCurrentItem(with: AVPlayerItem(url: videoURL))
                 player.actionAtItemEnd = .none
@@ -78,6 +66,7 @@ struct VideoPreviewView: View {
             }
     }
 }
+
 
 #Preview {
     let wallpaperURL = Bundle.main.url(forResource: "thinking_cat", withExtension: "bundle")!

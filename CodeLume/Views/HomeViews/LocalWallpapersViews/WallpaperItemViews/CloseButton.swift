@@ -10,7 +10,7 @@ struct CloseButton: View {
                 .font(.system(size: 12))
         }
         .buttonStyle(PlainButtonStyle())
-        .padding(8)
+        .padding(15)
     }
 }
 
