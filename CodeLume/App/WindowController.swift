@@ -8,6 +8,7 @@ class WindowController: NSObject {
     var playbackViews: [String: NSView] = [:]
     private var lastScreenChangeTime: TimeInterval = 0
     private let screenChangeDebounceInterval: TimeInterval = 1
+    private var mainScreen: String = NSScreen.main?.identifier ?? ""
     
     override init() {
         super.init()
@@ -218,13 +219,14 @@ class WindowController: NSObject {
             return
         }
         lastScreenChangeTime = now
+        // 主屏幕切换时重启应用
+        if mainScreen != NSScreen.main?.identifier ?? "" {
+            restartApplication()
+        }
+
         loadConfigurations()
         let currentScreens = NSScreen.screens
-        if currentScreens.count == screens.count {
-            if currentScreens.count == 1 {
-                restartApplication()
-            }
-            
+        if currentScreens.count == screens.count {            
             Logger.info("Same screens count: \(currentScreens.count)")
             screens = currentScreens
             for screen in screens {

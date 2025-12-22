@@ -164,7 +164,11 @@ class VideoPlaybackView: NSView {
     }
     
     @objc private func handleScreenTemporaryStateChanged(notification: Notification) {
-        if let screenId = notification.userInfo?["screenId"] as? String, screenId == playScreen?.identifier || screenId == nil {
+        if let screenId = notification.userInfo?["screenId"] as? String, screenId == playScreen?.identifier {
+            temporaryPause = notification.userInfo?["temporaryPause"] as? Bool ?? false
+            seekToZero = notification.userInfo?["seekToZero"] as? Bool ?? false
+            applyPlaybackSettings()
+        } else {
             temporaryPause = notification.userInfo?["temporaryPause"] as? Bool ?? false
             seekToZero = notification.userInfo?["seekToZero"] as? Bool ?? false
             applyPlaybackSettings()
