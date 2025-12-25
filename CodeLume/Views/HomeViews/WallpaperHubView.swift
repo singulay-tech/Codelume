@@ -48,8 +48,7 @@ struct WallpaperHubView: View {
                     
                     if wallpaperItems.isEmpty {
                         Text("No wallpapers available.")
-                            .foregroundColor(.secondary)
-                            .font(.subheadline)
+                            .font(.headline)
                             .padding()
                     }
                 }

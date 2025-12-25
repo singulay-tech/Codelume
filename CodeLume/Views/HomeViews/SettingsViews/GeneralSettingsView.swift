@@ -95,16 +95,15 @@ struct GeneralSettingsView: View {
         Logger.info("Set theme to \(theme.rawValue)")
         switch theme {
         case .system:
-            UserDefaults.standard.removeObject(forKey: "AppleInterfaceStyle")
+            UserDefaultsManager.shared.clearThemeConfig()
             NSApp.appearance = nil
         case .light:
-            UserDefaults.standard.set("Light", forKey: "AppleInterfaceStyle")
+            UserDefaultsManager.shared.saveTheme(.light)
             NSApp.appearance = NSAppearance(named: .aqua)
         case .dark:
-            UserDefaults.standard.set("Dark", forKey: "AppleInterfaceStyle")
+            UserDefaultsManager.shared.saveTheme(.dark)
             NSApp.appearance = NSAppearance(named: .darkAqua)
         }
-        UserDefaults.standard.synchronize()
         Logger.info("new theme: \(theme.rawValue)")
         NSApplication.shared.windows.forEach { window in
             window.appearance = NSApp.appearance

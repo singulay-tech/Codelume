@@ -12,7 +12,7 @@ class ScreenManager: ObservableObject {
     private var temporaryPause: Bool = false {
         didSet {
             if oldValue != temporaryPause {
-                NotificationCenter.default.post(name: .screenTemporaryStateChanged, object: nil, userInfo: ["temporaryPause": temporaryPause, "seekToZero": seekToZero])
+                NotificationCenter.default.post(name: .screenTemporaryStateChanged, object: nil, userInfo: ["screenId": "All", "temporaryPause": temporaryPause, "seekToZero": seekToZero])
                 Logger.info("Screen temporary state changed to: \(temporaryPause), seekToZero: \(seekToZero)")
             }
         }

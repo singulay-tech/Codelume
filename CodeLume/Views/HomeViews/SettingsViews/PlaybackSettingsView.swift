@@ -11,7 +11,7 @@ struct PlaybackSettingsView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-//            Text("Playback operations")
+            Text("Playback operations")
 //            Divider()
 //            HStack {
 //                Label("Playback mode", systemImage: "repeat")
@@ -47,35 +47,38 @@ struct PlaybackSettingsView: View {
                 newValue in
                 Logger.info("set pause to \(newValue)")
                 pause = newValue
+                NotificationCenter.default.post(name: .userDefaultChanged, object: nil)
             }
             .padding(.leading)
             
-            // IconToggle(iconName: "speaker.slash", title: "Mute", isOn: $mute){
-            //     newValue in
-            //     Logger.info("set mute to \(newValue)")
-            //     mute = newValue
-            // }
-            // .padding(.leading)
+             IconToggle(iconName: "speaker.slash", title: "Mute", isOn: $mute){
+                 newValue in
+                 Logger.info("set mute to \(newValue)")
+                 mute = newValue
+                 NotificationCenter.default.post(name: .userDefaultChanged, object: nil)
+             }
+             .padding(.leading)
             
-            // HStack() {
-            //     Image(systemName: "speaker.3")
-            //         .frame(width: 20, height: 20)
-            //         .foregroundColor(.primary)
-            //         .alignmentGuide(.firstTextBaseline) { d in
-            //             d[.bottom] + 4
-            //         }
-            //         .padding(.leading)
-            //     Text("Volume")
-            //     Spacer()
-            // }
-            // Slider(value: $volume) { editing in
-            //     if !editing {
-            //         Logger.info("Current volume: \(volume)")
-            //         volume = volume
-            //     }
-            // }
-            // .padding(.leading, 40)
-            // .padding(.trailing, 40)
+             HStack() {
+                 Image(systemName: "speaker.3")
+                     .frame(width: 20, height: 20)
+                     .foregroundColor(.primary)
+                     .alignmentGuide(.firstTextBaseline) { d in
+                         d[.bottom] + 4
+                     }
+                     .padding(.leading)
+                 Text("Volume")
+                 Spacer()
+             }
+             Slider(value: $volume) { editing in
+                 if !editing {
+                     Logger.info("Current volume: \(volume)")
+                     volume = volume
+                     NotificationCenter.default.post(name: .userDefaultChanged, object: nil)
+                 }
+             }
+             .padding(.leading, 40)
+             .padding(.trailing, 40)
             
             Text("Conditions for pausing playback")
             

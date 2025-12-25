@@ -1,7 +1,6 @@
 import SwiftUI
 import Foundation
 
-
 struct MenuBarView: View {
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettings
@@ -22,6 +21,7 @@ struct MenuBarView: View {
            .toggleStyle(.checkbox)
            .onChange(of: pause) { oldValue, newValue in
                pause = newValue
+               NotificationCenter.default.post(name: .userDefaultChanged, object: nil)
            }
            Toggle(isOn: $mute) {
                Text("Mute")
@@ -29,12 +29,13 @@ struct MenuBarView: View {
            .toggleStyle(.checkbox)
            .onChange(of: mute) { oldValue, newValue in
                mute = newValue
+               NotificationCenter.default.post(name: .userDefaultChanged, object: nil)
            }
             Divider()
-            Button("Import external wallpaper") {
+            Button("Import bundle") {
                 importExternalWallpaper()
             }
-            Button("Import external video as wallpaper") {
+            Button("Import video") {
                 importExternalVideoAsWallpaper()
             }
             Divider()
@@ -45,7 +46,6 @@ struct MenuBarView: View {
                 NSApplication.shared.terminate(nil)
             }
         }
-        
     }
     
     func openOrBringToFrontWindow(id: String) {

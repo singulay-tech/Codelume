@@ -67,6 +67,7 @@ class LogManager {
     private func setupLogger() {
         let console = ConsoleDestination()
         console.format = "$Dyyyy-MM-dd HH:mm:ss.SSS$d $L $N.$F:$l - $M"
+        console.minLevel = .error
         
         let file = FileDestination()
         let logDirectory = getLogDirectory()

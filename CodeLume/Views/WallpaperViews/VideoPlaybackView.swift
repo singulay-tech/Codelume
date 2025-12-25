@@ -144,6 +144,14 @@ class VideoPlaybackView: NSView {
             name: .screenTemporaryStateChanged,
             object: nil
         )
+
+        // User default changed
+        center.addObserver(
+            self,
+            selector: #selector(handleUserDefaultChanged),
+            name: .userDefaultChanged,
+            object: nil
+        )
     }
     
     @objc private func handlePlaybackDidEnd(notification: Notification) {
@@ -164,18 +172,25 @@ class VideoPlaybackView: NSView {
     }
     
     @objc private func handleScreenTemporaryStateChanged(notification: Notification) {
-        if let screenId = notification.userInfo?["screenId"] as? String, screenId == playScreen?.identifier {
-            temporaryPause = notification.userInfo?["temporaryPause"] as? Bool ?? false
-            seekToZero = notification.userInfo?["seekToZero"] as? Bool ?? false
-            applyPlaybackSettings()
-        } else {
-            temporaryPause = notification.userInfo?["temporaryPause"] as? Bool ?? false
-            seekToZero = notification.userInfo?["seekToZero"] as? Bool ?? false
-            applyPlaybackSettings()
+        if let screenId = notification.userInfo?["screenId"] as? String{
+            if screenId == playScreen?.identifier{
+                Logger.error("Screen \(screenId) tem status: \(temporaryPause), seektozero: \(seekToZero) ")
+                temporaryPause = notification.userInfo?["temporaryPause"] as? Bool ?? false
+                seekToZero = notification.userInfo?["seekToZero"] as? Bool ?? false
+                applyPlaybackSettings()
+            } else if screenId == "All" {
+                temporaryPause = notification.userInfo?["temporaryPause"] as? Bool ?? false
+                seekToZero = notification.userInfo?["seekToZero"] as? Bool ?? false
+                Logger.error("All screens tem status: \(temporaryPause), seektozero: \(seekToZero)")
+                applyPlaybackSettings()
+            }
         }
     }
+
+    @objc private func handleUserDefaultChanged(notification: Notification) {
+        applyPlaybackSettings()
+    }
     
-    // MARK: - Resource Management
     func releaseResources() {
         Logger.info("Release video playback view resources. Screen: \(playScreen?.identifier ?? "unknown")")
         
