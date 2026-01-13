@@ -13,14 +13,6 @@ struct HomeView: View {
                         .navigationTitle("")) {
                             Label("LocalWallpaper", systemImage: "photo.on.rectangle")
                         }
-                    NavigationLink(destination: WallpaperHubView()
-                        .navigationTitle("")) {
-                            Label("Wallpaper Hub", systemImage: "cloud")
-                        }
-//                    NavigationLink(destination: WallpaperMakerView()
-//                        .navigationTitle("")) {
-//                            Label("Wallpaper Maker", systemImage: "wand.and.stars")
-//                        }
                     NavigationLink(destination: ScreenSaverView()
                         .navigationTitle("")) {
                             Label("Screen Saver", systemImage: "sparkles")

@@ -1,4 +1,5 @@
 import Foundation
+import SpriteKit
 import AppKit
 
 class WindowController: NSObject {
@@ -70,10 +71,11 @@ class WindowController: NSObject {
             return VideoPlaybackView(frame: viewFrame, config: config, screen: screen)
         case .sprite:
             Logger.info("Create sprite playback view.")
-            return SpriteKitPlaybackView(frame: viewFrame)
+            return SpriteKitPlaybackView(frame: viewFrame, config: config, screen: screen)
+//            return SpriteKitPlaybackView(frame: viewFrame)
         case .scene:
             Logger.info("Create scene playback view.")
-            return SceneKitPlaybackView(frame: viewFrame)
+            return SceneKitPlaybackView(frame: viewFrame, config: config, screen: screen)
         }
     }
     
@@ -295,6 +297,7 @@ class WindowController: NSObject {
             let id = identifier
             if let window = windows[id] {
                 if let isVisible = notification.userInfo?["isVisible"] as? Bool {
+                    Logger.info("window \(id) set visible is \(isVisible)")
                     window.setIsVisible(isVisible)
                 }
             }

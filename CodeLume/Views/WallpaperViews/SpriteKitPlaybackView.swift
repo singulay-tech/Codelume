@@ -3,9 +3,22 @@ import SpriteKit
 
 // SpriteKit播放视图
 class SpriteKitPlaybackView: SKView {
-    override init(frame: NSRect) {
+    private var playScreen: NSScreen?
+    private var screenConfiguration: ScreenConfiguration?
+    
+    init(frame: NSRect, config: ScreenConfiguration, screen: NSScreen) {
         super.init(frame: frame)
+        screenConfiguration = config
+        playScreen = screen
         setupScene()
+        Logger.info("vis true \(self.screenConfiguration?.id)")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            Logger.info("Post visibility notification and start playback after delay for screen: \(self.screenConfiguration!.id)")
+            NotificationCenter.default.post(name: .setWallpaperIsVisible,
+                                            object: self.screenConfiguration?.id,
+                                            userInfo: ["isVisible": true])
+//            self.applyPlaybackSettings()
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -14,7 +27,7 @@ class SpriteKitPlaybackView: SKView {
     
     private func setupScene() {
         let scene = SKScene(size: self.frame.size)
-        scene.backgroundColor = .black
+        scene.backgroundColor = .blue
         self.presentScene(scene)
         
         // 添加默认的SpriteKit内容
