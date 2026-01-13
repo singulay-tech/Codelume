@@ -7,11 +7,11 @@ struct DetailsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             infoRow("FileName", wallpaperURL.lastPathComponent)
-            infoRow("WallpaperName", wallpaperBundele?.wallpaperInfo.name ?? wallpaperURL.deletingPathExtension().lastPathComponent)
-            infoRow("Description", wallpaperBundele?.wallpaperInfo.description ?? "")
-            infoRow("Author", wallpaperBundele?.wallpaperInfo.author ?? "Unknown")
-            infoRow("Email", wallpaperBundele?.wallpaperInfo.email ?? "Unknown")
-            infoRow("Version", wallpaperBundele?.wallpaperInfo.version ?? "Unknown")
+            infoRow("WallpaperName", wallpaperBundele?.bundleInfo.name ?? wallpaperURL.deletingPathExtension().lastPathComponent)
+            infoRow("Description", wallpaperBundele?.bundleInfo.description ?? "")
+            infoRow("Author", wallpaperBundele?.bundleInfo.author ?? "Unknown")
+            infoRow("Email", wallpaperBundele?.bundleInfo.email ?? "Unknown")
+            infoRow("Version", wallpaperBundele?.bundleInfo.version ?? "Unknown")
             
             Divider()
             

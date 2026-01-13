@@ -8,14 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		864DE0BF2EF447B3009B3349 /* CodelumeBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 864DE0BE2EF447B3009B3349 /* CodelumeBundle */; };
+		86C722CA2F1642FC008BE5B5 /* CodelumeBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 86C722C92F1642FC008BE5B5 /* CodelumeBundle */; };
 		86E2235B2EEA897000AFA3A3 /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 86E2235A2EEA897000AFA3A3 /* SwiftyBeaver */; };
 		86FBEE652EEA8CBD00F05936 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 86FBEE642EEA8CBD00F05936 /* SQLite */; };
-		86FBF03D2EF1838E00F05936 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 86FBF03C2EF1838E00F05936 /* Auth */; };
-		86FBF03F2EF1838E00F05936 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 86FBF03E2EF1838E00F05936 /* Functions */; };
-		86FBF0412EF1838E00F05936 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 86FBF0402EF1838E00F05936 /* PostgREST */; };
-		86FBF0432EF1838E00F05936 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 86FBF0422EF1838E00F05936 /* Realtime */; };
-		86FBF0452EF1838E00F05936 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 86FBF0442EF1838E00F05936 /* Storage */; };
-		86FBF0472EF1838E00F05936 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 86FBF0462EF1838E00F05936 /* Supabase */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,13 +45,8 @@
 			files = (
 				86FBEE652EEA8CBD00F05936 /* SQLite in Frameworks */,
 				86E2235B2EEA897000AFA3A3 /* SwiftyBeaver in Frameworks */,
-				86FBF0452EF1838E00F05936 /* Storage in Frameworks */,
+				86C722CA2F1642FC008BE5B5 /* CodelumeBundle in Frameworks */,
 				864DE0BF2EF447B3009B3349 /* CodelumeBundle in Frameworks */,
-				86FBF03F2EF1838E00F05936 /* Functions in Frameworks */,
-				86FBF0472EF1838E00F05936 /* Supabase in Frameworks */,
-				86FBF0432EF1838E00F05936 /* Realtime in Frameworks */,
-				86FBF03D2EF1838E00F05936 /* Auth in Frameworks */,
-				86FBF0412EF1838E00F05936 /* PostgREST in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,13 +99,8 @@
 			packageProductDependencies = (
 				86E2235A2EEA897000AFA3A3 /* SwiftyBeaver */,
 				86FBEE642EEA8CBD00F05936 /* SQLite */,
-				86FBF03C2EF1838E00F05936 /* Auth */,
-				86FBF03E2EF1838E00F05936 /* Functions */,
-				86FBF0402EF1838E00F05936 /* PostgREST */,
-				86FBF0422EF1838E00F05936 /* Realtime */,
-				86FBF0442EF1838E00F05936 /* Storage */,
-				86FBF0462EF1838E00F05936 /* Supabase */,
 				864DE0BE2EF447B3009B3349 /* CodelumeBundle */,
+				86C722C92F1642FC008BE5B5 /* CodelumeBundle */,
 			);
 			productName = "codelume-app";
 			productReference = 2262B8652E4B94B2003E8F45 /* CodeLume.app */;
@@ -149,8 +134,7 @@
 			packageReferences = (
 				86E223592EEA897000AFA3A3 /* XCRemoteSwiftPackageReference "SwiftyBeaver" */,
 				86FBEE632EEA8CBD00F05936 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
-				86FBF03B2EF1838E00F05936 /* XCRemoteSwiftPackageReference "supabase-swift" */,
-				864DE0BD2EF447B3009B3349 /* XCLocalSwiftPackageReference "../CodelumeBundle" */,
+				86C722C82F1642FC008BE5B5 /* XCRemoteSwiftPackageReference "CodelumeBundle" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2262B8662E4B94B2003E8F45 /* Products */;
@@ -331,7 +315,7 @@
 				INFOPLIST_FILE = CodeLume/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = CodeLume;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = NO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -374,7 +358,7 @@
 				INFOPLIST_FILE = CodeLume/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = CodeLume;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_LSUIElement = NO;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -412,14 +396,15 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		864DE0BD2EF447B3009B3349 /* XCLocalSwiftPackageReference "../CodelumeBundle" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../CodelumeBundle;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
+		86C722C82F1642FC008BE5B5 /* XCRemoteSwiftPackageReference "CodelumeBundle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/guang-zi-yu/CodelumeBundle.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		86E223592EEA897000AFA3A3 /* XCRemoteSwiftPackageReference "SwiftyBeaver" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyBeaver/SwiftyBeaver.git";
@@ -436,19 +421,16 @@
 				minimumVersion = 0.15.4;
 			};
 		};
-		86FBF03B2EF1838E00F05936 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/supabase/supabase-swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.5.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		864DE0BE2EF447B3009B3349 /* CodelumeBundle */ = {
 			isa = XCSwiftPackageProductDependency;
+			productName = CodelumeBundle;
+		};
+		86C722C92F1642FC008BE5B5 /* CodelumeBundle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86C722C82F1642FC008BE5B5 /* XCRemoteSwiftPackageReference "CodelumeBundle" */;
 			productName = CodelumeBundle;
 		};
 		86E2235A2EEA897000AFA3A3 /* SwiftyBeaver */ = {
@@ -460,36 +442,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 86FBEE632EEA8CBD00F05936 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
 			productName = SQLite;
-		};
-		86FBF03C2EF1838E00F05936 /* Auth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 86FBF03B2EF1838E00F05936 /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Auth;
-		};
-		86FBF03E2EF1838E00F05936 /* Functions */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 86FBF03B2EF1838E00F05936 /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Functions;
-		};
-		86FBF0402EF1838E00F05936 /* PostgREST */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 86FBF03B2EF1838E00F05936 /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = PostgREST;
-		};
-		86FBF0422EF1838E00F05936 /* Realtime */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 86FBF03B2EF1838E00F05936 /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Realtime;
-		};
-		86FBF0442EF1838E00F05936 /* Storage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 86FBF03B2EF1838E00F05936 /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Storage;
-		};
-		86FBF0462EF1838E00F05936 /* Supabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 86FBF03B2EF1838E00F05936 /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Supabase;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

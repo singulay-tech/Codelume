@@ -3,8 +3,13 @@ import SceneKit
 
 // SceneKit播放视图
 class SceneKitPlaybackView: SCNView {
-    override init(frame: NSRect) {
+    private var playScreen: NSScreen?
+    private var screenConfiguration: ScreenConfiguration?
+    
+    init(frame: NSRect, config: ScreenConfiguration, screen: NSScreen) {
         super.init(frame: frame)
+        screenConfiguration = config
+        playScreen = screen
         setupScene()
     }
     

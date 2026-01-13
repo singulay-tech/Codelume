@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import CodelumeBundle
 
 // MARK: - 屏幕管理类
 class ScreenManager: ObservableObject {
@@ -280,6 +281,22 @@ class ScreenManager: ObservableObject {
         
         var updatedConfig = screenConfigurations[index]
         updatedConfig.wallpaperUrl = wallpaperURL
+        
+        let bundle = BaseBundle()
+        bundle.open(wallpaperUrl: wallpaperURL!)
+        Logger.info("type \(bundle.bundleInfo.type)")
+        switch bundle.bundleInfo.type {
+        case .video:
+            updatedConfig.playbackType = .video
+        case .Scene2D:
+            updatedConfig.playbackType = .sprite
+        case .Scene3D:
+            updatedConfig.playbackType = .scene
+            
+        default:
+            updatedConfig.playbackType = .video
+        }
+        //        updatedConfig.playbackType =  wallpaper.wallpaperInfo.type
         
         screenConfigurations[index] = updatedConfig
         databaseManager.setScreenConfig(updatedConfig)
