@@ -588,6 +588,16 @@
         }
       }
     },
+    "Hide Dock icon" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐藏程序坞图标"
+          }
+        }
+      }
+    },
     "Home" : {
       "localizations" : {
         "zh-Hans" : {

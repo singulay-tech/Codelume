@@ -33,6 +33,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         #endif
 
+        // set dock icon visible
+        let hideDockIcon = UserDefaults.standard.bool(forKey: "hideDockIcon")
+        NSApp.setActivationPolicy(hideDockIcon ? .prohibited : .regular)
+
         let showWelcomeView = UserDefaultsManager.shared.getWelcomeStatus()
         if showWelcomeView {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
