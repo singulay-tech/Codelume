@@ -5,22 +5,25 @@ struct WelcomeView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        VStack(spacing: 30) {
-            Image("Welcome_1")
+        VStack(spacing: 10) {
+            Image("Welcome")
                 .resizable()
-                .scaledToFit()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 550, height: 35)
+                .clipped()
             HStack {
                 Image(nsImage: NSImage(named: "AppIcon") ?? NSImage())
                     .resizable()
                     .frame(width: 64, height: 64)
-                Text("Congratulations on discovering this free treasure of an app! Codelume is a dynamic wallpaper application designed exclusively for macOS, boasting a sleek and elegant design with comprehensive functionality. As a menu bar application, please remember to launch and use it from the menu bar—it won't be visible in your Dock.")
+                Text("Codelume is a dynamic wallpaper application designed exclusively for macOS, boasting a sleek and elegant design with comprehensive functionality. As a menu bar application, please remember to launch and use it from the menu bar—it won't be visible in your Dock.")
                     .font(.title3)
-                    .multilineTextAlignment(.center)
+                    .multilineTextAlignment(.leading)
                     .foregroundColor(.secondary)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.horizontal, 10)
             }
+            
             HStack {
                 Spacer()
                 Toggle("Show on next startup", isOn: $showAgain)
@@ -36,7 +39,7 @@ struct WelcomeView: View {
             .controlSize(.large)
             Spacer()
         }
-        .frame(minWidth: 650, minHeight: 440)
+        .frame(minWidth: 550)
     }
 }
 

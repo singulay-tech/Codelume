@@ -55,13 +55,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let hostingController = NSHostingController(rootView: welcomeView)
         
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 500, height: 400),
+            contentRect: NSRect(x: 0, y: 0, width: 550, height: 300),
             styleMask: .borderless,
             backing: .buffered,
             defer: false
         )
         
         window.contentViewController = hostingController
+        window.isOpaque = false
+        window.backgroundColor = .clear
+        
+        if let contentView = window.contentView {
+            contentView.wantsLayer = true
+            contentView.layer?.cornerRadius = 20.0
+            contentView.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
+        }
         window.center()
         window.makeKeyAndOrderFront(nil)
         

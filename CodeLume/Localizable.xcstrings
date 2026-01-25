@@ -154,6 +154,16 @@
         }
       }
     },
+    "Codelume is a dynamic wallpaper application designed exclusively for macOS, boasting a sleek and elegant design with comprehensive functionality. As a menu bar application, please remember to launch and use it from the menu bar—it won't be visible in your Dock." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "码镜是一款专为 macOS 系统打造的动态壁纸应用，设计简约优雅，功能全面实用。它是一款状态栏应用，请记得在状态栏中打开使用，程序坞中不会显示。"
+          }
+        }
+      }
+    },
     "Codelume is a native, open-source dynamic wallpaper application built exclusively for macOS." : {
       "localizations" : {
         "zh-Hans" : {
@@ -220,16 +230,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "暂停/播放条件"
-          }
-        }
-      }
-    },
-    "Congratulations on discovering this free treasure of an app! Codelume is a dynamic wallpaper application designed exclusively for macOS, boasting a sleek and elegant design with comprehensive functionality. As a menu bar application, please remember to launch and use it from the menu bar—it won't be visible in your Dock." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "恭喜你发现这款免费的宝藏软件！码镜是一款专为 macOS 系统打造的动态壁纸应用，设计简约优雅，功能全面实用。它是一款状态栏应用，请记得在状态栏中打开使用，程序坞中不会显示。"
           }
         }
       }
@@ -726,17 +726,6 @@
         }
       }
     },
-    "Login" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "登陆"
-          }
-        }
-      }
-    },
     "Loop" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -921,17 +910,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "付费下载以支持苹果开发者计划费用。自动更新。"
-          }
-        }
-      }
-    },
-    "Password" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "密码"
           }
         }
       }
@@ -1459,17 +1437,6 @@
         }
       }
     },
-    "Sign Up" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "登陆"
-          }
-        }
-      }
-    },
     "SpriteKit" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1619,17 +1586,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新配置"
-          }
-        }
-      }
-    },
-    "Username" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "用户名"
           }
         }
       }
