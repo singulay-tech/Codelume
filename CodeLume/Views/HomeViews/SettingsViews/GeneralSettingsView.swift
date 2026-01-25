@@ -6,7 +6,6 @@ struct GeneralSettingsView: View {
     @State private var selectedTheme: String = UserDefaultsManager.shared.getTheme().rawValue
     @State private var showWelcomeView: Bool = UserDefaultsManager.shared.getWelcomeStatus()
     @State private var startAtLogin: Bool = UserDefaultsManager.shared.getStartAtLogin()
-    @State private var lastHideDockIconToggleTime: Date = .distantPast
     @State private var showRestartAlert = false
     
     var body: some View {

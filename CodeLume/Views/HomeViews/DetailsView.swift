@@ -2,7 +2,7 @@ import SwiftUI
 import CodelumeBundle
 struct DetailsView: View {
     var wallpaperURL: URL
-    @State private var wallpaperBundele: VideoWallpaper?
+    @State private var wallpaperBundele: VideoBundle?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -27,7 +27,7 @@ struct DetailsView: View {
         .onAppear {
             Task {
                 Task {
-                    wallpaperBundele = VideoWallpaper()
+                    wallpaperBundele = VideoBundle()
                     _ = wallpaperBundele?.open(wallpaperUrl: wallpaperURL)
                 }
             }
@@ -46,7 +46,7 @@ struct DetailsView: View {
 }
 
 #Preview {
-    let bundleURL = Bundle.main.url(forResource: "thinking_cat", withExtension: "bundle")!
+    let bundleURL = Bundle.main.url(forResource: "DefaultBundle", withExtension: "bundle")!
     DetailsView(wallpaperURL: bundleURL)
         .frame(width:400, height: 360)
 }

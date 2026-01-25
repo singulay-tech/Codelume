@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "CodeLume-18@1x.png",
+      "filename" : "Codelume-18@1x.png",
       "idiom" : "mac",
       "scale" : "1x"
     },
@@ -12,12 +12,12 @@
           "value" : "dark"
         }
       ],
-      "filename" : "CodeLume-18-dark@1x.png",
+      "filename" : "Codelume-18-dark@1x.png",
       "idiom" : "mac",
       "scale" : "1x"
     },
     {
-      "filename" : "CodeLume-18@2x.png",
+      "filename" : "Codelume-18@2x.png",
       "idiom" : "mac",
       "scale" : "2x"
     },
@@ -28,7 +28,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "CodeLume-18-dark@2x.png",
+      "filename" : "Codelume-18-dark@2x.png",
       "idiom" : "mac",
       "scale" : "2x"
     }

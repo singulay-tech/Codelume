@@ -1,10 +1,3 @@
-//
-//  PlayingViews.swift
-//  codelume-app
-//
-//  Created by lyke on 2025/8/13.
-//
-
 import SwiftUI
 import AppKit
 import UniformTypeIdentifiers

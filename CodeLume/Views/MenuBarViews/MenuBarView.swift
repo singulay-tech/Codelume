@@ -3,45 +3,54 @@ import Foundation
 
 struct MenuBarView: View {
     @Environment(\.openWindow) private var openWindow
-    @Environment(\.openSettings) private var openSettings
-    @AppStorage(PAUSE) private var pause: Bool = false
-    @AppStorage(MUTE) private var mute: Bool = false
-    @AppStorage(VOLUME) private var volume: Double = 0.3
+    @AppStorage("Pause") private var pause: Bool = false
+    @AppStorage("Mute") private var mute: Bool = false
+    @AppStorage("Volume") private var volume: Double = 0.3
     
     var body: some View {
         VStack {
             Divider()
+            
             Button("Home") {
                 openOrBringToFrontWindow(id: "home")
             }
-           Divider()
-           Toggle(isOn: $pause) {
-               Text("Pause")
-           }
-           .toggleStyle(.checkbox)
-           .onChange(of: pause) { oldValue, newValue in
-               pause = newValue
-               NotificationCenter.default.post(name: .userDefaultChanged, object: nil)
-           }
-           Toggle(isOn: $mute) {
-               Text("Mute")
-           }
-           .toggleStyle(.checkbox)
-           .onChange(of: mute) { oldValue, newValue in
-               mute = newValue
-               NotificationCenter.default.post(name: .userDefaultChanged, object: nil)
-           }
+            
             Divider()
+            
+            Toggle(isOn: $pause) {
+                Text("Pause")
+            }
+            .toggleStyle(.checkbox)
+            .onChange(of: pause) { oldValue, newValue in
+                pause = newValue
+                NotificationCenter.default.post(name: .userDefaultChanged, object: nil)
+            }
+            
+            Toggle(isOn: $mute) {
+                Text("Mute")
+            }
+            .toggleStyle(.checkbox)
+            .onChange(of: mute) { oldValue, newValue in
+                mute = newValue
+                NotificationCenter.default.post(name: .userDefaultChanged, object: nil)
+            }
+            
+            Divider()
+            
             Button("Import bundle") {
-                importExternalWallpaper()
+                importBundle()
             }
+            
             Button("Import video") {
-                importExternalVideoAsWallpaper()
+                importVideo()
             }
+            
             Divider()
+            
             Button("Rstart") {
                 restartApplication()
             }
+            
             Button("Quit") {
                 NSApplication.shared.terminate(nil)
             }

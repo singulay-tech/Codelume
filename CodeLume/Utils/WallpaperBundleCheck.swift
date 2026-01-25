@@ -1,6 +1,6 @@
 //
 //  WallpaperBundleCheck.swift
-//  CodeLume
+//  Codelume
 //
 //  Created by 广子俞 on 2025/12/16.
 //

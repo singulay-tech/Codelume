@@ -1,6 +1,6 @@
 //
 //  Utils.swift
-//  CodeLume
+//  Codelume
 //
 //  Created by 广子俞 on 2025/12/11.
 //
@@ -76,7 +76,7 @@ func getWallpaperSaveURL() -> URL? {
     return wallpaperSaveURL
 }
 
-func importExternalWallpaper() {
+func importBundle() {
     let openPanel = NSOpenPanel()
     openPanel.title = NSLocalizedString("Select a Wallpaper Bundle.", comment: "")
     openPanel.allowedContentTypes = [.bundle]
@@ -129,14 +129,14 @@ func importExternalWallpaper() {
     }
 }
 
-func importExternalVideoAsWallpaper() {
+func importVideo() {
     let openPanel = NSOpenPanel()
     openPanel.title = NSLocalizedString("Select a Video.", comment: "")
     openPanel.allowedContentTypes = [.mpeg4Movie, .quickTimeMovie]
     openPanel.allowsMultipleSelection = false
     openPanel.begin { response in
         if response == .OK, let selectedURL = openPanel.url {
-            let wallpaperBundele = VideoWallpaper()
+            let wallpaperBundele = VideoBundle()
             let bundleName = selectedURL.deletingPathExtension().lastPathComponent
             
             var ret = wallpaperBundele.create(bundleName: bundleName, saveDir: WALLPAPER_SAVE_URL)
@@ -187,7 +187,7 @@ func getWallpaperFileName(from url: URL) async -> String? {
 }
 
 func addDefaultWallpaper() {
-    let wallpaperURL = Bundle.main.url(forResource: "thinking_cat", withExtension: "bundle")
+    let wallpaperURL = Bundle.main.url(forResource: "DefaultBundle", withExtension: "bundle")
     let wallpaperSaveURL = getWallpaperSaveURL()
     if let wallpaperSaveURL = wallpaperSaveURL, let wallpaperURL = wallpaperURL {
         let destinationURL = wallpaperSaveURL.appendingPathComponent(wallpaperURL.lastPathComponent)
@@ -212,57 +212,10 @@ func addDefaultWallpaper() {
 
 func getDefaultWallpaperURL() -> URL? {
     if let wallpaperURL = getWallpaperSaveURL() {
-        let wallpaperPath = wallpaperURL.appendingPathComponent("thinking_cat.bundle")
+        let wallpaperPath = wallpaperURL.appendingPathComponent("DefaultBundle.bundle")
         return wallpaperPath
     }
     return nil
-}
-
-// 下载资源文件中的屏保程序到指定目录，通过文件面板选择保存位置
-func downloadScreensaver() {
-    // 获取应用程序包中的屏保文件
-    guard let saverURL = Bundle.main.url(forResource: "CodeLumeSaver", withExtension: "saver") else {
-        Logger.error("Failed to find screensaver in bundle")
-        return
-    }
-    
-    // 创建保存面板
-    let savePanel = NSSavePanel()
-    savePanel.title = NSLocalizedString("Save Screen Saver", comment: "")
-    savePanel.nameFieldStringValue = "CodeLume.saver"
-    savePanel.allowedContentTypes = [UTType(filenameExtension: "saver") ?? .item]
-    
-    // 设置默认保存位置为桌面
-    let desktopURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first
-    savePanel.directoryURL = desktopURL
-    
-    // 显示保存面板并处理用户选择
-    savePanel.begin { response in
-        if response == .OK, let destinationURL = savePanel.url {
-            do {
-                // 如果目标文件已存在，则先删除
-                if FileManager.default.fileExists(atPath: destinationURL.path) {
-                    try FileManager.default.removeItem(at: destinationURL)
-                }
-                
-                // 复制屏保文件到用户选择的位置
-                try FileManager.default.copyItem(at: saverURL, to: destinationURL)
-                Logger.info("Screensaver saved successfully to: \(destinationURL.path)")
-
-                // 提供弹窗提示用户屏保已保存，双击安装即可生效
-                DispatchQueue.main.async {
-                    let alert = NSAlert()
-                    alert.messageText = NSLocalizedString("Screensaver Saved", comment: "")
-                    alert.informativeText = NSLocalizedString("Screensaver saved successfully!", comment: "")
-                    alert.alertStyle = .informational
-                    alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
-                    alert.runModal()
-                }
-            } catch {
-                Logger.error("Failed to save screensaver: \(error)")
-            }
-        }
-    }
 }
 
 func setStaticWallpaper(bundleURL: URL, screenLocalName: String) -> Bool {

@@ -1,12 +1,11 @@
 import SwiftUI
-import Foundation
-import AppKit
+import UniformTypeIdentifiers
 
 struct ScreenSaverView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Text("CodeLume Screen Saver")
+                Text("Codelume Screen Saver")
                     .font(.title)
                     .fontWeight(.bold)
                     .padding(.bottom, 10)
@@ -20,7 +19,7 @@ struct ScreenSaverView: View {
                         .font(.body)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.leading)
-                    Text("CodeLume offers a dedicated screen saver module that allows users to set their current dynamic wallpapers as screen savers after downloading and installing it. This creates a seamless visual transition between active desktop environments and idle states, extending dynamic aesthetics throughout the entire device usage cycle while ensuring privacy security and maintaining a consistent immersive visual experience.")
+                    Text("Codelume offers a dedicated screen saver module that allows users to set their current dynamic wallpapers as screen savers after downloading and installing it. This creates a seamless visual transition between active desktop environments and idle states, extending dynamic aesthetics throughout the entire device usage cycle while ensuring privacy security and maintaining a consistent immersive visual experience.")
                         .font(.body)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.leading)
@@ -30,39 +29,22 @@ struct ScreenSaverView: View {
                     Spacer()
                     Button(action: downloadScreensaver) {
                         Text("Download Screen Saver")
-                            .padding()
+                            .padding(6)
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.regular)
                     Spacer()
                 }
                 
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Installation Method")
-                        .font(.headline)
-                        .fontWeight(.medium)
-                    
-                    VStack(alignment: .leading, spacing: 5) {
-                        Text("1. Click the download button to download the screen saver file to your desktop;")
-                        Image("ScreenSaver_1")
-                            .resizable()
-                            .scaledToFit()
-                        Text("2. Double-click the downloaded .saver file to install;")
-                        Image("ScreenSaver_2")
-                            .resizable()
-                            .scaledToFit()
-                        Text("3. Select your video file to set up;")
-                        Image("ScreenSaver_3")
-                            .resizable()
-                            .scaledToFit()
-                        Text("4. Click \"Preview\" to view the effect.")
-                        Image("ScreenSaver_4")
-                            .resizable()
-                            .scaledToFit()
-                    }
-                    .font(.body)
-                    .foregroundColor(.secondary)
+                HStack {
+                    Spacer()
+                    Link("View installation instructions on GitHub.",
+                         destination: URL(string: "https://github.com/guang-zi-yu/CodelumeSaver.git")!)
+                    .font(.caption)
+                    .foregroundColor(.blue)
+                    Spacer()
                 }
+                .padding(.top, 5)
                 
                 Spacer()
                     .frame(height: 40)
@@ -72,6 +54,45 @@ struct ScreenSaverView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.windowBackgroundColor))
+    }
+    
+    func downloadScreensaver() {
+        guard let saverURL = Bundle.main.url(forResource: "CodelumeSaver", withExtension: "saver") else {
+            Logger.error("Failed to find screensaver in bundle")
+            return
+        }
+        
+        let savePanel = NSSavePanel()
+        savePanel.title = NSLocalizedString("Save Screen Saver", comment: "")
+        savePanel.nameFieldStringValue = "Codelume.saver"
+        savePanel.allowedContentTypes = [UTType(filenameExtension: "saver") ?? .item]
+        
+        let desktopURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first
+        savePanel.directoryURL = desktopURL
+        
+        savePanel.begin { response in
+            if response == .OK, let destinationURL = savePanel.url {
+                do {
+                    if FileManager.default.fileExists(atPath: destinationURL.path) {
+                        try FileManager.default.removeItem(at: destinationURL)
+                    }
+                    
+                    try FileManager.default.copyItem(at: saverURL, to: destinationURL)
+                    Logger.info("Screensaver saved successfully to: \(destinationURL.path)")
+
+                    DispatchQueue.main.async {
+                        let alert = NSAlert()
+                        alert.messageText = NSLocalizedString("Screensaver Saved", comment: "")
+                        alert.informativeText = NSLocalizedString("Screensaver saved successfully!", comment: "")
+                        alert.alertStyle = .informational
+                        alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
+                        alert.runModal()
+                    }
+                } catch {
+                    Logger.error("Failed to save screensaver: \(error)")
+                }
+            }
+        }
     }
 }
 
