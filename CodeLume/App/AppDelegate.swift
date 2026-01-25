@@ -28,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         default:
             NSApp.appearance = nil
         }
-#if !DEBUG
+        
         if isAppAlreadyRunning() {
             let alert = NSAlert()
             alert.messageText = NSLocalizedString("Codelume is Running", comment: "")
@@ -40,7 +40,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSApp.terminate(nil)
             return
         }
-#endif
         
         let showWelcomeView = UserDefaultsManager.shared.getWelcomeStatus()
         if showWelcomeView {

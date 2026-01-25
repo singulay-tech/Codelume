@@ -39,7 +39,7 @@ struct WelcomeView: View {
             .controlSize(.large)
             Spacer()
         }
-        .frame(minWidth: 550)
+        .frame(width: 550)
     }
 }
 
