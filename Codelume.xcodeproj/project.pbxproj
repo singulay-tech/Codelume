@@ -121,7 +121,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2262B8602E4B94B2003E8F45 /* Build configuration list for PBXProject "Codelume" */;
+			buildConfigurationList = 2262B8602E4B94B2003E8F45 /* Build configuration list for PBXProject "CodeLume" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -378,7 +378,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2262B8602E4B94B2003E8F45 /* Build configuration list for PBXProject "Codelume" */ = {
+		2262B8602E4B94B2003E8F45 /* Build configuration list for PBXProject "CodeLume" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2262B86F2E4B94B4003E8F45 /* Debug */,
