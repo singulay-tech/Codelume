@@ -321,6 +321,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codelume.CodeLume;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -364,6 +365,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codelume.CodeLume;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -399,10 +401,10 @@
 /* Begin XCRemoteSwiftPackageReference section */
 		86C722C82F1642FC008BE5B5 /* XCRemoteSwiftPackageReference "CodelumeBundle" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/guang-zi-yu/CodelumeBundle.git";
+			repositoryURL = "https://github.com/singulay-tech/CodelumeBundle.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = exactVersion;
+				version = 1.0.1;
 			};
 		};
 		86E223592EEA897000AFA3A3 /* XCRemoteSwiftPackageReference "SwiftyBeaver" */ = {

@@ -286,7 +286,7 @@ class ScreenManager: ObservableObject {
         bundle.open(wallpaperUrl: wallpaperURL!)
         Logger.info("type \(bundle.bundleInfo.type)")
         switch bundle.bundleInfo.type {
-        case .video:
+        case .Video:
             updatedConfig.playbackType = .video
         case .Scene2D:
             updatedConfig.playbackType = .sprite

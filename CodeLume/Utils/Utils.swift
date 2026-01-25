@@ -187,7 +187,7 @@ func getWallpaperFileName(from url: URL) async -> String? {
 }
 
 func addDefaultWallpaper() {
-    let wallpaperURL = Bundle.main.url(forResource: "thinking_cat", withExtension: "bundle")
+    let wallpaperURL = Bundle.main.url(forResource: "DefaultBundle", withExtension: "bundle")
     let wallpaperSaveURL = getWallpaperSaveURL()
     if let wallpaperSaveURL = wallpaperSaveURL, let wallpaperURL = wallpaperURL {
         let destinationURL = wallpaperSaveURL.appendingPathComponent(wallpaperURL.lastPathComponent)
@@ -212,7 +212,7 @@ func addDefaultWallpaper() {
 
 func getDefaultWallpaperURL() -> URL? {
     if let wallpaperURL = getWallpaperSaveURL() {
-        let wallpaperPath = wallpaperURL.appendingPathComponent("thinking_cat.bundle")
+        let wallpaperPath = wallpaperURL.appendingPathComponent("DefaultBundle.bundle")
         return wallpaperPath
     }
     return nil

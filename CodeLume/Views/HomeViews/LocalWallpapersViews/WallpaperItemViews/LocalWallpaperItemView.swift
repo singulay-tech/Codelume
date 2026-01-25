@@ -286,6 +286,6 @@ struct ScreenRow: View {
 }
 
 #Preview {
-    let bundleURL = Bundle.main.url(forResource: "thinking_cat", withExtension: "bundle")!
+    let bundleURL = Bundle.main.url(forResource: "DefaultBundle", withExtension: "bundle")!
     LocalWallpaperItemView(wallpaperURL: bundleURL)
 }
