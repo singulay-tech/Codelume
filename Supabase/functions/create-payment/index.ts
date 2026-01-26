@@ -22,11 +22,11 @@ serve(async (req) => {
       )
     }
 
-    const { wallpaper_id, amount } = await req.json()
+    const { wallpaper_id } = await req.json()
 
-    if (!wallpaper_id || !amount) {
+    if (!wallpaper_id) {
       return new Response(
-        JSON.stringify({ error: 'wallpaper_id and amount are required' }),
+        JSON.stringify({ error: 'wallpaper_id is required' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       )
     }
@@ -51,7 +51,7 @@ serve(async (req) => {
 
     const { data: wallpaper, error: wallpaperError } = await supabase
       .from('wallpapers')
-      .select('id, title, price, user_id')
+      .select('id, title, price, user_id, is_approved')
       .eq('id', wallpaper_id)
       .single()
 
@@ -61,6 +61,22 @@ serve(async (req) => {
         { status: 404, headers: { 'Content-Type': 'application/json' } }
       )
     }
+
+    if (!wallpaper.is_approved) {
+      return new Response(
+        JSON.stringify({ error: 'Wallpaper is not approved for purchase' }),
+        { status: 403, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
+    if (!wallpaper.price || wallpaper.price <= 0) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid wallpaper price' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const amount = wallpaper.price
 
     const { data: existingDownload, error: downloadError } = await supabase
       .from('downloads')
@@ -77,7 +93,7 @@ serve(async (req) => {
       )
     }
 
-    const serviceFee = amount * 0.1
+    const serviceFee = Math.round(amount * 0.1 * 100) / 100
     const totalAmount = Math.round(amount * 100)
 
     const paymentIntent = await stripe.paymentIntents.create({
