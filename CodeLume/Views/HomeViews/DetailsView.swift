@@ -46,7 +46,7 @@ struct DetailsView: View {
 }
 
 #Preview {
-    let bundleURL = Bundle.main.url(forResource: "DefaultBundle", withExtension: "bundle")!
+    let bundleURL = Bundle.main.url(forResource: "codelume_0", withExtension: "bundle")!
     DetailsView(wallpaperURL: bundleURL)
         .frame(width:400, height: 360)
 }

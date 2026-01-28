@@ -34,7 +34,7 @@ struct HomeView: View {
                     
                     Spacer()
                     
-                    UserAuthView()
+//                    UserAuthView()
                     
                     if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
                         Text("Version \(version)")
