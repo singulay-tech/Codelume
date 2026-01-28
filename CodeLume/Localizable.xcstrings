@@ -765,9 +765,6 @@
     "Login" : {
 
     },
-    "Login Codelume" : {
-
-    },
     "Login now" : {
 
     },
@@ -1185,9 +1182,6 @@
     "Register" : {
 
     },
-    "Register Codelume" : {
-
-    },
     "Register now" : {
 
     },
@@ -1263,7 +1257,14 @@
       }
     },
     "Save" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存"
+          }
+        }
+      }
     },
     "Save Screen Saver" : {
       "localizations" : {
@@ -1660,10 +1661,14 @@
       }
     },
     "Username" : {
-
-    },
-    "UserProfile Codelume" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用户名"
+          }
+        }
+      }
     },
     "Version %@" : {
       "localizations" : {
