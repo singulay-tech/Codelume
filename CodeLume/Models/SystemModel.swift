@@ -70,13 +70,3 @@ struct ScreenConfiguration: Codable, Hashable, Identifiable, Equatable {
         case physicalResolution
     }
 }
-
-struct WallpaperTable: Decodable, Identifiable {
-    let id: Int
-    let fileName: String
-    let createdAt: Date
-    
-    static func == (lhs: WallpaperTable, rhs: WallpaperTable) -> Bool {
-        return lhs.id == rhs.id
-    }
-}

@@ -52,8 +52,6 @@ struct ScreenSaverView: View {
             .padding()
             .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.windowBackgroundColor))
     }
     
     func downloadScreensaver() {

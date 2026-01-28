@@ -30,6 +30,12 @@
         }
       }
     },
+    "4-20 chars" : {
+
+    },
+    "6+ chars" : {
+
+    },
     "About" : {
       "localizations" : {
         "zh-Hans" : {
@@ -50,6 +56,9 @@
         }
       }
     },
+    "Already have an account?" : {
+
+    },
     "App Store Version" : {
       "localizations" : {
         "zh-Hans" : {
@@ -59,6 +68,12 @@
           }
         }
       }
+    },
+    "Are you sure you want to logout?" : {
+
+    },
+    "Authenticating..." : {
+
     },
     "Available Screens:" : {
       "localizations" : {
@@ -110,6 +125,12 @@
           }
         }
       }
+    },
+    "Change Avatar" : {
+
+    },
+    "Change Password" : {
+
     },
     "Chinese" : {
       "extractionState" : "manual",
@@ -234,6 +255,9 @@
         }
       }
     },
+    "Confirm Password" : {
+
+    },
     "Connected" : {
       "localizations" : {
         "zh-Hans" : {
@@ -294,6 +318,9 @@
           }
         }
       }
+    },
+    "Current Password" : {
+
     },
     "Dark" : {
       "extractionState" : "manual",
@@ -376,6 +403,9 @@
         }
       }
     },
+    "Don't have an account yet?" : {
+
+    },
     "Douyin" : {
       "localizations" : {
         "zh-Hans" : {
@@ -447,6 +477,9 @@
           }
         }
       }
+    },
+    "example@email.com" : {
+
     },
     "Failed to add video to wallpaper bundle." : {
       "localizations" : {
@@ -726,6 +759,18 @@
         }
       }
     },
+    "Log in" : {
+
+    },
+    "Login" : {
+
+    },
+    "Login now" : {
+
+    },
+    "Logout" : {
+
+    },
     "Loop" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -797,6 +842,9 @@
           }
         }
       }
+    },
+    "New Password" : {
+
     },
     "No" : {
       "localizations" : {
@@ -913,6 +961,9 @@
           }
         }
       }
+    },
+    "Password" : {
+
     },
     "Pause" : {
       "localizations" : {
@@ -1064,6 +1115,9 @@
         }
       }
     },
+    "Please confirm your password" : {
+
+    },
     "Please restart the app to apply the new language settings." : {
       "localizations" : {
         "zh-Hans" : {
@@ -1124,6 +1178,12 @@
           }
         }
       }
+    },
+    "Register" : {
+
+    },
+    "Register now" : {
+
     },
     "Reset Configuration" : {
       "localizations" : {
@@ -1192,6 +1252,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "重启"
+          }
+        }
+      }
+    },
+    "Save" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存"
           }
         }
       }
@@ -1586,6 +1656,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新配置"
+          }
+        }
+      }
+    },
+    "Username" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用户名"
           }
         }
       }

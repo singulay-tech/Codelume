@@ -7,14 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86406E392F289FF700C3CB3A /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 86406E382F289FF700C3CB3A /* Auth */; };
+		86406E3B2F289FF700C3CB3A /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 86406E3A2F289FF700C3CB3A /* Functions */; };
+		86406E3D2F289FF700C3CB3A /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 86406E3C2F289FF700C3CB3A /* PostgREST */; };
+		86406E3F2F289FF700C3CB3A /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 86406E3E2F289FF700C3CB3A /* Realtime */; };
+		86406E412F289FF700C3CB3A /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 86406E402F289FF700C3CB3A /* Storage */; };
+		86406E432F289FF700C3CB3A /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 86406E422F289FF700C3CB3A /* Supabase */; };
 		864DE0BF2EF447B3009B3349 /* CodelumeBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 864DE0BE2EF447B3009B3349 /* CodelumeBundle */; };
 		86C722CA2F1642FC008BE5B5 /* CodelumeBundle in Frameworks */ = {isa = PBXBuildFile; productRef = 86C722C92F1642FC008BE5B5 /* CodelumeBundle */; };
 		86E2235B2EEA897000AFA3A3 /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 86E2235A2EEA897000AFA3A3 /* SwiftyBeaver */; };
 		86FBEE652EEA8CBD00F05936 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 86FBEE642EEA8CBD00F05936 /* SQLite */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		86406E682F28AC4000C3CB3A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2262B85D2E4B94B2003E8F45 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2262B8642E4B94B2003E8F45;
+			remoteInfo = Codelume;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		2262B8652E4B94B2003E8F45 /* Codelume.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Codelume.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		86406E642F28AC4000C3CB3A /* CodelumeTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CodelumeTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +53,11 @@
 			path = Codelume;
 			sourceTree = "<group>";
 		};
+		86406E652F28AC4000C3CB3A /* CodelumeTest */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CodelumeTest;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,10 +65,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86406E432F289FF700C3CB3A /* Supabase in Frameworks */,
+				86406E3B2F289FF700C3CB3A /* Functions in Frameworks */,
 				86FBEE652EEA8CBD00F05936 /* SQLite in Frameworks */,
+				86406E3D2F289FF700C3CB3A /* PostgREST in Frameworks */,
+				86406E3F2F289FF700C3CB3A /* Realtime in Frameworks */,
 				86E2235B2EEA897000AFA3A3 /* SwiftyBeaver in Frameworks */,
 				86C722CA2F1642FC008BE5B5 /* CodelumeBundle in Frameworks */,
+				86406E412F289FF700C3CB3A /* Storage in Frameworks */,
+				86406E392F289FF700C3CB3A /* Auth in Frameworks */,
 				864DE0BF2EF447B3009B3349 /* CodelumeBundle in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86406E612F28AC4000C3CB3A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				2262B8672E4B94B2003E8F45 /* Codelume */,
+				86406E652F28AC4000C3CB3A /* CodelumeTest */,
 				86EDECDA2EC641BA00B3EAD8 /* Frameworks */,
 				2262B8662E4B94B2003E8F45 /* Products */,
 			);
@@ -66,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				2262B8652E4B94B2003E8F45 /* Codelume.app */,
+				86406E642F28AC4000C3CB3A /* CodelumeTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -101,10 +138,39 @@
 				86FBEE642EEA8CBD00F05936 /* SQLite */,
 				864DE0BE2EF447B3009B3349 /* CodelumeBundle */,
 				86C722C92F1642FC008BE5B5 /* CodelumeBundle */,
+				86406E382F289FF700C3CB3A /* Auth */,
+				86406E3A2F289FF700C3CB3A /* Functions */,
+				86406E3C2F289FF700C3CB3A /* PostgREST */,
+				86406E3E2F289FF700C3CB3A /* Realtime */,
+				86406E402F289FF700C3CB3A /* Storage */,
+				86406E422F289FF700C3CB3A /* Supabase */,
 			);
 			productName = "codelume-app";
 			productReference = 2262B8652E4B94B2003E8F45 /* Codelume.app */;
 			productType = "com.apple.product-type.application";
+		};
+		86406E632F28AC4000C3CB3A /* CodelumeTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 86406E6A2F28AC4000C3CB3A /* Build configuration list for PBXNativeTarget "CodelumeTest" */;
+			buildPhases = (
+				86406E602F28AC4000C3CB3A /* Sources */,
+				86406E612F28AC4000C3CB3A /* Frameworks */,
+				86406E622F28AC4000C3CB3A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				86406E692F28AC4000C3CB3A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				86406E652F28AC4000C3CB3A /* CodelumeTest */,
+			);
+			name = CodelumeTest;
+			packageProductDependencies = (
+			);
+			productName = CodelumeTest;
+			productReference = 86406E642F28AC4000C3CB3A /* CodelumeTest.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -113,15 +179,19 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1640;
+				LastSwiftUpdateCheck = 2610;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					2262B8642E4B94B2003E8F45 = {
 						CreatedOnToolsVersion = 16.4;
 					};
+					86406E632F28AC4000C3CB3A = {
+						CreatedOnToolsVersion = 26.1.1;
+						TestTargetID = 2262B8642E4B94B2003E8F45;
+					};
 				};
 			};
-			buildConfigurationList = 2262B8602E4B94B2003E8F45 /* Build configuration list for PBXProject "CodeLume" */;
+			buildConfigurationList = 2262B8602E4B94B2003E8F45 /* Build configuration list for PBXProject "Codelume" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -135,6 +205,7 @@
 				86E223592EEA897000AFA3A3 /* XCRemoteSwiftPackageReference "SwiftyBeaver" */,
 				86FBEE632EEA8CBD00F05936 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
 				86C722C82F1642FC008BE5B5 /* XCRemoteSwiftPackageReference "CodelumeBundle" */,
+				86406E372F289FF700C3CB3A /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2262B8662E4B94B2003E8F45 /* Products */;
@@ -142,12 +213,20 @@
 			projectRoot = "";
 			targets = (
 				2262B8642E4B94B2003E8F45 /* Codelume */,
+				86406E632F28AC4000C3CB3A /* CodelumeTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		2262B8632E4B94B2003E8F45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86406E622F28AC4000C3CB3A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -164,7 +243,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		86406E602F28AC4000C3CB3A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		86406E692F28AC4000C3CB3A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2262B8642E4B94B2003E8F45 /* Codelume */;
+			targetProxy = 86406E682F28AC4000C3CB3A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		2262B86F2E4B94B4003E8F45 /* Debug */ = {
@@ -296,7 +390,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -322,7 +416,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codelume.Codelume;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -340,7 +434,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -366,7 +460,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.codelume.Codelume;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -375,10 +469,54 @@
 			};
 			name = Release;
 		};
+		86406E6B2F28AC4000C3CB3A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codelume.CodelumeTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Codelume.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Codelume";
+			};
+			name = Debug;
+		};
+		86406E6C2F28AC4000C3CB3A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codelume.CodelumeTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Codelume.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Codelume";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2262B8602E4B94B2003E8F45 /* Build configuration list for PBXProject "CodeLume" */ = {
+		2262B8602E4B94B2003E8F45 /* Build configuration list for PBXProject "Codelume" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2262B86F2E4B94B4003E8F45 /* Debug */,
@@ -396,9 +534,26 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		86406E6A2F28AC4000C3CB3A /* Build configuration list for PBXNativeTarget "CodelumeTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				86406E6B2F28AC4000C3CB3A /* Debug */,
+				86406E6C2F28AC4000C3CB3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		86406E372F289FF700C3CB3A /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
 		86C722C82F1642FC008BE5B5 /* XCRemoteSwiftPackageReference "CodelumeBundle" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/singulay-tech/CodelumeBundle.git";
@@ -426,6 +581,36 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		86406E382F289FF700C3CB3A /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86406E372F289FF700C3CB3A /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		86406E3A2F289FF700C3CB3A /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86406E372F289FF700C3CB3A /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		86406E3C2F289FF700C3CB3A /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86406E372F289FF700C3CB3A /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		86406E3E2F289FF700C3CB3A /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86406E372F289FF700C3CB3A /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		86406E402F289FF700C3CB3A /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86406E372F289FF700C3CB3A /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		86406E422F289FF700C3CB3A /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86406E372F289FF700C3CB3A /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
 		864DE0BE2EF447B3009B3349 /* CodelumeBundle */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CodelumeBundle;

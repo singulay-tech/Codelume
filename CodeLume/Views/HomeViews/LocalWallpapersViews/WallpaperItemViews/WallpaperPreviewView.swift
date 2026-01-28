@@ -69,6 +69,6 @@ struct VideoPreviewView: View {
 
 
 #Preview {
-    let wallpaperURL = Bundle.main.url(forResource: "DefaultBundle", withExtension: "bundle")!
+    let wallpaperURL = Bundle.main.url(forResource: "codelume_0", withExtension: "bundle")!
     WallpaperPreviewView(url: wallpaperURL)
 }

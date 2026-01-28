@@ -14,6 +14,7 @@ struct ScreenManagerView: View {
                             .tag(config)
                     }
                 }
+                .scrollContentBackground(.hidden)
                 ScreenStatisticsView()
                     .padding(.bottom, 8)
             }
@@ -129,7 +130,6 @@ struct ScreenStatisticsView: View {
             }
         }
         .padding(12)
-        .background(Color.gray.opacity(0.1))
         .cornerRadius(24)
     }
 }
