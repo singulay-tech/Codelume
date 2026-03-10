@@ -40,11 +40,6 @@
 			path = Codelume;
 			sourceTree = "<group>";
 		};
-		86406E652F28AC4000C3CB3A /* CodelumeTest */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CodelumeTest;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +74,6 @@
 			isa = PBXGroup;
 			children = (
 				2262B8672E4B94B2003E8F45 /* Codelume */,
-				86406E652F28AC4000C3CB3A /* CodelumeTest */,
 				86EDECDA2EC641BA00B3EAD8 /* Frameworks */,
 				2262B8662E4B94B2003E8F45 /* Products */,
 			);
@@ -148,9 +142,6 @@
 			);
 			dependencies = (
 				86406E692F28AC4000C3CB3A /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				86406E652F28AC4000C3CB3A /* CodelumeTest */,
 			);
 			name = CodelumeTest;
 			packageProductDependencies = (
