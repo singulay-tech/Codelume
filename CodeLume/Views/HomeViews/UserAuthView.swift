@@ -11,7 +11,7 @@ struct UserAuthView: View {
     @Environment(\.openWindow) private var openWindow
     @StateObject private var supabase = SupabaseManager.shared
     @State private var showLoginView = false
-    @State private var showUserProfileViewView = false
+    @State private var showLogoutView = false
     
     private var authDisplayText: LocalizedStringKey {
         if supabase.isLoading {
@@ -30,7 +30,7 @@ struct UserAuthView: View {
             Button {
                 if !supabase.isLoading {
                     if supabase.isAuthenticated {
-                        showUserProfileViewView = true
+                        showLogoutView = true
                     } else {
                         showLoginView = true
                     }
@@ -68,8 +68,8 @@ struct UserAuthView: View {
         .sheet(isPresented: $showLoginView) {
             LoginView()
         }
-        .sheet(isPresented: $showUserProfileViewView) {
-            UserProfileView()
+        .sheet(isPresented: $showLogoutView) {
+            LogoutView()
         }
     }
 }
