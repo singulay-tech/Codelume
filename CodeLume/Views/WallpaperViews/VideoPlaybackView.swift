@@ -9,8 +9,10 @@ class VideoPlaybackView: NSView {
     private var playScreen: NSScreen?
     private var screenConfiguration: ScreenConfiguration?
     private var globalPlaybackState: Bool = true
-    private var temporaryPause: Bool = false
-    private var seekToZero: Bool = false
+    private var globalTemporaryPause: Bool = false
+    private var screenTemporaryPause: Bool = false
+    private var globalSeekToZero: Bool = false
+    private var screenSeekToZero: Bool = false
     
     init(frame: NSRect, config: ScreenConfiguration, screen: NSScreen) {
         super.init(frame: frame)
@@ -71,20 +73,22 @@ class VideoPlaybackView: NSView {
     private func applyPlaybackSettings() {
         guard let player = player, let config = screenConfiguration else { return }
         
-        let globalVolume = UserDefaults.standard.float(forKey: "Volume")
+        let globalVolume = UserDefaultsManager.shared.getVolume()
         let screenVolume = Float(config.volume)
         player.volume = globalVolume * screenVolume
         
-        let globalMute = UserDefaults.standard.bool(forKey: "Mute")
+        let globalMute = UserDefaultsManager.shared.getMuteStatus()
         player.isMuted = globalMute || config.isMuted
         
-        let globalPause = UserDefaults.standard.bool(forKey: "Pause")
-        let shouldPlay = !globalPause && config.isPlaying && !temporaryPause
+        let globalPause = UserDefaultsManager.shared.getPauseStatus()
+        let shouldTemporarilyPause = globalTemporaryPause || screenTemporaryPause
+        let shouldPlay = !globalPause && config.isPlaying && !shouldTemporarilyPause
+        let shouldSeekToZero = globalSeekToZero || screenSeekToZero
         Logger.info("Screen: \(config.id), global volume: \(globalVolume), screen volume: \(screenVolume), final volume: \(globalVolume * screenVolume)")
         Logger.info("Screen: \(config.id), global mute: \(globalMute), screen mute: \(config.isMuted), final mute: \(player.isMuted)")
-        Logger.info("Screen: \(config.id), global pause: \(globalPause), screen play: \(config.isPlaying), temporary pause: \(temporaryPause), final play: \(shouldPlay)")
+        Logger.info("Screen: \(config.id), global pause: \(globalPause), screen play: \(config.isPlaying), global temporary pause: \(globalTemporaryPause), screen temporary pause: \(screenTemporaryPause), final play: \(shouldPlay)")
         
-        if seekToZero {
+        if shouldSeekToZero {
             player.seek(to: CMTime.zero)
         }
         
@@ -143,14 +147,14 @@ class VideoPlaybackView: NSView {
     @objc private func handleScreenTemporaryStateChanged(notification: Notification) {
         if let screenId = notification.userInfo?["screenId"] as? String{
             if screenId == playScreen?.identifier{
-                Logger.error("Screen \(screenId) tem status: \(temporaryPause), seektozero: \(seekToZero) ")
-                temporaryPause = notification.userInfo?["temporaryPause"] as? Bool ?? false
-                seekToZero = notification.userInfo?["seekToZero"] as? Bool ?? false
+                Logger.error("Screen \(screenId) tem status: \(screenTemporaryPause), seektozero: \(screenSeekToZero) ")
+                screenTemporaryPause = notification.userInfo?["temporaryPause"] as? Bool ?? false
+                screenSeekToZero = notification.userInfo?["seekToZero"] as? Bool ?? false
                 applyPlaybackSettings()
             } else if screenId == "All" {
-                temporaryPause = notification.userInfo?["temporaryPause"] as? Bool ?? false
-                seekToZero = notification.userInfo?["seekToZero"] as? Bool ?? false
-                Logger.error("All screens tem status: \(temporaryPause), seektozero: \(seekToZero)")
+                globalTemporaryPause = notification.userInfo?["temporaryPause"] as? Bool ?? false
+                globalSeekToZero = notification.userInfo?["seekToZero"] as? Bool ?? false
+                Logger.error("All screens tem status: \(globalTemporaryPause), seektozero: \(globalSeekToZero)")
                 applyPlaybackSettings()
             }
         }

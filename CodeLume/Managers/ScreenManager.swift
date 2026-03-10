@@ -1,10 +1,17 @@
+//
+//  SupabaseManager.swift
+//  Codelume
+//
+//  Created by 广子俞 on 2026/1/27.
+//
+
 import AppKit
 import Foundation
 import CodelumeBundle
 
-// MARK: - 屏幕管理类
 class ScreenManager: ObservableObject {
     static let shared = ScreenManager()
+    @Published var selectedScreenId: String?
     @Published var screenConfigurations: [ScreenConfiguration] = []
     @Published var currentScreens: [NSScreen] = []
     private let databaseManager = DatabaseManger.shared
@@ -20,6 +27,16 @@ class ScreenManager: ObservableObject {
     }
     private var seekToZero: Bool = false // 是否需要跳转到第一帧
     private var screenTemporaryPause: [String: Bool] = [:] // 每个屏幕的临时暂停状态
+
+    var selectedConfiguration: ScreenConfiguration? {
+        get {
+            guard let id = selectedScreenId else { return nil }
+            return screenConfigurations.first { $0.id == id }
+        }
+        set {
+            selectedScreenId = newValue?.id
+        }
+    }
     
     private init() {
         updateCurrentScreens()
@@ -114,6 +131,8 @@ class ScreenManager: ObservableObject {
                 }
             }
         }
+
+        syncSelectedScreenId()
     }
     
     // 更新主屏幕标记
@@ -155,6 +174,7 @@ class ScreenManager: ObservableObject {
         let savedConfigs = databaseManager.getAllScreenConfigs()
         screenConfigurations = savedConfigs
         Logger.info("load \(savedConfigs.count) screen configurations from database")
+        syncSelectedScreenId()
     }
     
     private func updateScreenRealTimeInfo() {
@@ -281,9 +301,16 @@ class ScreenManager: ObservableObject {
         
         var updatedConfig = screenConfigurations[index]
         updatedConfig.wallpaperUrl = wallpaperURL
-        
+
+        guard let wallpaperURL = wallpaperURL else {
+            screenConfigurations[index] = updatedConfig
+            databaseManager.setScreenConfig(updatedConfig)
+            Logger.info("更新屏幕壁纸URL: \(screenId) -> nil")
+            return
+        }
+
         let bundle = BaseBundle()
-        bundle.open(wallpaperUrl: wallpaperURL!)
+        bundle.open(wallpaperUrl: wallpaperURL)
         Logger.info("type \(bundle.bundleInfo.type)")
         switch bundle.bundleInfo.type {
         case .Video:
@@ -292,7 +319,6 @@ class ScreenManager: ObservableObject {
             updatedConfig.playbackType = .sprite
         case .Scene3D:
             updatedConfig.playbackType = .scene
-            
         default:
             updatedConfig.playbackType = .video
         }
@@ -301,7 +327,7 @@ class ScreenManager: ObservableObject {
         screenConfigurations[index] = updatedConfig
         databaseManager.setScreenConfig(updatedConfig)
         
-        Logger.info("更新屏幕壁纸URL: \(screenId) -> \(wallpaperURL?.path ?? "nil")")
+        Logger.info("更新屏幕壁纸URL: \(screenId) -> \(wallpaperURL.path)")
     }
     
     func updateAllScreensWallpaper(wallpaperURL: URL) {
@@ -355,6 +381,7 @@ class ScreenManager: ObservableObject {
         Logger.info("reset all screen configurations")
         updateMainScreenFlag()
         sortScreenConfigurations()
+        syncSelectedScreenId()
     }
     
     // 重置特定屏幕配置
@@ -372,6 +399,7 @@ class ScreenManager: ObservableObject {
         databaseManager.setScreenConfig(newConfig)
         updateMainScreenFlag()
         Logger.info("Reset Screen Config: \(screenId)")
+        syncSelectedScreenId()
     }
     
     // 删除特定屏幕配置
@@ -379,6 +407,7 @@ class ScreenManager: ObservableObject {
         screenConfigurations.removeAll { $0.id == screenId }
         databaseManager.deleteScreenConfig(for: screenId)
         Logger.info("Delete Screen Config: \(screenId)")
+        syncSelectedScreenId()
     }
     
     func getScreenConfiguration(screenId: String) -> ScreenConfiguration? {
@@ -474,5 +503,12 @@ class ScreenManager: ObservableObject {
         
         temporaryPause = false
         return
+    }
+
+    private func syncSelectedScreenId() {
+        guard let id = selectedScreenId else { return }
+        if !screenConfigurations.contains(where: { $0.id == id }) {
+            selectedScreenId = nil
+        }
     }
 }

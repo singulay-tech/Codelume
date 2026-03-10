@@ -125,10 +125,8 @@ struct UserProfileView: View {
                             .alert("Logout", isPresented: $showingLogoutAlert) {
                                 Button("Cancel", role: .cancel) { }
                                 Button("Logout", role: .destructive) {
-                                    Task {
-                                        try? await supabaseM.signOut()
-                                        dismiss()
-                                    }
+                                    supabaseM.signOut()
+                                    dismiss()
                                 }
                             } message: {
                                 Text("Are you sure you want to logout?")

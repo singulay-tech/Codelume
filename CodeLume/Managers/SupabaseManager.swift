@@ -11,9 +11,26 @@ import AppKit
 
 class SupabaseManager: ObservableObject {
     static let shared = SupabaseManager()
-    
-    private let supabaseUrl = URL(string: "")!
-    private let supabaseKey = ""
+
+    private static let supabaseUrlKey = "SUPABASE_URL"
+    private static let supabaseAnonKey = "SUPABASE_ANON_KEY"
+
+    private lazy var supabaseUrl: URL = {
+        guard let urlString = Bundle.main.object(forInfoDictionaryKey: Self.supabaseUrlKey) as? String,
+              let url = URL(string: urlString),
+              !urlString.isEmpty else {
+            fatalError("Missing or invalid SUPABASE_URL in Info.plist")
+        }
+        return url
+    }()
+
+    private lazy var supabaseKey: String = {
+        guard let key = Bundle.main.object(forInfoDictionaryKey: Self.supabaseAnonKey) as? String,
+              !key.isEmpty else {
+            fatalError("Missing SUPABASE_ANON_KEY in Info.plist")
+        }
+        return key
+    }()
     
     @Published var isLoading = false
     @Published var currentUser: User?
@@ -107,6 +124,35 @@ class SupabaseManager: ObservableObject {
         }
         return true
     }
+
+    func signInWithApple(idToken: String, nonce: String?) async -> Bool {
+        await MainActor.run {
+            self.isLoading = true
+        }
+
+        do {
+            let credentials = OpenIDConnectCredentials(
+                provider: .apple,
+                idToken: idToken,
+                nonce: nonce
+            )
+
+            let session = try await client.auth.signInWithIdToken(credentials: credentials)
+            await MainActor.run {
+                self.isLoading = false
+                self.isAuthenticated = true
+                self.currentUser = session.user
+            }
+        } catch {
+            await MainActor.run {
+                self.isLoading = false
+                Alert(title: "Apple login failed!", message: error.localizedDescription)
+            }
+            return false
+        }
+
+        return true
+    }
     
     func signOut() {
         isLoading = true
@@ -139,9 +185,6 @@ class SupabaseManager: ObservableObject {
     }
     
     func updatePassword(currentPassword: String, newPassword: String) async throws {
-        let session = try await client.auth.session
-        let user = session.user
-        
         try await client.auth.update(
             user: UserAttributes(password: newPassword)
         )
@@ -149,11 +192,11 @@ class SupabaseManager: ObservableObject {
     
     func updateUserAvatar(avatarName: String) async throws {
         let authUser = try await getCurrentUser()
-        guard let userId = authUser?.id else {
+        guard let authUser else {
             throw NSError(domain: "SupabaseError", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
         }
         
-        var metadata = authUser?.userMetadata ?? [:]
+        let metadata = authUser.userMetadata
         //        metadata["avatar_name"] = avatarName
         
         try await client.auth.update(

@@ -55,18 +55,19 @@ extension NSImage {
     }
 }
 
+
 func getWallpaperSaveURL() -> URL? {
     let fileManager = FileManager.default
     guard let docDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
         return nil
     }
-
+    
     let wallpaperSaveURL = docDir.appendingPathComponent("Wallpapers")
     if !fileManager.fileExists(atPath: wallpaperSaveURL.path) {
         do {
             try fileManager.createDirectory(
                 at: wallpaperSaveURL, withIntermediateDirectories: true, attributes: nil)
-                Logger.info("Created wallpaper save path: \(wallpaperSaveURL.path)")
+            Logger.info("Created wallpaper save path: \(wallpaperSaveURL.path)")
         } catch {
             Logger.error("Failed to create wallpaper save path: \(error)")
             return nil
@@ -76,91 +77,124 @@ func getWallpaperSaveURL() -> URL? {
     return wallpaperSaveURL
 }
 
-func importBundle() {
+func importWallpapers() {
     let openPanel = NSOpenPanel()
-    openPanel.title = NSLocalizedString("Select a Wallpaper Bundle.", comment: "")
-    openPanel.allowedContentTypes = [.bundle]
-    openPanel.allowsMultipleSelection = false
+    openPanel.title = NSLocalizedString("Select Wallpaper Files", comment: "")
+    openPanel.message = NSLocalizedString("You can select multiple .bundle, .mp4, or .mov files to import as wallpapers.", comment: "")
+    openPanel.allowedContentTypes = [.bundle, .mpeg4Movie, .quickTimeMovie]
+    openPanel.allowsMultipleSelection = true
     openPanel.begin { response in
-        if response == .OK, let selectedURL = openPanel.url {
-            do {
-                // 检查壁纸包格式是否正确
-                if !checkWallpaperBundle(selectedURL) {
-                    Logger.error("Invalid wallpaper bundle format.")
-                    
-                    // 显示导入失败的弹窗
-                    let alert = NSAlert()
-                    alert.messageText = NSLocalizedString("Import Failed", comment: "")
-                    alert.informativeText = NSLocalizedString("The selected file is not a valid wallpaper bundle.", comment: "")
-                    alert.alertStyle = .critical
-                    alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
-                    alert.runModal()
-                    return
-                }
+        if response == .OK {
+            var successCount = 0
+            var failedCount = 0
+            var failedFiles: [String] = []
+            
+            for selectedURL in openPanel.urls {
+                let fileName = selectedURL.lastPathComponent
+                let fileExtension = selectedURL.pathExtension.lowercased()
                 
-                if let wallpaperSaveURL = getWallpaperSaveURL() {
-                    let destinationURL = wallpaperSaveURL.appendingPathComponent(selectedURL.lastPathComponent)
-                    if FileManager.default.fileExists(atPath: destinationURL.path) {
-                        try FileManager.default.removeItem(at: destinationURL)
-                        Logger.info("Deleted existing wallpaper file at: \(destinationURL.path)")
-                    }
-                    try FileManager.default.copyItem(at: selectedURL, to: destinationURL)
-                    Task { @MainActor in
-                        if let item = await getWallpaperFileName(from: destinationURL) {
-                            DatabaseManger.shared.addWallpaper(item)
-                            NotificationCenter.default.post(name: .refreshLocalWallpaperList, object: nil)
-                            Logger.info("External wallpaper imported successfully. Path: \(destinationURL.path)")
-
-                            let alert = NSAlert()
-                            alert.messageText = NSLocalizedString("Import Successful", comment: "")
-                            alert.informativeText = NSLocalizedString("Wallpaper imported successfully. Please go to Local Wallpapers View to view it.", comment: "")
-                            alert.alertStyle = .informational
-                            alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
-                            alert.runModal()
+                do {
+                    if fileExtension == "bundle" {
+                        // 处理 Bundle 文件
+                        if !checkWallpaperBundle(selectedURL) {
+                            Logger.error("Invalid wallpaper bundle format: \(fileName)")
+                            failedCount += 1
+                            failedFiles.append(fileName)
+                            continue
                         }
+                        
+                        guard let wallpaperSaveURL = getWallpaperSaveURL() else {
+                            Logger.error("Failed to get wallpaper save URL")
+                            failedCount += 1
+                            failedFiles.append(fileName)
+                            continue
+                        }
+                        
+                        let destinationURL = wallpaperSaveURL.appendingPathComponent(selectedURL.lastPathComponent)
+                        
+                        // 如果文件已存在，先删除
+                        if FileManager.default.fileExists(atPath: destinationURL.path) {
+                            try FileManager.default.removeItem(at: destinationURL)
+                            Logger.info("Deleted existing wallpaper file at: \(destinationURL.path)")
+                        }
+                        
+                        try FileManager.default.copyItem(at: selectedURL, to: destinationURL)
+                        
+                        Task { @MainActor in
+                            if let item = await getWallpaperFileName(from: destinationURL) {
+                                DatabaseManger.shared.addWallpaper(item)
+                                Logger.info("Bundle imported: \(item)")
+                            }
+                        }
+                        successCount += 1
+                        
+                    } else if fileExtension == "mp4" || fileExtension == "mov" {
+                        // 处理视频文件
+                        let wallpaperBundle = VideoBundle()
+                        let bundleName = selectedURL.deletingPathExtension().lastPathComponent
+                        
+                        guard wallpaperBundle.create(bundleName: bundleName, saveDir: WALLPAPER_SAVE_URL) else {
+                            Logger.error("Failed to create wallpaper bundle for video: \(fileName)")
+                            failedCount += 1
+                            failedFiles.append(fileName)
+                            continue
+                        }
+                        
+                        guard wallpaperBundle.addVideo(videoUrl: selectedURL) else {
+                            Logger.error("Failed to add video to bundle: \(fileName)")
+                            failedCount += 1
+                            failedFiles.append(fileName)
+                            continue
+                        }
+                        
+                        guard wallpaperBundle.save() else {
+                            Logger.error("Failed to save wallpaper bundle: \(fileName)")
+                            failedCount += 1
+                            failedFiles.append(fileName)
+                            continue
+                        }
+                        
+                        DatabaseManger.shared.addWallpaper(bundleName)
+                        Logger.info("Video imported: \(bundleName)")
+                        successCount += 1
+                    } else {
+                        Logger.error("Unsupported file type: \(fileName)")
+                        failedCount += 1
+                        failedFiles.append(fileName)
                     }
-                } else {
-                    Logger.error("Failed to get wallpapers save path url!")
+                } catch {
+                    Logger.error("Failed to import file \(fileName): \(error)")
+                    failedCount += 1
+                    failedFiles.append(fileName)
                 }
-            } catch {
-                Logger.error("Failed to import external wallpaper. error: \(error)")
-            }
-        }
-    }
-}
-
-func importVideo() {
-    let openPanel = NSOpenPanel()
-    openPanel.title = NSLocalizedString("Select a Video.", comment: "")
-    openPanel.allowedContentTypes = [.mpeg4Movie, .quickTimeMovie]
-    openPanel.allowsMultipleSelection = false
-    openPanel.begin { response in
-        if response == .OK, let selectedURL = openPanel.url {
-            let wallpaperBundele = VideoBundle()
-            let bundleName = selectedURL.deletingPathExtension().lastPathComponent
-            
-            var ret = wallpaperBundele.create(bundleName: bundleName, saveDir: WALLPAPER_SAVE_URL)
-            if !ret {
-                Alert(title: NSLocalizedString("Import Failed", comment: ""), message: NSLocalizedString("Failed to create wallpaper bundle.", comment: ""), style: .critical)
-                return
-            }
-
-            ret = wallpaperBundele.addVideo(videoUrl: selectedURL)
-            if !ret {
-                Alert(title: NSLocalizedString("Import Failed", comment: ""), message: NSLocalizedString("Failed to add video to wallpaper bundle.", comment: ""), style: .critical)
-                return
-            }
-
-            ret = wallpaperBundele.save()
-            if !ret {
-                Alert(title: NSLocalizedString("Import Failed", comment: ""), message: NSLocalizedString("Failed to save wallpaper bundle.", comment: ""), style: .critical)    
-                return
             }
             
-            DatabaseManger.shared.addWallpaper(bundleName)
-            NotificationCenter.default.post(name: .refreshLocalWallpaperList, object: nil)
-
-            Alert(title: NSLocalizedString("Import Successful", comment: ""), message: NSLocalizedString("Wallpaper imported successfully. Please go to Local Wallpapers View to view it.", comment: ""), style: .informational)
+            // 刷新列表
+            if successCount > 0 {
+                NotificationCenter.default.post(name: .refreshLocalWallpaperList, object: nil)
+            }
+            
+            // 显示导入结果
+            DispatchQueue.main.async {
+                let alert = NSAlert()
+                if failedCount == 0 {
+                    alert.messageText = NSLocalizedString("Import Successful", comment: "")
+                    alert.informativeText = String(format: NSLocalizedString("Successfully imported %d wallpaper(s).", comment: ""), successCount)
+                    alert.alertStyle = .informational
+                } else if successCount == 0 {
+                    alert.messageText = NSLocalizedString("Import Failed", comment: "")
+                    let failedList = failedFiles.joined(separator: "\n")
+                    alert.informativeText = NSLocalizedString("Failed to import the following files:", comment: "") + "\n\n\(failedList)"
+                    alert.alertStyle = .critical
+                } else {
+                    alert.messageText = NSLocalizedString("Import Completed", comment: "")
+                    let failedList = failedFiles.joined(separator: "\n")
+                    alert.informativeText = String(format: NSLocalizedString("Successfully imported %d wallpaper(s), failed %d:", comment: ""), successCount, failedCount) + "\n\n\(failedList)"
+                    alert.alertStyle = .warning
+                }
+                alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
+                alert.runModal()
+            }
         }
     }
 }
@@ -174,7 +208,7 @@ func deleteWallpaperFile(at fileName: String) {
                 Logger.info("Deleted wallpaper file at: \(fileURL.path)")
             } catch {
                 Logger.error("Failed to delete wallpaper file: \(error)")
-            }   
+            }
         } else {
             Logger.error("Wallpaper file does not exist at: \(fileURL.path)")
         }
@@ -263,11 +297,13 @@ func setStaticWallpaper(bundleURL: URL, screenLocalName: String) -> Bool {
     }
 }
 
-func Alert(title: String, message: String, style: NSAlert.Style = .informational) {
-    let alert = NSAlert()
-    alert.messageText = NSLocalizedString(title, comment: "")
-    alert.informativeText = NSLocalizedString(message, comment: "")
-    alert.alertStyle = style
-    alert.addButton(withTitle: NSLocalizedString("OK", comment: "").rawValue)
-    alert.runModal()
+func Alert(title: String, message: String = "", style: NSAlert.Style = .informational) {
+    DispatchQueue.main.async {
+        let alert = NSAlert()
+        alert.messageText = NSLocalizedString(title, comment: "")
+        alert.informativeText = NSLocalizedString(message, comment: "")
+        alert.alertStyle = style
+        alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
+        alert.runModal()
+    }
 }

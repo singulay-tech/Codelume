@@ -87,6 +87,9 @@ playground.xcworkspace
 # macOS
 .DS_Store
 
+# Codelume secrets
+CodeLume/Info.plist
+
 # User-specific files
 *.user
 *.userprefs

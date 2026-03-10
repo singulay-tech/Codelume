@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct PlaybackSettingsView: View {
-    @AppStorage(PAUSE) private var pause: Bool = false
-    @AppStorage(MUTE) private var mute: Bool = false
-    @AppStorage(VOLUME) private var volume: Double = 0.3
-    @AppStorage(PAUSE_IF_OTHER_APP_ON_DESKTOP) private var pauseIfOtherAppOnDesktop: Bool = false
-    @AppStorage(PAUSE_IF_OTHER_APP_FULL_SCREEN) private var pauseIfOtherAppFullScreen: Bool = true
-    @AppStorage(PAUSE_IF_BATTERY_POWERED) private var pauseIfBatteryPowered: Bool = false
-    @AppStorage(PAUSE_IF_POWER_SAVING) private var pauseIfPowerSaving: Bool = true
+    @AppStorage(PAUSE) private var pause: Bool = UserDefaultsManager.shared.getPauseStatus()
+    @AppStorage(MUTE) private var mute: Bool = UserDefaultsManager.shared.getMuteStatus()
+    @AppStorage(VOLUME) private var volume: Double = Double(UserDefaultsManager.shared.getVolume())
+    @AppStorage(PAUSE_IF_OTHER_APP_ON_DESKTOP) private var pauseIfOtherAppOnDesktop: Bool = UserDefaultsManager.shared.getPauseIfOtherAppOnDesktopStatus()
+    @AppStorage(PAUSE_IF_OTHER_APP_FULL_SCREEN) private var pauseIfOtherAppFullScreen: Bool = UserDefaultsManager.shared.getPauseIfOtherAppFullScreenStatus()
+    @AppStorage(PAUSE_IF_BATTERY_POWERED) private var pauseIfBatteryPowered: Bool = UserDefaultsManager.shared.getPauseIfBatteryPoweredStatus()
+    @AppStorage(PAUSE_IF_POWER_SAVING) private var pauseIfPowerSaving: Bool = UserDefaultsManager.shared.getPauseIfPowerSavingStatus()
     
     var body: some View {
         VStack(alignment: .leading) {

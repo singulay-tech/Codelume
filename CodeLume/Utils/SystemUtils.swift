@@ -130,12 +130,8 @@ func isAnyAppFullScreenOnScreen(_ screen: NSScreen) -> Bool {
     let screenWidth = screenFrame.width
     let screenHeight = screenFrame.height
     
-    // 获取主屏幕高度，用于坐标系转换
-    let mainScreenHeight = NSScreen.main?.frame.height ?? 0
-    
     // 考虑刘海屏和菜单栏，允许一定的容差百分比
-    let widthTolerance = screenWidth * 0.00 // 5% 的宽度容差
-    let heightTolerance = screenHeight * 0.00 // 5% 的高度容差
+    let coverageThreshold: CGFloat = 0.90
     
     for window in windowList {
         guard let bounds = window[kCGWindowBounds as String] as? [String: CGFloat],
@@ -145,11 +141,9 @@ func isAnyAppFullScreenOnScreen(_ screen: NSScreen) -> Bool {
             continue
         }
         
-        // 转换窗口坐标系到NSScreen坐标系（处理坐标系Y轴反转问题）
-        let flippedY = mainScreenHeight > 0 ? mainScreenHeight - y - height : y
-        let windowFrame = CGRect(x: x, y: flippedY, width: width, height: height)
+        let windowFrame = CGRect(x: x, y: y, width: width, height: height)
         
-        Logger.debug("Window dimensions: \(width)x\(height) at (\(x), \(y)), flippedY=\(flippedY)")
+        Logger.debug("Window dimensions: \(width)x\(height) at (\(x), \(y))")
         Logger.debug("Screen dimensions: \(screenWidth)x\(screenHeight)")
         
         // 使用两种方法检测窗口是否在屏幕上：
@@ -160,22 +154,17 @@ func isAnyAppFullScreenOnScreen(_ screen: NSScreen) -> Bool {
         let windowCenter = CGPoint(x: windowFrame.midX, y: windowFrame.midY)
         let isCenterInScreen = screenFrame.contains(windowCenter)
         
-        // 如果交集区域不为空或者窗口中心点在屏幕内，则进行全屏判断
-        if !intersection.isEmpty || isCenterInScreen {
-            // 计算尺寸差异，使用容差判断是否接近全屏
-            let widthDiff = abs(width - screenWidth)
-            let heightDiff = abs(height - screenHeight)
-            let isNearlyFullWidth = widthDiff <= widthTolerance
-            let isNearlyFullHeight = heightDiff <= heightTolerance
-            
-            Logger.debug("Width difference: \(widthDiff), Height difference: \(heightDiff)")
-            Logger.debug("Is nearly full width: \(isNearlyFullWidth), Is nearly full height: \(isNearlyFullHeight)")
-            
-            // 考虑全屏应用的典型特征：窗口层和尺寸
+        // 只有窗口中心在该屏幕内，且覆盖该屏幕大部分区域时才认为是该屏幕全屏
+        if isCenterInScreen, !intersection.isEmpty {
+            let intersectionArea = intersection.width * intersection.height
+            let screenArea = screenWidth * screenHeight
+            let coverage = screenArea > 0 ? intersectionArea / screenArea : 0
+
+            Logger.debug("Intersection area: \(intersectionArea), Screen area: \(screenArea), coverage: \(coverage)")
+
             if let windowLayer = window[kCGWindowLayer as String] as? Int,
                windowLayer == CGWindowLevelForKey(.normalWindow),
-               (isNearlyFullWidth && isNearlyFullHeight) || 
-               (height > screenHeight * 0.9 && width > screenWidth * 0.9) {
+               coverage >= coverageThreshold {
                 
                 if let ownerName = window[kCGWindowOwnerName as String] as? String {
                     Logger.debug("App \(ownerName) is in full screen mode on screen: \(screen.identifier)")
