@@ -464,16 +464,6 @@
         }
       }
     },
-    "Due to limited testing resources, this app is only tested on the latest macOS systems. Older systems may experience compatibility issues. We recommend upgrading your system or compiling from source to resolve any issues." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "由于精力有限，本软件只在最新的 macOS 系统上进行测试。较旧的系统可能存在兼容性问题。建议升级系统或通过源码编译来解决问题。"
-          }
-        }
-      }
-    },
     "Douyin" : {
       "localizations" : {
         "zh-Hans" : {
@@ -493,6 +483,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "下载屏保"
+          }
+        }
+      }
+    },
+    "Due to limited testing resources, this app is only tested on the latest macOS systems. Older systems may experience compatibility issues. We recommend upgrading your system or compiling from source to resolve any issues." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "由于精力有限，本软件只在最新的 macOS 系统上进行测试。较旧的系统可能存在兼容性问题。建议升级系统或通过源码编译来解决问题。"
           }
         }
       }
@@ -603,16 +603,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "五分钟"
-          }
-        }
-      }
-    },
-    "New wallpapers, version updates, and technical insights." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "壁纸上新、版本更新和技术分享。"
           }
         }
       }
@@ -913,6 +903,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "新密码"
+          }
+        }
+      }
+    },
+    "New wallpapers, version updates, and technical insights." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "壁纸上新、版本更新和技术分享。"
           }
         }
       }
@@ -1866,6 +1866,7 @@
       }
     },
     "View installation instructions on GitHub." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

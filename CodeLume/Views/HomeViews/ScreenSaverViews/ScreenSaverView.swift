@@ -4,7 +4,7 @@ import UniformTypeIdentifiers
 struct ScreenSaverView: View {
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 16) {
                 Text("Codelume Screen Saver")
                     .font(.title)
                     .fontWeight(.bold)
@@ -24,6 +24,12 @@ struct ScreenSaverView: View {
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.leading)
                 }
+                .padding(16)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(.regularMaterial)
+                )
                 
                 HStack {
                     Spacer()
@@ -36,20 +42,13 @@ struct ScreenSaverView: View {
                     Spacer()
                 }
                 
-                HStack {
-                    Spacer()
-                    Link("View installation instructions on GitHub.",
-                         destination: URL(string: "https://github.com/guang-zi-yu/CodelumeSaver.git")!)
-                    .font(.caption)
-                    .foregroundColor(.blue)
-                    Spacer()
-                }
-                .padding(.top, 5)
-                
                 Spacer()
                     .frame(height: 40)
             }
-            .padding()
+            .padding(.horizontal, 24)
+            .padding(.top, 0)
+            .padding(.bottom, 20)
+            .frame(maxWidth: .infinity)
         }
         .frame(minWidth: 800, minHeight: 500)
     }
@@ -77,7 +76,7 @@ struct ScreenSaverView: View {
                     
                     try FileManager.default.copyItem(at: saverURL, to: destinationURL)
                     Logger.info("Screensaver saved successfully to: \(destinationURL.path)")
-
+                    
                     DispatchQueue.main.async {
                         let alert = NSAlert()
                         alert.messageText = NSLocalizedString("Screensaver Saved", comment: "")
