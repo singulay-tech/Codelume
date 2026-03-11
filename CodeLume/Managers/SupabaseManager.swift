@@ -9,6 +9,35 @@ import Foundation
 import Supabase
 import AppKit
 
+struct IAPVerifyResponse: Codable {
+    let success: Bool
+    let creditsGranted: Int
+    let balance: Int
+
+    enum CodingKeys: String, CodingKey {
+        case success
+        case creditsGranted = "credits_granted"
+        case balance
+    }
+}
+
+struct WallpaperCreditsPurchaseResponse: Codable {
+    let success: Bool
+    let alreadyOwned: Bool
+    let balance: Int
+
+    enum CodingKeys: String, CodingKey {
+        case success
+        case alreadyOwned = "already_owned"
+        case balance
+    }
+}
+
+struct WallpaperDownloadLinkResponse: Codable {
+    let success: Bool
+    let url: String
+}
+
 class SupabaseManager: ObservableObject {
     static let shared = SupabaseManager()
 
@@ -204,25 +233,6 @@ class SupabaseManager: ObservableObject {
         )
     }
     
-    //    func updateUserProfile(username: String? = nil, avatarUrl: String? = nil) async throws {
-    //        let authUser = try await getCurrentUser()
-    //        guard let userId = authUser?.id else {
-    //            throw NSError(domain: "SupabaseError", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
-    //        }
-    //
-    //        var metadata = authUser?.userMetadata ?? [:]
-    //
-    //        if let newUsername = username {
-    //            metadata["username"] = newUsername
-    //        }
-    //
-    //        if let newAvatarUrl = avatarUrl {
-    //            metadata["avatar_url"] = newAvatarUrl
-    //        }
-    //
-    //        try await client.auth.update(user: UserAttributes(data: metadata))
-    //    }
-    
     func getWallpapers(page: Int = 1, limit: Int = 20) async throws -> [WallpaperTable] {
         let wallpapers: [WallpaperTable] = try await client
             .from("wallpapers")
@@ -246,164 +256,163 @@ class SupabaseManager: ObservableObject {
         let wallpaper = try JSONDecoder().decode(WallpaperTable.self, from: response.data)
         return wallpaper
     }
-    
-    func getUserWallpapers(userId: UUID) async throws -> [WallpaperTable] {
-        let response = try await client
-            .from("wallpapers")
+
+    func getCreditPackages() async throws -> [CreditPackageTable] {
+        let packages: [CreditPackageTable] = try await client
+            .from("iap_products")
             .select()
-            .eq("user_id", value: userId)
-            .order("created_at", ascending: false)
+            .eq("is_active", value: true)
+            .order("credits", ascending: true)
             .execute()
-        
-        let wallpapers = try JSONDecoder().decode([WallpaperTable].self, from: response.data)
-        return wallpapers
+            .value
+        return packages
     }
-    
-    func uploadWallpaper(title: String, description: String, price: Double, fileData: Data) async throws -> WallpaperTable {
+
+    func getUserCredits() async throws -> Int {
         guard let currentUser = try await getCurrentUser() else {
             throw NSError(domain: "SupabaseError", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
         }
-        
-        let wallpaperId = UUID()
-        let filePath = "\(currentUser.id)/\(wallpaperId)/wallpaper.mp4"
-        
-        
-        // 上传文件到存储
-        try await client.storage
-            .from("wallpapers")
-            .upload(
-                filePath,
-                data: fileData
-            )
-        
-        // 创建壁纸记录
-        let response = try await client
-            .from("wallpapers")
-            .insert([
-                "id": wallpaperId.uuidString,
-                "user_id": currentUser.id.uuidString,
-                "title": title,
-                "description": description,
-                "price": String(format: "%.2f", price),
-                "file_path": filePath,
-                "is_approved": String(false),
-                "download_count": String(0)
-            ])
+
+        let balances: [UserBalanceTable] = try await client
+            .from("user_balances")
             .select()
-            .single()
+            .eq("user_id", value: currentUser.id)
             .execute()
-        
-        let wallpaper = try JSONDecoder().decode(WallpaperTable.self, from: response.data)
-        return wallpaper
+            .value
+        return balances.first?.credits ?? 0
     }
-    
-    // MARK: - 下载相关
-    
-    //    func createDownload(wallpaperId: UUID) async throws -> [String: Any] {
-    //        guard let currentUser = try await getCurrentUser() else {
-    //            throw NSError(domain: "SupabaseError", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
-    //        }
-    //
-    //        // 调用 Edge Function 创建支付
-    //        let response = try await client
-    //            .functions
-    //            .invoke("create-payment")
-    //
-    //        return response
-    //    }
-    
-    //    func getPurchasedWallpapers() async throws -> [Wallpaper] {
-    //        guard let currentUser = try await getCurrentUser() else {
-    //            throw NSError(domain: "SupabaseError", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
-    //        }
-    //
-    //        let response = try await client
-    //            .from("downloads")
-    //            .select("wallpapers(*)")
-    //            .eq("user_id", value: currentUser.id)
-    //            .eq("status", value: "completed")
-    //            .execute()
-    //
-    //        // 解析响应
-    //        let data = try response.decoded(to: [[String: Any]].self)
-    //
-    //        let wallpapers = try data.compactMap { item -> Wallpaper? in
-    //            if let wallpaperData = item["wallpapers"] as? [String: Any] {
-    //                let jsonData = try JSONSerialization.data(withJSONObject: wallpaperData)
-    //                return try JSONDecoder().decode(Wallpaper.self, from: jsonData)
-    //            }
-    //            return nil
-    //        }
-    //
-    //        return wallpapers
-    //    }
-    
-    // MARK: - 关注相关
-    
-    func followUser(followingId: UUID) async throws {
+
+    func hasPurchasedWallpaper(wallpaperId: UUID) async throws -> Bool {
         guard let currentUser = try await getCurrentUser() else {
             throw NSError(domain: "SupabaseError", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
         }
-        
-        try await client
-            .from("follows")
-            .insert([
-                "follower_id": currentUser.id,
-                "following_id": followingId
-            ])
+
+        let entitlements: [WallpaperEntitlementTable] = try await client
+            .from("wallpaper_entitlements")
+            .select()
+            .eq("user_id", value: currentUser.id)
+            .eq("wallpaper_id", value: wallpaperId)
             .execute()
+            .value
+        return !entitlements.isEmpty
     }
-    
-    func unfollowUser(followingId: UUID) async throws {
-        guard let currentUser = try await getCurrentUser() else {
-            throw NSError(domain: "SupabaseError", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])
+
+    func verifyIAPPurchase(productId: String, transactionId: String, originalTransactionId: String?) async throws -> IAPVerifyResponse {
+        struct VerifyBody: Codable {
+            let productId: String
+            let transactionId: String
+            let originalTransactionId: String?
+
+            enum CodingKeys: String, CodingKey {
+                case productId = "product_id"
+                case transactionId = "transaction_id"
+                case originalTransactionId = "original_transaction_id"
+            }
         }
-        
-        try await client
-            .from("follows")
-            .delete()
-            .eq("follower_id", value: currentUser.id)
-            .eq("following_id", value: followingId)
-            .execute()
+
+        let body = VerifyBody(productId: productId, transactionId: transactionId, originalTransactionId: originalTransactionId)
+        return try await invokeEdgeFunction(name: "verify-iap-purchase", body: body)
     }
-    
-    //    func getFollowingUsers(userId: UUID) async throws -> [User] {
-    //        let response = try await client
-    //            .from("follows")
-    //            .select("users!following_id(*)")
-    //            .eq("follower_id", value: userId)
-    //            .execute()
-    //
-    //        // 解析响应
-    //        let data = try response.decoded(to: [[String: Any]].self)
-    //        let users = try data.compactMap { item -> User? in
-    //            if let userData = item["users"] as? [String: Any] {
-    //                let jsonData = try JSONSerialization.data(withJSONObject: userData)
-    //                return try JSONDecoder().decode(User.self, from: jsonData)
-    //            }
-    //            return nil
-    //        }
-    //
-    //        return users
-    //    }
-    
-    //    func getFollowers(userId: UUID) async throws -> [User] {
-    //        let response = try await client
-    //            .from("follows")
-    //            .select("users!follower_id(*)")
-    //            .eq("following_id", value: userId)
-    //            .execute()
-    //
-    //        // 解析响应
-    //        let data = try response.decoded(to: [[String: Any]].self)
-    //        let users = try data.compactMap { item -> User? in
-    //            if let userData = item["users"] as? [String: Any] {
-    //                let jsonData = try JSONSerialization.data(withJSONObject: userData)
-    //                return try JSONDecoder().decode(User.self, from: jsonData)
-    //            }
-    //            return nil
-    //        }
-    
-    //        return users
-    //    }
+
+    func purchaseWallpaperWithCredits(wallpaperId: UUID) async throws -> WallpaperCreditsPurchaseResponse {
+        struct PurchaseBody: Codable {
+            let wallpaperId: String
+
+            enum CodingKeys: String, CodingKey {
+                case wallpaperId = "wallpaper_id"
+            }
+        }
+
+        let body = PurchaseBody(wallpaperId: wallpaperId.uuidString.lowercased())
+        return try await invokeEdgeFunction(name: "purchase-wallpaper-with-credits", body: body)
+    }
+
+    func getPurchasedWallpaperDownloadURL(wallpaperId: UUID) async throws -> URL {
+        struct DownloadBody: Codable {
+            let wallpaperId: String
+
+            enum CodingKeys: String, CodingKey {
+                case wallpaperId = "wallpaper_id"
+            }
+        }
+
+        Logger.info("[DownloadLink] Requesting purchased link. wallpaperId=\(wallpaperId.uuidString.lowercased())")
+
+        let body = DownloadBody(wallpaperId: wallpaperId.uuidString.lowercased())
+        let response: WallpaperDownloadLinkResponse
+        do {
+            response = try await invokeEdgeFunction(name: "create-purchased-download-link", body: body)
+        } catch {
+            Logger.error("[DownloadLink] Edge function call failed. error=\(error.localizedDescription)")
+            throw error
+        }
+        Logger.info("[DownloadLink] Edge function response. success=\(response.success), rawUrl=\(response.url)")
+        guard response.success, let url = URL(string: response.url) else {
+            Logger.error("[DownloadLink] Invalid URL response. success=\(response.success), rawUrl=\(response.url)")
+            throw NSError(domain: "SupabaseError", code: 500, userInfo: [NSLocalizedDescriptionKey: "Invalid download URL response"])
+        }
+        Logger.info("[DownloadLink] Parsed URL absoluteString=\(url.absoluteString)")
+        return url
+    }
+
+    func getWallpaperPreviewURL(wallpaper: WallpaperTable) -> URL {
+        let userId = wallpaper.userId.uuidString.lowercased()
+        let wallpaperId = wallpaper.id.uuidString.lowercased()
+
+        let url = supabaseUrl
+            .appendingPathComponent("storage")
+            .appendingPathComponent("v1")
+            .appendingPathComponent("object")
+            .appendingPathComponent("public")
+            .appendingPathComponent("wallpaper-previews")
+            .appendingPathComponent(userId)
+            .appendingPathComponent(wallpaperId)
+            .appendingPathComponent("preview.gif")
+
+        Logger.info("Preview URL build userId=\(userId), wallpaperId=\(wallpaperId), url=\(url.absoluteString)")
+        return url
+    }
+
+    private func invokeEdgeFunction<Response: Decodable, Body: Encodable>(name: String, body: Body) async throws -> Response {
+        Logger.info("[EdgeFunction] Start invoke name=\(name)")
+
+        Logger.info("[EdgeFunction] Fetching auth session for name=\(name)")
+        let session = try await client.auth.session
+        let accessToken = session.accessToken
+        Logger.info("[EdgeFunction] Auth session ready for name=\(name), userId=\(session.user.id.uuidString.lowercased())")
+
+        let endpoint = supabaseUrl.appendingPathComponent("functions/v1/\(name)")
+        Logger.info("[EdgeFunction] Request endpoint=\(endpoint.absoluteString)")
+
+        var request = URLRequest(url: endpoint)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.httpBody = try JSONEncoder().encode(body)
+        Logger.info("[EdgeFunction] Request body encoded bytes=\(request.httpBody?.count ?? 0), name=\(name)")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+        Logger.info("[EdgeFunction] Network response received bytes=\(data.count), name=\(name)")
+        guard let httpResponse = response as? HTTPURLResponse else {
+            Logger.error("[EdgeFunction] Non-HTTP response for name=\(name)")
+            throw NSError(domain: "SupabaseError", code: 500, userInfo: [NSLocalizedDescriptionKey: "Invalid edge function response"])
+        }
+        Logger.info("[EdgeFunction] HTTP status=\(httpResponse.statusCode), name=\(name)")
+
+        guard (200...299).contains(httpResponse.statusCode) else {
+            let errorMessage = String(data: data, encoding: .utf8) ?? "Edge function failed"
+            Logger.error("[EdgeFunction] HTTP error status=\(httpResponse.statusCode), name=\(name), body=\(errorMessage)")
+            throw NSError(domain: "SupabaseError", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: errorMessage])
+        }
+
+        do {
+            let decoded = try JSONDecoder().decode(Response.self, from: data)
+            Logger.info("[EdgeFunction] Decode success name=\(name)")
+            return decoded
+        } catch {
+            let raw = String(data: data, encoding: .utf8) ?? "<non-utf8>"
+            Logger.error("[EdgeFunction] Decode failed name=\(name), error=\(error.localizedDescription), raw=\(raw)")
+            throw error
+        }
+    }
 }

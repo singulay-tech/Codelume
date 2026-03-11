@@ -30,12 +30,6 @@
         }
       }
     },
-    "4-20 chars" : {
-
-    },
-    "6+ chars" : {
-
-    },
     "About" : {
       "localizations" : {
         "zh-Hans" : {
@@ -56,9 +50,6 @@
         }
       }
     },
-    "Already have an account?" : {
-
-    },
     "App Store Version" : {
       "localizations" : {
         "zh-Hans" : {
@@ -69,7 +60,10 @@
         }
       }
     },
-    "Are you sure you want to logout?" : {
+    "Are you sure you want to sign out?" : {
+
+    },
+    "Authenticated" : {
 
     },
     "Authenticating..." : {
@@ -94,6 +88,9 @@
           }
         }
       }
+    },
+    "Buy" : {
+
     },
     "Cancel" : {
       "localizations" : {
@@ -125,12 +122,6 @@
           }
         }
       }
-    },
-    "Change Avatar" : {
-
-    },
-    "Change Password" : {
-
     },
     "Chinese" : {
       "extractionState" : "manual",
@@ -255,9 +246,6 @@
         }
       }
     },
-    "Confirm Password" : {
-
-    },
     "Connected" : {
       "localizations" : {
         "zh-Hans" : {
@@ -319,7 +307,7 @@
         }
       }
     },
-    "Current Password" : {
+    "Credits: %lld" : {
 
     },
     "Dark" : {
@@ -349,28 +337,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "删除配置"
-          }
-        }
-      }
-    },
-    "Delete Failed" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "删除失败"
-          }
-        }
-      }
-    },
-    "Delete Success" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "删除成功"
           }
         }
       }
@@ -414,6 +380,9 @@
           }
         }
       }
+    },
+    "Download" : {
+
     },
     "Download Screen Saver" : {
       "localizations" : {
@@ -477,44 +446,8 @@
         }
       }
     },
-    "example@email.com" : {
-
-    },
-    "Failed to add video to wallpaper bundle." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "给资源包中添加视频失败。"
-          }
-        }
-      }
-    },
-    "Failed to create wallpaper bundle." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "创建壁纸资源包失败。"
-          }
-        }
-      }
-    },
     "Failed to import the following files:" : {
 
-    },
-    "Failed to save wallpaper bundle." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存壁纸资源包失败。"
-          }
-        }
-      }
     },
     "File Path" : {
       "extractionState" : "manual",
@@ -672,17 +605,6 @@
         }
       }
     },
-    "Import bundle" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "导入资源包"
-          }
-        }
-      }
-    },
     "Import Completed" : {
       "localizations" : {
         "zh-Hans" : {
@@ -710,17 +632,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "导入成功"
-          }
-        }
-      }
-    },
-    "Import video" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "导入视频"
           }
         }
       }
@@ -785,15 +696,6 @@
           }
         }
       }
-    },
-    "Log in" : {
-
-    },
-    "Login now" : {
-
-    },
-    "Logout" : {
-
     },
     "Loop" : {
       "extractionState" : "manual",
@@ -868,6 +770,7 @@
       }
     },
     "New Password" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -994,6 +897,7 @@
       }
     },
     "Password" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1154,6 +1058,7 @@
       }
     },
     "Please confirm your password" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1225,22 +1130,12 @@
       }
     },
     "Register" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "注册"
-          }
-        }
-      }
-    },
-    "Register now" : {
       "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "现在注册"
+            "value" : "注册"
           }
         }
       }
@@ -1251,17 +1146,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "重置配置"
-          }
-        }
-      }
-    },
-    "Reset Success" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重置成功"
           }
         }
       }
@@ -1307,6 +1191,9 @@
         }
       }
     },
+    "Retry" : {
+
+    },
     "Rstart" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1318,6 +1205,7 @@
       }
     },
     "Save" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1357,28 +1245,6 @@
         }
       }
     },
-    "Screen configuration has been deleted." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "屏幕平之已经删除。"
-          }
-        }
-      }
-    },
-    "Screen configuration has been reset." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "屏幕配置已经重置。"
-          }
-        }
-      }
-    },
     "Screen ID:" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1395,17 +1261,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "屏幕信息"
-          }
-        }
-      }
-    },
-    "Screen is connected. Please disconnect it first." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "屏幕正在使用，请先断开屏幕。"
           }
         }
       }
@@ -1510,28 +1365,6 @@
         }
       }
     },
-    "Select a Video." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "选择一个视频"
-          }
-        }
-      }
-    },
-    "Select a Wallpaper Bundle." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请选择一个壁纸包文件"
-          }
-        }
-      }
-    },
     "Select Screen" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1582,6 +1415,32 @@
           }
         }
       }
+    },
+    "Sign in" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录"
+          }
+        }
+      }
+    },
+    "Sign in to access the Wallpaper Hub." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登录后访问壁纸中心"
+          }
+        }
+      }
+    },
+    "Sign out" : {
+
+    },
+    "Sign Out" : {
+
     },
     "SpriteKit" : {
       "localizations" : {
@@ -1691,17 +1550,6 @@
         }
       }
     },
-    "The selected file is not a valid wallpaper bundle." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "所选文件不是有效的壁纸包文件"
-          }
-        }
-      }
-    },
     "Theme settings:" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1732,6 +1580,9 @@
           }
         }
       }
+    },
+    "Top up" : {
+
     },
     "Total Screens" : {
       "localizations" : {
@@ -1764,9 +1615,17 @@
       }
     },
     "Use your Apple account to sign in" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用你的 Apple 账号登录"
+          }
+        }
+      }
     },
     "Username" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1886,13 +1745,12 @@
         }
       }
     },
-    "Wallpaper imported successfully. Please go to Local Wallpapers View to view it." : {
-      "extractionState" : "stale",
+    "Wallpaper Hub" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "壁纸导入成功，请前往本地壁纸库查看"
+            "value" : "壁纸中心"
           }
         }
       }
@@ -1939,6 +1797,9 @@
           }
         }
       }
+    },
+    "已下载" : {
+
     }
   },
   "version" : "1.0"

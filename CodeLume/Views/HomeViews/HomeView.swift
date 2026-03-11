@@ -16,6 +16,10 @@ struct HomeView: View {
                             .navigationTitle("")) {
                                 Label("LocalWallpaper", systemImage: "photo.on.rectangle")
                             }
+                        NavigationLink(destination: WallpaperHubView()
+                            .navigationTitle("")) {
+                                Label("Wallpaper Hub", systemImage: "icloud.and.arrow.down")
+                            }
                         NavigationLink(destination: ScreenSaverView()
                             .navigationTitle("")) {
                                 Label("Screen Saver", systemImage: "sparkles")
