@@ -30,12 +30,62 @@
         }
       }
     },
+    "• Format: .mp4 or .mov" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 格式：.mp4 或 .mov"
+          }
+        }
+      }
+    },
+    "• Max size: 50 MB" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 大小：不超过 50 MB"
+          }
+        }
+      }
+    },
+    "• Min resolution: 1080P (4K recommended)" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 分辨率：不低于 1080P（推荐 4K）"
+          }
+        }
+      }
+    },
+    "• Must support seamless looping" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 支持无缝循环播放"
+          }
+        }
+      }
+    },
     "About" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "关于"
+          }
+        }
+      }
+    },
+    "All contact methods are listed at the bottom of this page." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有联系方式都列在本页面底部。"
           }
         }
       }
@@ -85,6 +135,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "浏览"
+          }
+        }
+      }
+    },
+    "Built with a privacy-first approach, Codelume runs inside the macOS sandbox and does not collect personal data. It is open source, transparent, and built for long-term reliability." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "码镜秉持隐私优先原则，运行于 macOS 沙盒环境内，不收集个人数据。应用开源透明，并以长期稳定可靠为目标构建。"
           }
         }
       }
@@ -166,6 +226,27 @@
         }
       }
     },
+    "Codelume focuses on the playback engine and desktop integration. You can use your own compatible video wallpapers, and we encourage proper licensing and respect for original creators." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "码镜专注于播放引擎与桌面集成能力。你可以使用自己的兼容视频壁纸，我们鼓励遵守授权规范并尊重原创作者。"
+          }
+        }
+      }
+    },
+    "Codelume focuses on the playback engine—we don't create wallpaper content. Wallpaper quality determines the ceiling of the entire experience. If you have original wallpapers, you can submit them via email for other users to purchase. Pricing is decided by the original creator. Codelume takes a small share to cover server maintenance and development; the rest goes to the creator. Of course, there will always be free wallpapers available." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "码镜专注于播放引擎的开发，不涉及壁纸内容创作。壁纸质量决定了动态壁纸体验的上限。如果你有优质的原创壁纸，可以通过邮箱投递，供其他用户购买使用。价格由原创作者决定。码镜仅收取少部分费用用于服务器维护与日常开发，其余部分结算给原创作者。当然，也会提供大量免费壁纸供大家使用。"
+          }
+        }
+      }
+    },
     "Codelume is a dynamic wallpaper application designed exclusively for macOS, featuring a sleek design with comprehensive functionality. As a menu bar application, please remember to launch and use it from the menu bar—it won't be visible in your Dock." : {
       "localizations" : {
         "zh-Hans" : {
@@ -176,7 +257,18 @@
         }
       }
     },
+    "Codelume is a native macOS dynamic wallpaper app designed for smooth playback, low resource usage, and a polished desktop experience." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "码镜是一款原生 macOS 动态壁纸应用，专注于流畅播放、低资源占用和精致的桌面体验。"
+          }
+        }
+      }
+    },
     "Codelume is a native, open-source dynamic wallpaper application built exclusively for macOS." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -217,6 +309,7 @@
       }
     },
     "Completely free. Clone, build, and customize from GitHub." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -371,6 +464,16 @@
         }
       }
     },
+    "Due to limited testing resources, this app is only tested on the latest macOS systems. Older systems may experience compatibility issues. We recommend upgrading your system or compiling from source to resolve any issues." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "由于精力有限，本软件只在最新的 macOS 系统上进行测试。较旧的系统可能存在兼容性问题。建议升级系统或通过源码编译来解决问题。"
+          }
+        }
+      }
+    },
     "Douyin" : {
       "localizations" : {
         "zh-Hans" : {
@@ -416,6 +519,7 @@
       }
     },
     "Email Support" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -503,6 +607,16 @@
         }
       }
     },
+    "New wallpapers, version updates, and technical insights." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "壁纸上新、版本更新和技术分享。"
+          }
+        }
+      }
+    },
     "Follow system" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -515,6 +629,7 @@
       }
     },
     "Follow us for updates, demos, and community content." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -525,6 +640,7 @@
       }
     },
     "For technical support, collaboration inquiries, or feedback." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -555,6 +671,7 @@
       }
     },
     "Get Codelume" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -580,6 +697,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "GitHub"
+          }
+        }
+      }
+    },
+    "GitHub Open-Source Version" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GitHub 开源版本"
           }
         }
       }
@@ -642,6 +769,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "导入壁纸"
+          }
+        }
+      }
+    },
+    "Integrated with Supabase services, offering both free and paid wallpapers with a richer and continuously expanding content ecosystem." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "接入 Supabase 服务，提供免费与付费壁纸，内容生态更丰富且持续扩展。"
           }
         }
       }
@@ -800,6 +937,16 @@
         }
       }
     },
+    "Note: Paid features are currently in development. All wallpapers are available for free at this time." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "注：付费功能还在开发中，暂时所有壁纸免费使用。"
+          }
+        }
+      }
+    },
     "OK" : {
       "comment" : "OK button text",
       "localizations" : {
@@ -877,6 +1024,7 @@
       }
     },
     "Open Source Version" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -887,6 +1035,7 @@
       }
     },
     "Paid download to support Apple Developer Program costs. Auto-updated." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1136,6 +1285,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "注册"
+          }
+        }
+      }
+    },
+    "Report issues, request features, or contribute code." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "报告问题、请求功能或贡献代码。"
           }
         }
       }
@@ -1442,6 +1601,16 @@
     "Sign Out" : {
 
     },
+    "Some materials are sourced from the internet. If any content infringes on your rights, please contact us using the contact methods at the bottom of this page." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "部分素材来源于网络。如有侵权，请通过本页面底部的联系方式与我们联系。"
+          }
+        }
+      }
+    },
     "SpriteKit" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1468,6 +1637,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "主题"
+          }
+        }
+      }
+    },
+    "Submission Requirements:" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "投递要求："
+          }
+        }
+      }
+    },
+    "Submit wallpapers or report copyright issues." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "投递壁纸或举报版权问题。"
           }
         }
       }
@@ -1508,6 +1697,16 @@
         }
       }
     },
+    "Supports custom builds and full code-level customization. This version does not connect to the server, so Wallpaper Hub content is unavailable." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支持自定义构建与代码级深度定制。该版本不接入服务器，因此无法访问壁纸中心内容。"
+          }
+        }
+      }
+    },
     "Tags" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1531,6 +1730,7 @@
       }
     },
     "The app runs strictly within the macOS sandbox, requires no network permissions, and never collects user data." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1645,6 +1845,16 @@
         }
       }
     },
+    "Versions" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "版本介绍"
+          }
+        }
+      }
+    },
     "Video" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1666,6 +1876,7 @@
       }
     },
     "View on App Store" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1676,6 +1887,7 @@
       }
     },
     "View on GitHub" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1686,6 +1898,7 @@
       }
     },
     "Visit Codelume's Douyin" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1756,6 +1969,7 @@
       }
     },
     "We focus solely on the playback engine. For video wallpapers, we recommend using compatible content from platforms like **Wallpaper Engine**. We welcome collaboration with original creators." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

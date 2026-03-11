@@ -1,16 +1,15 @@
 import SwiftUI
 
 struct AboutView: View {
-    private let githubURL = URL(string: "https://github.com/guang-zi-yu/CodelumeApp.git")!
+    private let githubURL = URL(string: "https://github.com/singulay-tech/Codelume.git")!
     private let douyinURL = URL(string: "https://www.douyin.com/user/MS4wLjABAAAAl1srMN6bnoQL8gBUFGUa3wQZp7KJ4WHfXyfz16Us2syzqhhKKM-iDCW64v5enW9w?from_tab_name=main&vid=7573053246886006052")!
-    private let appStoreURL = URL(string: "https://apps.apple.com/us/app/%E7%A0%81%E9%95%9C/id6751061329?mt=12")!
     private let emailAddress = "codelume@163.com"
     @State private var showingEmailSheet = false
     
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 16) {
                 VStack(alignment: .center, spacing: 8) {
                     Image(nsImage: NSImage(named: "AppIcon") ?? NSImage())
                         .resizable()
@@ -30,51 +29,80 @@ struct AboutView: View {
                 
                 VStack(alignment: .leading, spacing: 8) {
                     SectionTitleView(title: "About")
-                    Text("Codelume is a native, open-source dynamic wallpaper application built exclusively for macOS.")
+                    Text("Codelume is a native macOS dynamic wallpaper app designed for smooth playback, low resource usage, and a polished desktop experience.")
                         .font(.body)
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundColor(.primary)
                     
                     Divider().padding(.vertical, 2)
                     
-                    Text("The app runs strictly within the macOS sandbox, requires no network permissions, and never collects user data.")
+                    Text("Built with a privacy-first approach, Codelume runs inside the macOS sandbox and does not collect personal data. It is open source, transparent, and built for long-term reliability.")
                         .font(.callout)
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundColor(.secondary)
                 }
-                .padding(.horizontal)
+                .aboutSectionCard()
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    SectionTitleView(title: "Get Codelume")
+                    SectionTitleView(title: "Versions")
                     
                     OptionView(
                         icon: "GithubIcon",
                         isSystemIcon: false,
-                        title: "Open Source Version",
-                        description: "Completely free. Clone, build, and customize from GitHub.",
-                        buttonTitle: "View on GitHub",
-                        action: { NSWorkspace.shared.open(githubURL) }
+                        title: "GitHub Open-Source Version",
+                        description: "Supports custom builds and full code-level customization. This version does not connect to the server, so Wallpaper Hub content is unavailable."
                     )
                     
                     OptionView(
                         icon: "apple.logo",
                         isSystemIcon: true,
                         title: "App Store Version",
-                        description: "Paid download to support Apple Developer Program costs. Auto-updated.",
-                        buttonTitle: "View on App Store",
-                        action: { NSWorkspace.shared.open(appStoreURL) }
+                        description: "Integrated with Supabase services, offering both free and paid wallpapers with a richer and continuously expanding content ecosystem."
                     )
+                    
+                    Text("Due to limited testing resources, this app is only tested on the latest macOS systems. Older systems may experience compatibility issues. We recommend upgrading your system or compiling from source to resolve any issues.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .italic()
+                        .padding(.top, 8)
                 }
-                .padding(.horizontal)
+                .aboutSectionCard()
                 
                 VStack(alignment: .leading, spacing: 8) {
                     SectionTitleView(title: "Wallpaper Content")
-                    Text("We focus solely on the playback engine. For video wallpapers, we recommend using compatible content from platforms like **Wallpaper Engine**. We welcome collaboration with original creators.")
+                    Text("Codelume focuses on the playback engine—we don't create wallpaper content. Wallpaper quality determines the ceiling of the entire experience. If you have original wallpapers, you can submit them via email for other users to purchase. Pricing is decided by the original creator. Codelume takes a small share to cover server maintenance and development; the rest goes to the creator. Of course, there will always be free wallpapers available.")
                         .font(.callout)
                         .foregroundColor(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
+                    
+                    Text("Submission Requirements:")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                        .padding(.top, 4)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("• Format: .mp4 or .mov")
+                        Text("• Max size: 50 MB")
+                        Text("• Min resolution: 1080P (4K recommended)")
+                        Text("• Must support seamless looping")
+                    }
+                        .font(.callout)
+                        .foregroundColor(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Text("Note: Paid features are currently in development. All wallpapers are available for free at this time.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .italic()
+                        .padding(.top, 4)
+                    
+                    Text("Some materials are sourced from the internet. If any content infringes on your rights, please contact us using the contact methods at the bottom of this page.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .italic()
+                        .padding(.top, 4)
                 }
-                .padding(.horizontal)
+                .aboutSectionCard()
                 
                 VStack(alignment: .leading, spacing: 8) {
                     SectionTitleView(title: "Contact & Support")
@@ -82,23 +110,31 @@ struct AboutView: View {
                     OptionView(
                         icon: "envelope",
                         isSystemIcon: true,
-                        title: "Email Support",
-                        description: "For technical support, collaboration inquiries, or feedback.",
-                        email: emailAddress
-                    ) {
-                        showingEmailSheet = true
-                    }
+                        title: "Email",
+                        description: "Submit wallpapers or report copyright issues."
+                    )
                     
                     OptionView(
-                        icon: "DouyinIcon",
+                        icon: "douyinIcon",
                         isSystemIcon: false,
                         title: "Douyin",
-                        description: "Follow us for updates, demos, and community content.",
-                        buttonTitle: "Visit Codelume's Douyin",
-                        action: { NSWorkspace.shared.open(douyinURL) }
+                        description: "New wallpapers, version updates, and technical insights."
                     )
+                    
+                    OptionView(
+                        icon: "GithubIcon",
+                        isSystemIcon: false,
+                        title: "GitHub",
+                        description: "Report issues, request features, or contribute code."
+                    )
+                    
+                    Text("All contact methods are listed at the bottom of this page.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .italic()
+                        .padding(.top, 8)
                 }
-                .padding(.horizontal)
+                .aboutSectionCard()
                 
                 VStack(spacing: 16) {
                     Divider()
@@ -106,7 +142,7 @@ struct AboutView: View {
                     HStack(spacing: 20) {
                         SocialButtonView(
                             url: douyinURL,
-                            iconName: "DouyinIcon",
+                            iconName: "douyinIcon",
                             fallbackIcon: "video",
                             label: "Douyin"
                         )
@@ -130,9 +166,13 @@ struct AboutView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
-                .padding(.top, 8)
+                .padding(.top, 4)
+                .padding(.horizontal, 8)
             }
-            .padding(24)
+            .padding(.horizontal, 24)
+            .padding(.top, 0)
+            .padding(.bottom, 20)
+            .frame(maxWidth: .infinity)
         }
         .sheet(isPresented: $showingEmailSheet) {
             EmailContactView(emailAddress: emailAddress)
@@ -330,6 +370,18 @@ struct SectionTitleView: View {
             .font(.headline)
             .foregroundColor(.primary)
             .padding(.top, 2)
+    }
+}
+
+private extension View {
+    func aboutSectionCard() -> some View {
+        self
+            .padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(.regularMaterial)
+            )
     }
 }
 
