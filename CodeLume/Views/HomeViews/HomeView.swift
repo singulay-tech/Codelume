@@ -30,7 +30,7 @@ struct HomeView: View {
                             }
                     }
                     .listStyle(.sidebar)
-                    .frame(minWidth: 220)
+                    .frame(width: 220)
                     
                     Spacer()
                     
@@ -43,6 +43,8 @@ struct HomeView: View {
                             .padding(5)
                     }
                 }
+                .frame(width: 220)
+                .navigationSplitViewColumnWidth(min: 220, ideal: 220, max: 220)
             } detail: {
                 LocalWallpapersView()
                     .navigationTitle("")
