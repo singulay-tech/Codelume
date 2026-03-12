@@ -3,34 +3,28 @@ import UniformTypeIdentifiers
 
 struct ScreenSaverView: View {
     var body: some View {
-        ScrollView {
+        VStack {
             VStack(alignment: .leading, spacing: 16) {
                 Text("Codelume Screen Saver")
                     .font(.title)
                     .fontWeight(.bold)
                     .padding(.bottom, 10)
-                
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Screen Saver Introduction")
-                        .font(.headline)
-                        .fontWeight(.medium)
-                    
-                    Text("Screen savers originated in the CRT monitor era, primarily designed to prevent 'burn-in' caused by static images remaining on the screen for extended periods. This phenomenon occurs when electron beams continuously bombard the same phosphor areas, causing permanent physical damage. As technology evolved to LCD and OLED displays, screen savers transformed from mere hardware protection to versatile platforms that integrate security, energy management, information display, and personalized experiences.")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.leading)
-                    Text("Codelume offers a dedicated screen saver module that allows users to set their current dynamic wallpapers as screen savers after downloading and installing it. This creates a seamless visual transition between active desktop environments and idle states, extending dynamic aesthetics throughout the entire device usage cycle while ensuring privacy security and maintaining a consistent immersive visual experience.")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.leading)
-                }
-                .padding(16)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(.regularMaterial)
-                )
-                
+
+                Text("Screen Saver Introduction")
+                    .font(.headline)
+                    .fontWeight(.medium)
+
+                Text("Screen savers originated in the CRT monitor era, primarily designed to prevent 'burn-in' caused by static images remaining on the screen for extended periods. This phenomenon occurs when electron beams continuously bombard the same phosphor areas, causing permanent physical damage. As technology evolved to LCD and OLED displays, screen savers transformed from mere hardware protection to versatile platforms that integrate security, energy management, information display, and personalized experiences.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.leading)
+                Text("Codelume offers a dedicated screen saver module that allows users to set their current dynamic wallpapers as screen savers after downloading and installing it. This creates a seamless visual transition between active desktop environments and idle states, extending dynamic aesthetics throughout the entire device usage cycle while ensuring privacy security and maintaining a consistent immersive visual experience.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.leading)
+
+                Spacer()
+
                 HStack {
                     Spacer()
                     Button(action: downloadScreensaver) {
@@ -41,16 +35,19 @@ struct ScreenSaverView: View {
                     .controlSize(.regular)
                     Spacer()
                 }
-                
-                Spacer()
-                    .frame(height: 40)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(.regularMaterial)
+            )
             .padding(.horizontal, 24)
             .padding(.top, 0)
             .padding(.bottom, 20)
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(minWidth: 800, minHeight: 500)
+        .frame(minWidth: 800, minHeight: 600)
     }
     
     func downloadScreensaver() {

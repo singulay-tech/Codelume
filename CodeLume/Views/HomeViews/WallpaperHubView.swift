@@ -4,7 +4,11 @@ import ImageIO
 struct WallpaperHubView: View {
     @State private var wallpapers: [WallpaperTable] = []
     @State private var isLoading = false
+    @State private var isLoadingMore = false
+    @State private var currentPage = 1
+    @State private var hasMorePages = true
     private let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    private let pageSize = 20
     
     @ObservedObject private var supabase = SupabaseManager.shared
     
@@ -17,7 +21,7 @@ struct WallpaperHubView: View {
             } else {
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 16) {
-                        ForEach(wallpapers, id: \.id) { wallpaper in
+                        ForEach(Array(wallpapers.enumerated()), id: \.element.id) { index, wallpaper in
                             VStack(alignment: .leading, spacing: 10) {
                                 PreviewImage(url: supabase.getWallpaperPreviewURL(wallpaper: wallpaper))
                                     .aspectRatio(16 / 9, contentMode: .fit)
@@ -50,6 +54,18 @@ struct WallpaperHubView: View {
                                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                                     .fill(.regularMaterial)
                             )
+                            .onAppear {
+                                Task {
+                                    await loadMoreIfNeeded(currentIndex: index)
+                                }
+                            }
+                        }
+
+                        if isLoadingMore {
+                            ProgressView()
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 8)
+                                .gridCellColumns(columns.count)
                         }
                     }
                     .padding(.horizontal, 24)
@@ -61,18 +77,47 @@ struct WallpaperHubView: View {
         }
         .task(id: supabase.isAuthenticated) {
             if supabase.isAuthenticated {
-                await loadWallpapers()
+                await loadInitialWallpapers()
+            } else {
+                wallpapers = []
+                currentPage = 1
+                hasMorePages = true
             }
         }
         .frame(minWidth: 800, minHeight: 500)
     }
     
-    private func loadWallpapers() async {
+    private func loadInitialWallpapers() async {
         isLoading = true
         defer { isLoading = false }
+        currentPage = 1
+        hasMorePages = true
         
         do {
-            wallpapers = try await supabase.getWallpapers()
+            let firstPage = try await supabase.getWallpapers(page: currentPage, limit: pageSize)
+            wallpapers = firstPage
+            hasMorePages = firstPage.count == pageSize
+        } catch {
+            guard !(error is CancellationError) else { return }
+            let nsError = error as NSError
+            guard !(nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorCancelled) else { return }
+            Alert(title: "Load failed", message: error.localizedDescription)
+        }
+    }
+
+    private func loadMoreIfNeeded(currentIndex: Int) async {
+        guard hasMorePages, !isLoading, !isLoadingMore else { return }
+        guard currentIndex >= wallpapers.count - 4 else { return }
+
+        isLoadingMore = true
+        defer { isLoadingMore = false }
+
+        do {
+            let nextPage = currentPage + 1
+            let nextWallpapers = try await supabase.getWallpapers(page: nextPage, limit: pageSize)
+            wallpapers.append(contentsOf: nextWallpapers)
+            currentPage = nextPage
+            hasMorePages = nextWallpapers.count == pageSize
         } catch {
             guard !(error is CancellationError) else { return }
             let nsError = error as NSError
