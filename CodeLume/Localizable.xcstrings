@@ -1398,6 +1398,7 @@
       }
     },
     "Screensaver Saved" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1408,6 +1409,7 @@
       }
     },
     "Screensaver saved successfully!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
