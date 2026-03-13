@@ -67,7 +67,7 @@ class VideoPlaybackView: NSView {
     private func loadVideoUrl(from bundleUrl: URL) throws -> URL {
         let bundle = VideoBundle()
         _ = bundle.open(wallpaperUrl: bundleUrl)
-        return bundle.videoUrl!
+        return bundle.videoUrl ?? URL(string: "invalid://default.url")!
     }
     
     private func applyPlaybackSettings() {

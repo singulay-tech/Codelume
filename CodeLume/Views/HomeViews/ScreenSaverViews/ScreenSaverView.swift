@@ -28,7 +28,7 @@ struct ScreenSaverView: View {
     }
     
     func downloadScreensaver() {
-        guard let saverURL = Bundle.main.url(forResource: "CodelumeSaver", withExtension: "saver") else {
+        guard let saverURL = Bundle.main.url(forResource: "Codelume", withExtension: "saver") else {
             Logger.error("Failed to find screensaver in bundle")
             return
         }

@@ -1,13 +1,7 @@
-//
-//  Utils.swift
-//  Codelume
-//
-//  Created by 广子俞 on 2025/12/11.
-//
-
 import AVFoundation
 import AppKit
 import Foundation
+import SwiftUI
 import ServiceManagement
 import UniformTypeIdentifiers
 import CodelumeBundle
@@ -254,8 +248,8 @@ func getDefaultWallpaperURL() -> URL? {
 
 func setStaticWallpaper(bundleURL: URL, screenLocalName: String) -> Bool {
     // 构建缩略图文件路径：bundleURL/preview/thumbnail.jpg
-    let previewDirectory = bundleURL.appendingPathComponent("Preview")
-    let thumbnailURL = previewDirectory.appendingPathComponent("Preview.jpg")
+    let previewDirectory = bundleURL.appendingPathComponent("preview")
+    let thumbnailURL = previewDirectory.appendingPathComponent("preview.png")
     
     do {
         // 检查缩略图文件是否存在
@@ -297,13 +291,35 @@ func setStaticWallpaper(bundleURL: URL, screenLocalName: String) -> Bool {
     }
 }
 
-func Alert(title: String, message: String = "", style: NSAlert.Style = .informational) {
+func Alert(title: LocalizedStringResource, style: NSAlert.Style = .informational) {
     DispatchQueue.main.async {
         let alert = NSAlert()
-        alert.messageText = NSLocalizedString(title, comment: "")
-        alert.informativeText = NSLocalizedString(message, comment: "")
+        alert.messageText = String(localized: title)
+        alert.informativeText = ""
         alert.alertStyle = style
-        alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
+        alert.addButton(withTitle: String(localized: "OK"))
+        alert.runModal()
+    }
+}
+
+func Alert(title: LocalizedStringResource, message: LocalizedStringResource, style: NSAlert.Style = .informational) {
+    DispatchQueue.main.async {
+        let alert = NSAlert()
+        alert.messageText = String(localized: title)
+        alert.informativeText = String(localized: message)
+        alert.alertStyle = style
+        alert.addButton(withTitle: String(localized: "OK"))
+        alert.runModal()
+    }
+}
+
+func Alert(title: LocalizedStringResource, dynamicMessage: String, style: NSAlert.Style = .informational) {
+    DispatchQueue.main.async {
+        let alert = NSAlert()
+        alert.messageText = String(localized: title)
+        alert.informativeText = dynamicMessage
+        alert.alertStyle = style
+        alert.addButton(withTitle: String(localized: "OK"))
         alert.runModal()
     }
 }

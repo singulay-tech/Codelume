@@ -155,6 +155,32 @@ struct WallpaperEntitlementTable: Codable, Identifiable {
     }
 }
 
+struct WallpaperVideoInfoTable: Codable {
+    let wallpaperId: UUID
+    let width: Int
+    let height: Int
+    let sizeMB: Decimal
+    let duration: Int
+    let format: String
+    let loop: Bool
+    let isEncrypted: Bool
+
+    var resolutionText: String {
+        "\(width)x\(height)"
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case wallpaperId = "wallpaper_id"
+        case width
+        case height
+        case sizeMB = "size_mb"
+        case duration = "duration"
+        case format
+        case loop
+        case isEncrypted = "is_encrypted"
+    }
+}
+
 struct Download: Codable {
     let id: Int
     let userId: UUID

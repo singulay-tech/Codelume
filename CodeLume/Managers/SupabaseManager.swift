@@ -123,7 +123,7 @@ class SupabaseManager: ObservableObject {
         } catch {
             await MainActor.run {
                 self.isLoading = false
-                Alert(title: "Register failed!", message: error.localizedDescription)
+                Alert(title: "Register failed!", dynamicMessage: error.localizedDescription)
             }
             return false
         }
@@ -147,7 +147,7 @@ class SupabaseManager: ObservableObject {
         } catch {
             await MainActor.run {
                 self.isLoading = false
-                Alert(title: "Sign in failed!", message: error.localizedDescription)
+                Alert(title: "Sign in failed!", dynamicMessage: error.localizedDescription)
             }
             return false
         }
@@ -175,7 +175,7 @@ class SupabaseManager: ObservableObject {
         } catch {
             await MainActor.run {
                 self.isLoading = false
-                Alert(title: "Apple sign in failed!", message: error.localizedDescription)
+                Alert(title: "Apple ID sign in failed!", dynamicMessage: error.localizedDescription)
             }
             return false
         }
@@ -190,7 +190,7 @@ class SupabaseManager: ObservableObject {
                 try await client.auth.signOut()
             } catch {
                 await MainActor.run {
-                    Alert(title: "Sign out failed.", message: error.localizedDescription)
+                    Alert(title: "Sign out failed.", dynamicMessage: error.localizedDescription)
                 }
             }
             await MainActor.run {
@@ -255,6 +255,18 @@ class SupabaseManager: ObservableObject {
         
         let wallpaper = try JSONDecoder().decode(WallpaperTable.self, from: response.data)
         return wallpaper
+    }
+
+    func getWallpaperVideoInfo(wallpaperId: UUID) async throws -> WallpaperVideoInfoTable? {
+        let infos: [WallpaperVideoInfoTable] = try await client
+            .from("wallpaper_video_info")
+            .select()
+            .eq("wallpaper_id", value: wallpaperId)
+            .limit(1)
+            .execute()
+            .value
+
+        return infos.first
     }
 
     func getCreditPackages() async throws -> [CreditPackageTable] {

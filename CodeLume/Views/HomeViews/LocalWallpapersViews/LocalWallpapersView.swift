@@ -7,16 +7,14 @@ struct LocalWallpapersView: View {
     private let columns = [GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
-        ScrollView {
+        Group {
+            ScrollView {
             LazyVGrid(columns: columns, spacing: 16) {
                 ForEach(wallpaperItems, id: \.self) { url in
                     LocalWallpaperHubCard(wallpaperURL: url)
                 }
             }
-            .padding(.horizontal, 24)
-            .padding(.top, 0)
-            .padding(.bottom, 20)
-            .frame(maxWidth: .infinity)
+            .padding()
         }
         .onAppear {
             loadLocalWallpapers()
@@ -24,6 +22,7 @@ struct LocalWallpapersView: View {
         .onReceive(NotificationCenter.default.publisher(for: .refreshLocalWallpaperList)) { _ in
             Logger.info("Received refresh local wallpapers notification.")
             loadLocalWallpapers()
+        }   
         }
         .frame(minWidth: 800, minHeight: 600)
     }
@@ -51,6 +50,80 @@ private struct LocalWallpaperHubCard: View {
     @State private var isShowingPreview = false
     @State private var isShowingScreenSelector = false
 
+    private var wallpaperInfoPlist: [String: Any]? {
+        let infoPlistURL = wallpaperURL.appendingPathComponent("Info.plist")
+
+        guard let plistData = try? Data(contentsOf: infoPlistURL),
+              let plist = try? PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any] else {
+            return nil
+        }
+
+        return plist
+    }
+
+    private var wallpaperDisplayName: String {
+        if let plist = wallpaperInfoPlist {
+            if let displayName = plist["name"] as? String,
+               !displayName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                return displayName
+            }
+
+            if let bundleName = plist["CFBundleName"] as? String,
+               !bundleName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                return bundleName
+            }
+        }
+
+        return wallpaperURL.deletingPathExtension().lastPathComponent
+    }
+
+    private var wallpaperType: String {
+        if let type = wallpaperInfoPlist?["type"] as? String {
+            return type.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        }
+
+        return ""
+    }
+
+    private var wallpaperDescription: String {
+        if let description = wallpaperInfoPlist?["description"] as? String,
+           !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return description
+        }
+
+        return "Stored in local wallpaper bundles."
+    }
+
+    private var wallpaperVideoInfo: WallpaperVideoInfoTable? {
+        guard wallpaperType == "video" else { return nil }
+
+        let videoPlistURL = wallpaperURL.appendingPathComponent("Video/Video.plist")
+
+        guard let plistData = try? Data(contentsOf: videoPlistURL),
+              let plist = try? PropertyListSerialization.propertyList(from: plistData, format: nil) as? [String: Any],
+              let width = plist["width"] as? Int,
+              let height = plist["height"] as? Int,
+              let duration = plist["duration"] as? Int,
+              let format = plist["format"] as? String,
+              let loop = plist["loop"] as? Bool,
+              let isEncrypted = plist["encrypted"] as? Bool else {
+            return nil
+        }
+
+        let sizeValue = (plist["size"] as? NSNumber)?.decimalValue ?? .zero
+
+        return WallpaperVideoInfoTable(
+            wallpaperId: UUID(),
+            width: width,
+            height: height,
+            sizeMB: sizeValue,
+            duration: duration,
+            format: format,
+            loop: loop,
+            isEncrypted: isEncrypted
+        )
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             LocalBundleStaticPreview(bundleURL: wallpaperURL)
@@ -58,22 +131,26 @@ private struct LocalWallpaperHubCard: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 
             HStack {
-                Text(wallpaperURL.deletingPathExtension().lastPathComponent)
+                Text(wallpaperDisplayName)
                     .font(.headline)
                     .lineLimit(1)
 
                 Spacer()
+            }
 
-                Text("Local")
+            if let wallpaperVideoInfo {
+                WallpaperVideoInfoInline(info: wallpaperVideoInfo, isLoading: false)
+            } else {
+                Text("")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .lineLimit(1)
             }
 
-            Text("Stored in local wallpaper bundles.")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .lineLimit(2)
+            Text(wallpaperDescription)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
 
             HStack(spacing: 8) {
                 Spacer()
@@ -207,6 +284,5 @@ private struct LocalBundleStaticPreview: View {
 
 #Preview {
     LocalWallpapersView()
-        .frame(width: 600, height: 400)
 }
 

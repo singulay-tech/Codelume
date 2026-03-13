@@ -1,16 +1,6 @@
 import SwiftUI
 import ImageIO
 
-private enum SortOption: String, CaseIterable, Identifiable {
-    case newest = "Newest"
-    case downloads = "Most Downloaded"
-    case priceLowToHigh = "Price: Low to High"
-    case priceHighToLow = "Price: High to Low"
-    case name = "Name"
-    
-    var id: String { rawValue }
-}
-
 private enum PriceFilter: String, CaseIterable, Identifiable {
     case all = "All Prices"
     case free = "Free Only"
@@ -28,7 +18,6 @@ struct WallpaperHubView: View {
     @State private var currentPage = 1
     @State private var hasMorePages = true
     @State private var searchText = ""
-    @State private var selectedSort: SortOption = .newest
     @State private var selectedCategoryId: Int? = nil
     @State private var selectedPriceFilter: PriceFilter = .all
     private let columns = [GridItem(.flexible()), GridItem(.flexible())]
@@ -158,22 +147,6 @@ struct WallpaperHubView: View {
                 
                 return matchesSearch && matchesCategory && matchesPrice
             }
-            .sorted(by: wallpaperComparator)
-    }
-    
-    private func wallpaperComparator(_ lhs: WallpaperTable, _ rhs: WallpaperTable) -> Bool {
-        switch selectedSort {
-        case .newest:
-            return lhs.createdAt > rhs.createdAt
-        case .downloads:
-            return lhs.totalDownloads > rhs.totalDownloads
-        case .priceLowToHigh:
-            return lhs.creditsCost < rhs.creditsCost
-        case .priceHighToLow:
-            return lhs.creditsCost > rhs.creditsCost
-        case .name:
-            return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
-        }
     }
     
     private func isVideoWallpaper(_ wallpaper: WallpaperTable) -> Bool {
@@ -218,7 +191,7 @@ struct WallpaperHubView: View {
             guard !(error is CancellationError) else { return }
             let nsError = error as NSError
             guard !(nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorCancelled) else { return }
-            Alert(title: "Load failed", message: error.localizedDescription)
+            Alert(title: "Load failed", dynamicMessage: error.localizedDescription)
         }
     }
     
@@ -241,7 +214,7 @@ struct WallpaperHubView: View {
             guard !(error is CancellationError) else { return }
             let nsError = error as NSError
             guard !(nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorCancelled) else { return }
-            Alert(title: "Load failed", message: error.localizedDescription)
+            Alert(title: "Load failed", dynamicMessage: error.localizedDescription)
         }
     }
 }

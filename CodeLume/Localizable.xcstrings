@@ -117,6 +117,16 @@
         }
       }
     },
+    "Apple ID sign in failed!" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple ID 登录失败"
+          }
+        }
+      }
+    },
     "Are you sure you want to sign out?" : {
       "localizations" : {
         "zh-Hans" : {
@@ -186,6 +196,9 @@
           }
         }
       }
+    },
+    "Buy failed" : {
+
     },
     "Cancel" : {
       "localizations" : {
@@ -436,6 +449,12 @@
         }
       }
     },
+    "Delete Failed" : {
+
+    },
+    "Delete Success" : {
+
+    },
     "Delete this video?" : {
       "localizations" : {
         "zh-Hans" : {
@@ -486,6 +505,9 @@
         }
       }
     },
+    "Download failed" : {
+
+    },
     "Download Screen Saver" : {
       "localizations" : {
         "zh-Hans" : {
@@ -495,6 +517,9 @@
           }
         }
       }
+    },
+    "Download success" : {
+
     },
     "Due to limited testing resources, this app is only tested on the latest macOS systems. Older systems may experience compatibility issues. We recommend upgrading your system or compiling from source to resolve any issues." : {
       "localizations" : {
@@ -738,6 +763,16 @@
         }
       }
     },
+    "Invalid Apple credential." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无效的 Apple 凭证"
+          }
+        }
+      }
+    },
     "Language settings:" : {
       "localizations" : {
         "zh-Hans" : {
@@ -769,6 +804,9 @@
         }
       }
     },
+    "Load failed" : {
+
+    },
     "Loading..." : {
       "localizations" : {
         "zh-Hans" : {
@@ -780,6 +818,7 @@
       }
     },
     "Local" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -890,6 +929,9 @@
           }
         }
       }
+    },
+    "No matching credit package found." : {
+
     },
     "Non-program-built-in local video cannot be recovered after deletion and need to be redownloaded or imported." : {
       "localizations" : {
@@ -1157,6 +1199,9 @@
         }
       }
     },
+    "Please sign in with your email and password." : {
+
+    },
     "Preferences" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1176,6 +1221,9 @@
           }
         }
       }
+    },
+    "Purchase failed" : {
+
     },
     "Quit" : {
       "localizations" : {
@@ -1198,6 +1246,12 @@
         }
       }
     },
+    "Register failed!" : {
+
+    },
+    "Register success!" : {
+
+    },
     "Report issues, request features, or contribute code." : {
       "localizations" : {
         "zh-Hans" : {
@@ -1217,6 +1271,9 @@
           }
         }
       }
+    },
+    "Reset Success" : {
+
     },
     "Resolution" : {
       "extractionState" : "manual",
@@ -1302,6 +1359,9 @@
         }
       }
     },
+    "Screen configuration has been reset." : {
+
+    },
     "Screen ID:" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1321,6 +1381,9 @@
           }
         }
       }
+    },
+    "Screen is connected. Please disconnect it first." : {
+
     },
     "Screen Management" : {
       "localizations" : {
@@ -1393,7 +1456,6 @@
       }
     },
     "Screensaver Saved" : {
-      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1485,6 +1547,9 @@
         }
       }
     },
+    "Sign in failed!" : {
+
+    },
     "Sign in to access the Wallpaper Hub." : {
       "localizations" : {
         "zh-Hans" : {
@@ -1495,11 +1560,25 @@
         }
       }
     },
-    "Sign out" : {
-
-    },
     "Sign Out" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "退出登录"
+          }
+        }
+      }
+    },
+    "Sign out failed." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "退出登录失败"
+          }
+        }
+      }
     },
     "Some materials are sourced from the internet. If any content infringes on your rights, please contact us using the contact methods at the bottom of this page." : {
       "localizations" : {
@@ -1532,6 +1611,7 @@
       }
     },
     "Stored in local wallpaper bundles." : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -1683,12 +1763,25 @@
     "Top up" : {
 
     },
+    "Top up unavailable" : {
+
+    },
     "Total Screens" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "总屏幕数"
+          }
+        }
+      }
+    },
+    "Unable to read Apple identity token." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法读取 Apple 身份令牌"
           }
         }
       }
@@ -1802,6 +1895,9 @@
           }
         }
       }
+    },
+    "Wallpaper has been imported to local library." : {
+
     },
     "Wallpaper Hub" : {
       "localizations" : {
